@@ -1,56 +1,119 @@
 # turbo-src
+
+Requirements
+
+* Docker installed.
+* git installed
+
 ## Setup Mac
 
 macOS Catlina (10.15) (or higher)
 
-### Install Brew (Mac only)
+### Install developer tools.
 
 `xcode-select --install`
-Brew is a package manager for Mac.
 
-Check if you have it.
+## Install Docker
+
+Search the web for "Docker install Mac".
+
+### Setup yooo
+
+### Install brew and upgrade
+
+Brew is a package manager for Mac. You can check if you already have it with:
 
 `whereis brew`
+
 
 If not there, install (check if below command is correct, here https://brew.sh/).
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)”
 
-## Setup Linux (Ubuntu)
+`brew update && brew upgrade`
 
-Docker installed.
-git installed
+### Install nvm (nodejs version manager)
 
-### Install Brew (Mac only)
+Before running
 
-`xcode-select --install`
-Brew is a package manager for Mac.
+`brew install nvm`
 
-Check if you have it.
+There is some additional setup found here:
 
-`whereis brew`
+https://formulae.brew.sh/formula/nvm
 
-If not there, install (check if below command is correct, here https://brew.sh/).
+Install node.
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)”
+`nvm install 12.22.0`
 
-### Stuff to do before
+Make sure using the right one
+
+`nvm use 12.22.0`
+
+### Install git, if not already there.
+
+Git is a version control system. Check if you already have it.
+
+`whereis git`
+
+If not, install it.
+
+`brew install git`
+
+Configure git. Suggest that you use your github username.
+
+```
+git config --global user.name "YOUR_USERNAME_HERE"
+git config --global user.email ""
+git config -l
+```
+### Github
+
+Invite the user to turbo-src organization on Github.
+
+github.com/turbo-src > Invite Someone (right side of page)
+
+### Remaining setup
+
+`mkidr ~/turbo-src`
+
+`cd ~/turbo-src`
+
+Clone the repo.
+
+`git clone https://github.com/turbo-src/graphql_express_server`
+
+`cd ~/graphql_express_server`
+
+Install everything.
+
+`npm install`
+
+If install doesn't work, make sure your using nodejs 12.22.0
+
+`node --version`
+
+If it isn't correct, make sure you selected right one on nvm.
+
+## Linux setup
+
+### Clone the repo
+
+git clone https://github.com/turbo-src/graphql_express_server
+
+## Setup Linux
 
 On Linux
 
 `sudo apt update`
 
 On Mac.
-w
-`brew update && brew upgrade`
 
 whereis brew
 
 `mkdir ~/turbo-src`
 
 `cd ~/turbo-src`
-
-### Setup yooo
 
 ### Install nodejs using nvim.
 
