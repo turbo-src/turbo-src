@@ -13,11 +13,15 @@ macOS Catlina (10.15) (or higher)
 
 `xcode-select --install`
 
-## Install Docker
+### Install Docker
 
 Search the web for "Docker install Mac".
 
-### Setup yooo
+### Install wormhole
+
+See instructions at
+
+github.com/7db9a/magic-wormhole-container
 
 ### Install brew and upgrade
 
@@ -94,6 +98,10 @@ If install doesn't work, make sure your using nodejs 12.22.0
 `node --version`
 
 If it isn't correct, make sure you selected right one on nvm.
+
+Transfer `.github-token` file using wormhole. The receiver needs to be in the right directory.
+
+`cd ~/turbo-src/graphql_express_server`
 
 ## Linux setup
 
