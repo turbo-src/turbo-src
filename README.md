@@ -17,6 +17,10 @@ macOS Catlina (10.15) (or higher)
 
 Search the web for "Docker install Mac".
 
+Test that it works. You don't need to be in any particular directory.
+
+`docker run hello-world`
+
 ### Install wormhole
 
 See instructions at
