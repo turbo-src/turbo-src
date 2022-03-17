@@ -9,6 +9,10 @@ Requirements
 
 macOS Catlina (10.15) (or higher)
 
+`mkdir ~/turbo-src/`
+
+`cd ~/turbo-src/`
+
 ### Install developer tools.
 
 `xcode-select --install`
