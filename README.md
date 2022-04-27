@@ -4,6 +4,6 @@
 
 See [install](docs/install.md).
 
-### Contributing
+### Contribute
 
-See [contributions](docs/contributions.md).
+See [contribute](docs/contribute.md).
