@@ -19,7 +19,7 @@ Programmatically diff the DOM to detect any breaking changes to Github website.
 
 ### Fake Github API service for testing.
 
-Server that responds to like Github API for testing purposes.
+Server that responds like the Github API for testing purposes.
 
 ### Resource consumption regression tests
 
