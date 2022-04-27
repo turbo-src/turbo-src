@@ -2,7 +2,7 @@
 
 ### Signup page
 
-Allow people to follow the project by adding their name.
+Allow people to follow the project by adding their email.
 
 ### Github repo create and del
 
@@ -24,6 +24,10 @@ Server that responds to like Github API for testing purposes.
 ### Resource consumption regression tests
 
 Benchmark memory usage, cpu, and network of turbo-src service and extension. Should be able to assert certain acceptable ranges in tests.
+
+### SVG icons
+
+Properly convert image icons to svg in the extension codebase.
 
 ### Git server
 
