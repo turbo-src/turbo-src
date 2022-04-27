@@ -1,4 +1,4 @@
-# Contributions Needed
+# Contribute
 
 ### Signup page
 
