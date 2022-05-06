@@ -75,3 +75,7 @@ git pull github master
 Calculate sha256 `tprid`.
 
 If `tprid` matches contract `head`, then valid. A message in the popup will say the repo is valid. If invalid, vote buttons will say ('invalid`), and modal will explain why.
+
+### Docker to podman and buildah
+
+Build the service image using buildah and run with podman. Document for switch.
