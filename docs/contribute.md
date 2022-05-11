@@ -4,12 +4,12 @@
 
 Allow people to follow the project by adding their email.
 
-### Github repo create and del
+### ~~Github repo create and del~~
 
-Programmatically create and delete a Github repo.
+~~Programmatically create and delete a Github repo.~~
 
-* Puppeter?
-* Github Api?
+* ~~Puppeter?~~
+* ~~Github Api?~~
 
 ### Github pull page diffs
 
