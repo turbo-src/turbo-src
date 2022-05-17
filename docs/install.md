@@ -134,6 +134,14 @@ Clone the repo.
 
 `cd turbsrc-service`
 
+Add your github personal access token.
+
+```
+echo "ghp_3tafd..." > .github-token
+```
+
+`.github-token is ignored by git.
+
 Install everything.
 
 `npm install`
