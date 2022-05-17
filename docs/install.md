@@ -9,27 +9,6 @@ Requirements
 
 macOS Catlina (10.15) (or higher)
 
-`mkdir ~/turbo-src/`
-
-`cd ~/turbo-src/`
-
-### Install developer tools.
-
-`xcode-select --install`
-
-### Install Docker
-
-Search the web for "Docker install Mac".
-
-Test that it works. You don't need to be in any particular directory.
-
-`docker run hello-world`
-
-### Install wormhole
-
-See instructions at
-
-github.com/7db9a/magic-wormhole-container
 
 ### Install brew and upgrade
 
@@ -43,6 +22,31 @@ If not there, install (check if below command is correct, here https://brew.sh/)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)”
 
 `brew update && brew upgrade`
+
+### Install developer tools.
+
+`xcode-select --install`
+
+## Install Docker
+
+For Mac.
+
+Search the web for "Docker install Mac".
+
+Otherwise install Docker from a package manager or however.
+
+Make sure to be able to run docker commands without root, otherwise development and test scripts won't work.
+
+```
+sudo groupadd docker
+sudo usermod -aG docker [user]
+```
+
+
+Test that it works. You don't need to be in any particular directory.
+
+`docker run hello-world`
+
 
 ## Install nvm (nodejs version manager)
 
@@ -74,7 +78,24 @@ Then follow these steps:
 
 https://aur.archlinux.org/packages/nvm
 
-### Install git, if not already there.
+## Install yarn
+
+Yarn is an alternative package manager for nodejs
+
+Download the public key from yarn author.
+
+`curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
+
+Add the public key so ubuntu package manager can find it.
+
+`echo "deb https://dl.yarnpkg.com/debian/ stable main" |
+sudo tee /etc/apt/sources.list.d/yarn.list`
+
+Finally, install.
+
+`sudo apt update && sudo apt install yarn`
+
+## Install git, if not already there.
 
 Git is a version control system. Check if you already have it.
 
@@ -82,9 +103,13 @@ Git is a version control system. Check if you already have it.
 
 If not, install it.
 
+### Mac
+
 `brew install git`
 
-Configure git. Suggest that you use your github username.
+### Configure git.
+
+Suggest that you use your github username.
 
 ```
 git config --global user.name "YOUR_USERNAME_HERE"
@@ -105,9 +130,9 @@ github.com/turbo-src > Invite Someone (right side of page)
 
 Clone the repo.
 
-`git clone https://github.com/turbo-src/graphql_express_server`
+`git clone https://github.com/turbo-src/service turbosrc-service`
 
-`cd ~/graphql_express_server`
+`cd turbsrc-service`
 
 Install everything.
 
@@ -116,12 +141,6 @@ Install everything.
 If install doesn't work, make sure your using nodejs 12.22.0
 
 `node --version`
-
-If it isn't correct, make sure you selected right one on nvm.
-
-Transfer `.github-token` file using wormhole. The receiver needs to be in the right directory.
-
-`cd ~/turbo-src/graphql_express_server`
 
 ## Linux setup
 
@@ -143,7 +162,10 @@ whereis brew
 
 `cd ~/turbo-src`
 
-### Install nodejs using nvim.
+## Notes
+
+
+### Alternative install of nodejs using nvim.
 
 Nodejs server-side javascript. This will also install npm, the package nodejs package manager.
 
@@ -167,22 +189,6 @@ Use correct version.
 
 `nvm use v12.22.0`
 
-### Install yarn
-
-Yarn is an alternative package manager for nodejs
-
-Download the public key from yarn author.
-
-`curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
-
-Add the public key so ubuntu package manager can find it.
-
-`echo "deb https://dl.yarnpkg.com/debian/ stable main" |
-sudo tee /etc/apt/sources.list.d/yarn.list`
-
-Finally, install.
-
-`sudo apt update && sudo apt install yarn`
 
 ### Install turbo-src local server.
 
