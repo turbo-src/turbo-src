@@ -44,7 +44,9 @@ If not there, install (check if below command is correct, here https://brew.sh/)
 
 `brew update && brew upgrade`
 
-### Install nvm (nodejs version manager)
+## Install nvm (nodejs version manager)
+
+### Mac
 
 Before running
 
@@ -61,6 +63,16 @@ Install node.
 Make sure using the right one
 
 `nvm use 12.22.0`
+
+### Arch
+
+```
+pacman -S nvm
+```
+
+Then follow these steps:
+
+https://aur.archlinux.org/packages/nvm
 
 ### Install git, if not already there.
 
