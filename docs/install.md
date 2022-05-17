@@ -122,11 +122,7 @@ Invite the user to turbo-src organization on Github.
 
 github.com/turbo-src > Invite Someone (right side of page)
 
-### Remaining setup
-
-`mkidr ~/turbo-src`
-
-`cd ~/turbo-src`
+## service install
 
 Clone the repo.
 
@@ -142,25 +138,55 @@ If install doesn't work, make sure your using nodejs 12.22.0
 
 `node --version`
 
-## Linux setup
+## extension install
 
-### Clone the repo
+Clone the repo.
 
-git clone https://github.com/turbo-src/graphql_express_server
+```
+git clone https://github.com/turbo-src/extension turbosrc-extension`
+```
 
-## Setup Linux
+Install.
 
-On Linux
+```
+yarn install
+```
 
-`sudo apt update`
+See it's readme under `Development` section.
 
-On Mac.
+https://github.com/turbo-src/extension
 
-whereis brew
+## Workflow
 
-`mkdir ~/turbo-src`
+### service
 
-`cd ~/turbo-src`
+Rebuilds image, starts containers, and runs tests.
+
+```
+./testing/run-tests.sh
+```
+
+### extension
+
+Output the files for extension
+
+```
+yarn dev
+```
+
+May want to interupt file watching after it emits file as it's very cpu intensive.
+
+Go to you chrome or brave browser
+
+Open
+
+brave://extensions/
+
+or
+
+chrome://extensions/
+
+Select Load Unpacked and select the `dist` folder in the `turbosrc-extension`.
 
 ## Notes
 
