@@ -124,7 +124,7 @@ github.com/turbo-src > Invite Someone (right side of page)
 
 ## Install GithubMakerTools
 
-See [here](https://github.com/turbo-src/GithubMakerTools).
+See [here](https://github.com/turbo-src/GihtubMakerTools).
 
 ## service install
 
