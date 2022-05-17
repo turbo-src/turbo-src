@@ -122,6 +122,10 @@ Invite the user to turbo-src organization on Github.
 
 github.com/turbo-src > Invite Someone (right side of page)
 
+## Install GithubMakerTools
+
+See [here](https://github.com/turbo-src/GithubMakerTools).
+
 ## service install
 
 Clone the repo.
@@ -214,18 +218,3 @@ If you don’t see 12.22.0, install like so.
 Use correct version.
 
 `nvm use v12.22.0`
-
-
-### Install turbo-src local server.
-
-Make sure you’re in `~/turbo-src/`. If not sure do `pwd`.
-
-Clone the repo.
-
-`git clone https://github.com/turbo-src/graphql_express_server`
-
-Build the server.
-
-`$ ./dev.sh cycle`
-
-`$ ./dev.sh start`
