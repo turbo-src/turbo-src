@@ -33,6 +33,10 @@ Properly convert image icons to svg in the extension codebase.
 
 A service that can host a single git repo. It must create branches, fetch, pull, merge, etc, according to the turbo-src api.
 
+### Popup vote table
+
+Stablize the vote table feature. Currently it uses a websocket, but messages are missed. Perhaps go simple with polling for now.
+
 ### Wormhole
 
 Setup a private wormhole server.
