@@ -33,6 +33,10 @@ Properly convert image icons to svg in the extension codebase.
 
 A service that can host a single git repo. It must create branches, fetch, pull, merge, etc, according to the turbo-src api.
 
+### Wormhole
+
+Setup a private wormhole server.
+
 #### Some notes on the subject
 
 Hosts the repo. All pull request forks are validated here. Also the `turbo-src pull request id` (sha256 of repo) is generated here.
