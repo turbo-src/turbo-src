@@ -37,6 +37,10 @@ A service that can host a single git repo. It must create branches, fetch, pull,
 
 Stablize the vote table feature. Currently it uses a websocket, but messages are missed. Perhaps go simple with polling for now.
 
+### Token wallet
+
+Demonstrate gettting Metamask or Avalanch wallet to popup by injecting wallet api into a webpage.
+
 ### Wormhole
 
 Setup a private wormhole server.
