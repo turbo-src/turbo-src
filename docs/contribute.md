@@ -1,5 +1,15 @@
 # Contribute
 
+### Nix demo
+
+We want to run a demo off of nixos/nixpkgs.
+
+1. Fork the project
+2. Checkout commit down from HEAD~10
+3. Make a branch from each commit HEAD to HEAD~10
+
+(test script push --all origin)
+
 ### Signup page
 
 Allow people to follow the project by adding their email.
