@@ -12,6 +12,8 @@ We want to run a demo off of nixos/nixpkgs.
 
 nixpkgs is modular, so most commits don't touch the same files. No merge conflicts that can't be automatically resolved in general. Feel free to skip a commit if there is a confict (as long makes sense visually).
 
+Put the nixpkgs in turbo-src/nixpkgs. Should be forked at the commit depth you want. Whatever you need to do to get it done.
+
 ### Signup page
 
 Allow people to follow the project by adding their email.
