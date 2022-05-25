@@ -10,6 +10,8 @@ We want to run a demo off of nixos/nixpkgs.
 
 (test script push --all origin)
 
+nixpkgs is modular, so most commits don't touch files. No merge conflicts that can't be automatically resolved in general. Feel free to skip a commit if there is a confict (as long makes sense visually).
+
 ### Signup page
 
 Allow people to follow the project by adding their email.
