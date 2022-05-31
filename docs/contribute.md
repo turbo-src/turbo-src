@@ -45,7 +45,7 @@ Properly convert image icons to svg in the extension codebase.
 
 ### Git server
 
-A service that can host a single git repo. It must create branches, fetch, pull, merge, etc, according to the turbo-src api. It must be accessible via a rest api. Below is for illustrative purposes in bash. It should be done with an actual library, like [gitpython](https://gitpython.readthedocs.io/en/stable/tutorial.html).
+A service that can host git repos. It must create branches, fetch, pull, merge, etc, according to the turbo-src api. It must be accessible via a rest api. Below is for illustrative purposes in bash. It should be done with an actual library, like [gitpython](https://gitpython.readthedocs.io/en/stable/tutorial.html).
 
 #### clone(repoID, url, defaultBranchName)
 
