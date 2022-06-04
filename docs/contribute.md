@@ -50,7 +50,7 @@ A service that can host git repos. It must create branches, fetch, pull, merge, 
 #### clone(repoID, url, defaultBranchName)
 
 ```
-git clone https://.... <repoID>
+git clone <url> <repoID>
 cat "defaultBranchName" > .git-server/defaultBranchName
 ```
 
