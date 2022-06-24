@@ -14,9 +14,9 @@ nixpkgs is modular, so most commits don't touch the same files. No merge conflic
 
 Put the nixpkgs in turbo-src/nixpkgs. Should be forked at the commit depth you want. Whatever you need to do to get it done.
 
-### Signup page
+### ~~Signup page~~
 
-Allow people to follow the project by adding their email.
+~~Allow people to follow the project by adding their email.~~
 
 ### ~~Github repo create and del~~
 
@@ -42,6 +42,10 @@ Benchmark memory usage, cpu, and network of turbo-src service and extension. Sho
 ### SVG icons
 
 Properly convert image icons to svg in the extension codebase.
+
+### Private store
+
+Create a database with endpoints that can be hit by actions.js. In real-world scenarios, it would be code to read or write to blockchain per smart contract.
 
 ### Git server
 
