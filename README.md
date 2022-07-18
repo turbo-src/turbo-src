@@ -11,10 +11,14 @@ https://user-images.githubusercontent.com/60105252/179119707-068dfca3-6bec-426b-
 
 We at [Reibase](https://reibase.rs) created the open-source protocol Turbosrc. It only allows token holders to engage with pull requests. Maintainers create tokens for their project via Turbosrc. They can distribute or sell these into their communities. Token holders vote on pull requests - accept or deny. Each project (likely maintainers) creates their own set of tokens.
 
+Turbosrc software will also tokenize itself, creating value for our contributor community. If you're interested in contributing, see the contributor section below. If you'd like to join our team, please reach out to us at Reibase.
+
 ```
- 100%     Github web extension
-  90%     Codeberg web extension
-  90%     Gitlab web extension
+ 100%     Chrome and Brave extension
+  90%     Firefox extension
+ 100%     Works on Github
+  90%     Works on Codeberg
+  90%     Works on Gitlab
  100%     Nochain mode
   50%     Web3-hybrid mode
   40%     Dedicated web app & cli
@@ -23,7 +27,9 @@ We at [Reibase](https://reibase.rs) created the open-source protocol Turbosrc. I
 
 ### Install
 
-See [install](docs/install.md).
+See here to install the [Turbosrc services](https://github.com/turbo-src/service) and the [web extension](https://github.com/turbo-src/extension).
+
+Currently, you'll only be able to use nochain mode in a local environment.
 
 ### Contribute
 
