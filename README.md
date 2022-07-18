@@ -15,12 +15,10 @@ We at [Reibase](https://reibase.rs) created the open-source protocol Turbosrc. I
  100%     Github web extension
   90%     Codeberg web extension
   90%     Gitlab web extension
-  100%    Nochain mode
-  50%     Community Network (Web3-hybrid)
+ 100%     Nochain mode
+  50%     Web3-hybrid mode
   30%     Organization Network (Web3-hybrid)
-  20%     Search and discoverY (across Networks)
   40%     Dedicated web app & cli
-  20%     Premium API/Data service
   50%     End-to-end Web3 Networks (100% blockchain)
   ```
 
