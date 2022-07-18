@@ -35,10 +35,6 @@ Currently, you'll only be able to use nochain mode in a local environment.
 
 See [contribute](docs/contribute.md).
 
-### System overview
-
-See [system-overview](docs/system-overview.md).
-
 ### FAQ
 
 See [FAQ](docs/faq.md)
