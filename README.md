@@ -31,7 +31,7 @@ Turbosrc is under rapid development and isn't production ready.
 
 See here to install the [Turbosrc services](https://github.com/turbo-src/service) and the [web extension](https://github.com/turbo-src/extension).
 
-Currently, you'll only be able to use nochain mode in a local environment.
+Currently, you'll only be able to use it nochain mode in a local environment.
 
 ### Contribute
 
@@ -39,4 +39,4 @@ See [contribute](docs/contribute.md).
 
 ### FAQ
 
-See [FAQ](docs/faq.md)
+See [FAQ](docs/faq.md).
