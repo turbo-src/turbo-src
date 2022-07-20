@@ -13,7 +13,7 @@ We at [Reibase](https://reibase.rs) created the open-source protocol Turbosrc. I
 
 Turbosrc software will also tokenize itself, creating value for our contributor community. If you're interested in contributing, see the contributor section below. If you'd like to join our team, please reach out to us at Reibase.
 
-Turbosrc is in under rapid development and isn't production ready.
+Turbosrc is under rapid development and isn't production ready.
 
 ```
  100%     Chrome and Brave extension
