@@ -26,3 +26,26 @@ The user loads there username and github credentials with .config.json.o
 The user must be an accepted user (createUser), and be added to the database via transferTokens or from original createRepo.
 
 The extension checks the owner/repo name from github. If it doesn't match that of the service, it won't work.
+
+## Actions
+
+### setVote
+
+* main `service` checks the `namespace` service if the user exists.
+* It finds out if there is tPR open. If not it opens and applies the vote.
+
+Must add:
+* Check if PR on Github exists (cache `$prID: boolean`)
+* Check if PR is mergeable. (cache `mergeable: 0 yes | 1 no | 2 any other, such as null
+
+```
+repoCache = {
+   $repoID: {
+       $prID: boolean
+       mergeable: int
+   }
+
+}
+```
+
+It doesn't need to be written to disk. If the service restarts, it's not expensive to get all this info again. It will automatically happen when users vote on pull requests.
