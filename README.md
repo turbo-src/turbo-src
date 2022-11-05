@@ -18,7 +18,7 @@ Turbosrc is under rapid development and is in alpha phase
 See here to install the
 
 * [Turbosrc web extension](https://github.com/turbo-src/extension)
-* [Turbosrc main service](https://github.com/turbo-src/service)
-* [Turbosrc offchain](https://github.com/turbo-src/offchain-service)
-* [Turbosrc namespace](https://github.com/turbo-src/namespace-service)
-* [Turbosrc gh](https://github.com/turbo-src/gh-service)
+* [Turbosrc main service](https://github.com/turbo-src/turbosrc-reibase-service)
+* [Turbosrc engine](https://github.com/turbo-src/turbosrc-reibase-service)
+* [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-service)
+* [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh)
