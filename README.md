@@ -37,8 +37,26 @@ git clone git@github.com:turbo-src/turbosrc-gh.git
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
 
-### Place forall command file in turbosrc directory
-[download forall](https://github.com/turbo-src/turbo-src/blob/master/forall)
+### Create forall command
+```
+touch forall
+```
+
+### And paste in:
+```
+#!/bin/bash
+# https://stackoverflow.com/questions/51544446/can-i-use-git-bash-to-checkout-a-particular-branch-on-all-my-repos-at-once
+
+# ./forall git fetch upstream
+# ./forall git checkout relase9.5
+
+
+for repo in */ ; do
+    (   cd "$repo"
+        "$@"
+    )
+done
+```
 
 ### Then:
 ```
