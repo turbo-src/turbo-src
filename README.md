@@ -13,12 +13,51 @@ Turbosrc software will also tokenize itself, creating value for our contributor 
 
 Turbosrc is under rapid development and is in alpha phase
 
-### Install
+# Install
 
-See here to install the
+### Make Turbosrc Directory
+```
+mkdir turbosrc
+```
+
+### Clone each service into turbosrc directory
+```
+git clone git@github.com:turbo-src/turbosrc-service.git
+```
+```
+git clone git@github.com:turbo-src/turbosrc-engine.git
+```
+```
+git clone git@github.com:turbo-src/turbosrc-namespace.git
+```
+```
+git clone git@github.com:turbo-src/turbosrc-gh.git
+```
+```
+git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
+```
+
+### Place forall command file in turbosrc directory
+link to forall
+
+### Then:
+```
+chmod +x forall
+```
+```
+./forall git fetch --all
+```
+```
+./forall git checkout alpha-docs
+```
+
+# See here to install each service
 
 * [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
 * [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
 * [Turbosrc engine](https://github.com/turbo-src/turbosrc-reibase-engine/tree/alpha-devOps)
 * [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-namespace/tree/alpha-devOps)
 * [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh/tree/alpha-devOps)
+
+
+
