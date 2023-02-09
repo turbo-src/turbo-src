@@ -38,7 +38,7 @@ git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
 
 ### Place forall command file in turbosrc directory
-link to forall
+[download forall](https://github.com/turbo-src/turbo-src/blob/master/forall)
 
 ### Then:
 ```
