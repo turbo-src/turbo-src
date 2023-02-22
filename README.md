@@ -80,7 +80,11 @@ chmod +x forall
 
 ## Further install instructions (development)
 
-This for test automation and not used in turbo-src.
+These are for test automation and other devops uses.
+
+### jwt_hash_decrypt
+
+Follow the instructions at `https://github.com/turbo-src/jwt_hash_decrypt`
 
 ### fork-repo tool
 
