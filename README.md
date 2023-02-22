@@ -16,6 +16,7 @@ Turbosrc is under rapid development and is in alpha phase
 # Install
 
 ### Make Turbosrc Directory
+
 ```
 mkdir turbosrc
 ```
@@ -69,7 +70,7 @@ chmod +x forall
 ./forall git checkout alpha-docs
 ```
 
-# See here to install each service
+## See here to install each service
 
 * [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
 * [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
@@ -77,5 +78,22 @@ chmod +x forall
 * [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-namespace/tree/alpha-devOps)
 * [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh/tree/alpha-devOps)
 
+## Further install instructions (development)
 
+These are for test automation and other devops uses.
 
+### jwt_hash_decrypt
+
+Follow the instructions at `https://github.com/turbo-src/jwt_hash_decrypt`
+
+### fork-repo tool
+
+Follow instructions `github.com/turbo-src/fork-repo`.
+
+### create_pull_requests tool
+
+Follow instructions `github.com/turbo-src/create_pull_requests`
+
+### GihtubMakerTools
+
+Follow instructions `github.com/turbo-src/GihtubMakerTools`.
