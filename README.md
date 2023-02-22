@@ -86,9 +86,9 @@ This for test automation and not used in turbo-src.
 
 Follow instructions `github.com/turbo-src/fork-repo`.
 
-### create-repo tool
+### create_pull_requests tool
 
-Follow instructions `github.com/turbo-src/fork-repo`.
+Follow instructions `github.com/turbo-src/create_pull_requests`
 
 ### GihtubMakerTools
 
