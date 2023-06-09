@@ -7,9 +7,7 @@
   </a>
 </p>
 
-We at [Reibase](https://reibase.rs) created the open-source protocol Turbosrc.
-
-Turbosrc software will also tokenize itself, creating value for our contributor community. If you're interested in contributing, see the contributor section below. If you'd like to join our team, please reach out to us at Reibase.
+Turbosrc allows maintainers to create vote power on pull requests on their projects. Now their open source communities can be fully-engaged and participate in the project in a more transparent way.
 
 Turbosrc is under rapid development and is in alpha phase
 
