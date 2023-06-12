@@ -36,10 +36,6 @@ git clone git@github.com:turbo-src/turbosrc-gh.git
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
 
-### Then:
-```
-chmod +x forall
-```
 # Step 2: Configure and start Turbosrc-service
 Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return here when complete.
 
@@ -115,4 +111,8 @@ for repo in */ ; do
         "$@"
     )
 done
+```
+### Then:
+```
+chmod +x forall
 ```
