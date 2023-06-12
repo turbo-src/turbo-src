@@ -87,7 +87,7 @@ In a Chromium based web browser:
 
 ![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
-## See here to install each service
+## See here for more detailed instructions to install each service
 
 * [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
 * [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
