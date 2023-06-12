@@ -11,7 +11,7 @@ Turbosrc allows maintainers to create vote power on pull requests on their proje
 
 Turbosrc is under rapid development and is in alpha phase
 
-# Install
+# Step 1: Install
 
 ### Make Turbosrc Directory
 
@@ -61,8 +61,7 @@ done
 ```
 chmod +x forall
 ```
-
-### To start using locally:
+# Step 2: Configure and start Turbosrc-service
 Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return here when complete.
 
 ### Start the services:
@@ -70,8 +69,9 @@ From ```turbosrc/turbosrc-service```
 ```
 ./tsrc-dev start
 ```
-### Then:
-from the ```turbosrc/chrome-extension``` directory:
+
+# Step 3: Load the extension
+From the ```turbosrc/chrome-extension``` directory:
 ```
 yarn install
 ```
