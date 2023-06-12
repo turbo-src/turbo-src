@@ -36,11 +36,11 @@ git clone git@github.com:turbo-src/turbosrc-gh.git
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
 
-# Step 2: Configure and start Turbosrc-service
-Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return here when ready to start the services.
+# Step 2: Configure Turbosrc-service
+Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return to these instructions when ready to start.
 
-### Start the services:
-Ensure Docker is running then from the ```turbosrc/turbosrc-service``` directory:
+### Start Services
+Ensure Docker is running and from the ```turbosrc/turbosrc-service``` directory:
 ```
 ./tsrc-dev start
 ```
