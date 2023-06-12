@@ -61,12 +61,25 @@ done
 ```
 chmod +x forall
 ```
+
+### To start using locally:
+From the /turbosrc-service directory
 ```
-./forall git fetch --all
+npm install
 ```
 ```
-./forall git checkout alpha-docs
+./tsrc-dev start
 ```
+### Then:
+from the chrome-extension directory:
+```
+yarn install
+```
+```
+yarn devLocal
+```
+### Then:
+In a Chromium based web browser go to extensions > developer mode > load unpacked > and select the dist directory in turbosrc/chrome-extension. You can then open the Turbosrc web extension in your browser.
 
 ## See here to install each service
 
