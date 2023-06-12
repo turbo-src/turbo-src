@@ -63,7 +63,7 @@ chmod +x forall
 ```
 
 ### To start using locally:
-From the /turbosrc-service directory
+From the ```turbosrc/turbosrc-service``` directory
 ```
 npm install
 ```
@@ -71,7 +71,7 @@ npm install
 ./tsrc-dev start
 ```
 ### Then:
-from the chrome-extension directory:
+from the ```turbosrc/chrome-extension``` directory:
 ```
 yarn install
 ```
@@ -79,7 +79,13 @@ yarn install
 yarn devLocal
 ```
 ### Then:
-In a Chromium based web browser go to extensions > developer mode > load unpacked > and select the dist directory in turbosrc/chrome-extension. You can then open the Turbosrc web extension in your browser.
+In a Chromium based web browser:
+- Go to Manage Extensions
+- Enable developer mode
+- Select Load unpacked
+- Select the ```dist``` directory in ```turbosrc/chrome-extension```. You can then open the Turbosrc web extension in your browser.
+
+![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
 ## See here to install each service
 
