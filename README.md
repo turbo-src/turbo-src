@@ -63,10 +63,10 @@ chmod +x forall
 ```
 
 ### To start using locally:
-From the ```turbosrc/turbosrc-service``` directory
-```
-npm install
-```
+Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return here when complete.
+
+### Start the services:
+From ```turbosrc/turbosrc-service```
 ```
 ./tsrc-dev start
 ```
