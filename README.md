@@ -7,7 +7,7 @@
   </a>
 </p>
 
-## ***Launch Your Own Turbosrc Instance***
+## Launch Your Own Turbosrc Instance
 
 Turbosrc is a powerful tool that enables you to set up a voting system for pull requests on your projects. By launching your own Turbosrc instance, you can empower your open source community with an increased level of engagement and transparency, letting them voice their opinions on pull requests.
 
