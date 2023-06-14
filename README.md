@@ -7,130 +7,122 @@
   </a>
 </p>
 
-Turbosrc allows maintainers to create vote power on pull requests on their projects. Now their open source communities can be fully-engaged and participate in the project in a more transparent way.
+***Empower Your Open Source Community***
 
-Turbosrc is under rapid development and in pre-launch phase.
+Turbosrc is an innovative tool that equips maintainers with the power to create a voting system for pull requests on their projects. Enhance your open source community's engagement and foster transparency by giving your community the ability to voice their opinions.
 
-# About
+As of now, Turbosrc is undergoing rapid development and is in its pre-launch phase. We appreciate your support and patience as we work to make Turbosrc a tool for every open source project.
 
-**VotePower**
+## What is VotePower?
+VotePower gives users the ability to vote on pull requests. Each VotePower represents a single vote that you can use to vote for or against pull requests. Even though you can possess more than one VotePower (for instance, 100,000 VotePower), the total supply is capped at one million per project. In other words, if you hold 100,000 VotePower, you have 100,000 votes that you can use.
 
-VotePower grants you a single vote on a pull request, allowing you to vote either for merges or against them to close. You can possess more than one VotePower (e.g., 100,000 VotePower). The total supply of VotePowers is capped at one million per project. Thus, if you hold 100,000 VotePower, you have 100,000 votes at your disposal.
+## How to Use Turbosrc?
+Using Turbosrc is simple! If you hold VotePower for a project, visit its pull request page on Github. You'll see features that allow you to vote and monitor ongoing activities.
 
-**Use**
+To add your project to Turbosrc, visit your project's Github page and open the Turbosrc Extension. You'll see an option to add your project to Turbosrc. You'll need to sign in to your Github account to authenticate yourself.
 
-If you hold VotePower for a project, simply visit its pull request page on Github. Features will load that allow you to vote and monitor ongoing activities. If you wish to add your project to Turbosrc, navigate to your project's Github page and open the Extension. The Extension will provide an option to add your project to Turbosrc. It will prompt you to sign into your Github account for authentication.
+## How to Get VotePower?
+You can get VotePower by joining the community of the project you're interested in. We recommend project maintainers to distribute VotePower to their contributors and sponsors based on merit.
 
-**Get VotePower**
+Remember, the supply of VotePower is created by the initial maintainer for each project independently. Therefore, your VotePower might vary across different projects.
 
-Join the community of the project in which you seek VotePower. Project maintainers are advised to distribute VotePower to their contributors based on merit or to their sponsors.
+## Getting Started with Turbosrc
+We've compiled a simple guide to get you started with Turbosrc:
 
-**More on VotePower**
-
-The supply of VotePower is created by the initial maintainer for each project independently. You could possess 1 VotePower on Project A, 500,000 VotePower on Project B, or none at all on Project C, and so on.
-
-# Step 1: Install
-
-### Make Turbosrc Directory
+### Step 1: Installation
+To begin, set up the Turbosrc directory and clone each service:
 
 ```
+# Create Turbosrc directory
 mkdir turbosrc
-```
 
-### Clone each service into turbosrc directory
-```
+# Navigate to the directory
+cd turbosrc
+
+# Clone each service into the directory
 git clone git@github.com:turbo-src/turbosrc-service.git
-```
-```
 git clone git@github.com:turbo-src/turbosrc-engine.git
-```
-```
 git clone git@github.com:turbo-src/turbosrc-namespace.git
-```
-```
 git clone git@github.com:turbo-src/turbosrc-gh.git
-```
-```
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
 
-# Step 2: Configure Turbosrc-service
-Complete the instructions for the turbosrc-servcice installation found <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and return to these instructions when ready to start.
+### Step 2: Configure Turbosrc Service
+Before you can use Turbosrc, you'll need to configure it. Follow the instructions for the Turbosrc service installation <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and then return to this README to continue.
 
-### Start Services
-Ensure Docker is running and from the ```turbosrc/turbosrc-service``` directory:
+### Step 3: Launch Turbosrc
+Make sure Docker is running and then start services from the Turbosrc service directory
 ```
+cd turbosrc-service
 ./tsrc-dev start
 ```
 
-# Step 3: Load the extension
-From the ```turbosrc/chrome-extension``` directory:
+### Step 3: Load the Extension
+From the chrome-extension directory, install dependencies and start the local development server:
 ```
+# Install dependencies
 yarn install
-```
-```
+
+# Start the local development server
 yarn devLocal
 ```
-### Then:
-In a Chromium based web browser:
-- Go to Manage Extensions
-- Enable developer mode
-- Select Load unpacked
-- Select the ```dist``` directory in ```turbosrc/chrome-extension```. You can then open the Turbosrc web extension in your browser.
 
-![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
+Then, in a Chromium based web browser:
 
-## See here for more detailed instructions to install each service
+Go to Manage Extensions
+Enable developer mode
+Select Load unpacked
+Select the dist directory in turbosrc/chrome-extension. You can then open the Turbosrc web extension in your browser.
 
-* [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
-* [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
-* [Turbosrc engine](https://github.com/turbo-src/turbosrc-reibase-engine/tree/alpha-devOps)
-* [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-namespace/tree/alpha-devOps)
-* [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh/tree/alpha-devOps)
+[xxxxxxxx]
 
-## Further install instructions (development)
+For more detailed instructions on each service installation, check out the respective links below:
 
-These are for test automation and other devops uses.
+Turbosrc web extension
+Turbosrc main service
+Turbosrc engine
+Turbosrc namespace
+Turbosrc gh
 
-### jwt_hash_decrypt
+## Advanced Installation Instructions (For Development Purposes)
+The following instructions are intended for development, test automation, and DevOps uses:
 
-Follow the instructions at `https://github.com/turbo-src/jwt_hash_decrypt`
+**jwt_hash_decrypt**
+You can follow the instructions at this link.
 
-### fork-repo tool
+**fork-repo tool**
+You can follow the instructions at this link.
 
-Follow instructions `github.com/turbo-src/fork-repo`.
+**create_pull_requests tool**
+You can follow the instructions at this link.
 
-### create_pull_requests tool
+**GithubMakerTools**
+You can follow the instructions at this link.
 
-Follow instructions `github.com/turbo-src/create_pull_requests`
+### Creating the 'forall' Command
 
-### GihtubMakerTools
+This command will help you to perform Git commands across all repositories simultaneously.
 
-Follow instructions `github.com/turbo-src/GihtubMakerTools`.
+In the turbosrc directory:
 
-# Forall Command:
-### Create forall command
-In the ```turbosrc``` directory:
 ```
-touch forall
-```
-
-### And paste in:
-```
-#!/bin/bash
-# https://stackoverflow.com/questions/51544446/can-i-use-git-bash-to-checkout-a-particular-branch-on-all-my-repos-at-once
-
-# ./forall git fetch upstream
-# ./forall git checkout relase9.5
-
-
+# Create the forall script
+echo '#!/bin/bash
 for repo in */ ; do
     (   cd "$repo"
         "$@"
     )
-done
-```
-### Then:
-```
+done' > forall
+
+# Make the script executable
 chmod +x forall
+```
+
+You can then use this script to run Git commands on all repositories at once. For example:
+```
+# Fetch from upstream for all repositories
+./forall git fetch upstream
+
+# Switch to the release 9.5 branch for all repositories
+./forall git checkout release9.5
 ```
