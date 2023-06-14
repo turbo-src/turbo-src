@@ -69,12 +69,12 @@ yarn devLocal
 
 Then, in a Chromium based web browser:
 
-Go to Manage Extensions
-Enable developer mode
-Select Load unpacked
-Select the dist directory in turbosrc/chrome-extension. You can then open the Turbosrc web extension in your browser.
+1. Go to Manage Extensions
+2. Enable developer mode
+3. Select Load unpacked
+4. Select the `dist` directory in `turbosrc/chrome-extension`. You can then open the Turbosrc web extension in your browser.
 
-[xxxxxxxx]
+![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
 For more detailed instructions on each service installation, check out the respective links below:
 
