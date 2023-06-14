@@ -7,7 +7,7 @@
   </a>
 </p>
 
-***Empower Your Open Source Community***
+## ***Empower Your Open Source Community***
 
 Turbosrc is an innovative tool that equips maintainers with the power to create a voting system for pull requests on their projects. Enhance your open source community's engagement and foster transparency by giving your community the ability to voice their opinions.
 
