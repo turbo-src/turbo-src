@@ -59,6 +59,77 @@ git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 We've compiled a simple guide forthose that want to manage a Turbosrc instance:
 
 **2. Configure Turbosrc Service**
+
+You'll need a `.config.json` file in the root directory of turbosrc-service.
+
+#### 1. A Github API Token
+
+[See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+
+#### 2. Create YOUR_SECRET
+
+It can be anything, as long as no one can guess it.
+
+#### 3. Create YOUR_ENCRYPTED_TOKEN
+
+To create `YOUR_ENCRYPTED_TOKEN`, install [**jwt_hash_encrypt**](github.com/turbo-src/jwt_hash_decrypt) and run the command below (edit with your info).
+
+```
+node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."}'
+```
+#### 4. Create `turbosrc-service/.config.json`
+   
+- Replace YOUR_USERNAME with your Github username
+- Replace YOUR_SECRET with your secret to sign the token
+- Replace YOUR_ENCRYPTED_TOKEN with the JWT string from **'step 2'** above
+
+```
+{
+    "github": {
+        "organization": "turbo-src",
+        "user": "YOUR_USERNAME",
+        "apiToken": "YOUR_ENCRYPTED_TOKEN"
+    },
+    "turbosrc": {
+        "endpoint": {
+          "mode": "online",
+           "url": "http://localhost:4000/graphql"
+        },
+        "jwt": "YOUR_SECRET",
+        "store": {
+            "repo": {
+                "addr": "REPO_ADDR",
+                "key": "REPO_KEY"
+            },
+            "contributor": {
+                "addr": "YOUR_ADDR",
+                "key": "YOUR_KEY"
+            }
+        }
+    },
+    "offchain": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4002/graphql"
+        }
+    },
+    "namespace": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4003/graphql"
+        }
+    },
+    "gh": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4004/graphql"
+        }
+    },
+    "testers": {}
+    }
+}
+```
+
 Before you can use Turbosrc, you'll need to configure it. Follow the instructions for the Turbosrc service installation <a href="https://github.com/turbo-src/turbosrc-service#config" target="_blank">here</a> and then return to this README to continue.
 
 **3. Launch Turbosrc**
