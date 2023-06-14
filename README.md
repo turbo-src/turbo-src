@@ -78,11 +78,11 @@ Then, in a Chromium based web browser:
 
 For more detailed instructions on each service installation, check out the respective links below:
 
-Turbosrc web extension
-Turbosrc main service
-Turbosrc engine
-Turbosrc namespace
-Turbosrc gh
+* [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
+* [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
+* [Turbosrc engine](https://github.com/turbo-src/turbosrc-reibase-engine/tree/alpha-devOps)
+* [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-namespace/tree/alpha-devOps)
+* [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh/tree/alpha-devOps)
 
 ## Advanced Installation Instructions (For Development Purposes)
 The following instructions are intended for development, test automation, and DevOps uses:
