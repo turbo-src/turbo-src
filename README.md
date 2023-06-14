@@ -8,26 +8,25 @@
 </p>
 
 ## Launch Your Own Turbosrc Instance
+Turbosrc amplifies community involvement and fosters transparency in your open-source projects by setting up a unique voting system for your projects' pull requests. Though we're currently in the pre-launch phase and actively developing, we appreciate your support and patience and strive to make Turbosrc an essential tool for all open-source projects.
 
-Turbosrc is a powerful tool that enables you to set up a voting system for pull requests on your projects. By launching your own Turbosrc instance, you can empower your open source community with an increased level of engagement and transparency, letting them voice their opinions on pull requests.
-
-As of now, Turbosrc is undergoing rapid development and is in its pre-launch phase. We appreciate your support and patience as we work to make Turbosrc an instrumental tool for every open source project.
-
-## What is VotePower?
+## Understanding VotePower
 VotePower gives users in your Turbosrc instance the ability to vote on pull requests. Each VotePower represents a single vote that they can use to vote for or against pull requests. Although a user can possess more than one VotePower (for instance, 100,000 VotePower), the total supply is capped at one million per project within your Turbosrc instance. In other words, if a user holds 100,000 VotePower, they have 100,000 votes that they can use.
 
-## How to Use Turbosrc?
-Setting up and using Turbosrc is simple! If users hold VotePower for a project within your Turbosrc instance, they can visit its pull request page on Github and see features that allow them to vote and monitor ongoing activities.
-
-To add your project to your Turbosrc instance, visit your project's Github page and open the Turbosrc Extension. You'll see an option to add your project to Turbosrc. You'll need to sign in to your Github account to authenticate yourself.
+Remember, VotePower is specific to each project. This means if you possess VotePower in one project, it cannot be used in another.
 
 ## How to Distribute VotePower?
 You can distribute VotePower to the community members of the project you're hosting on your Turbosrc instance. We recommend project maintainers to distribute VotePower to their contributors and sponsors based on merit.
 
 Remember, the supply of VotePower is created by the initial maintainer for each project independently within your Turbosrc instance. Therefore, the distribution of VotePower might vary across different projects.
 
-## Getting Started with Turbosrc
-We've compiled a simple guide to get you started with Turbosrc:
+## How to Use Turbosrc?
+Setting up and using Turbosrc is simple! If users hold VotePower for a project within your Turbosrc instance, they can visit its pull request page on Github and see features that allow them to vote and monitor ongoing activities.
+
+To add your project to your Turbosrc instance, visit your project's Github page and open the Turbosrc Extension. You'll see an option to add your project to Turbosrc. You'll need to sign in to your Github account to authenticate yourself.
+
+## Getting Started with Turbosrc Instance
+We've compiled a simple guide to get you started with a Turbosrc instance:
 
 ### Step 1: Installation
 To begin, set up the Turbosrc directory and clone each service:
