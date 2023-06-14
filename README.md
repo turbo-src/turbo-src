@@ -7,30 +7,38 @@
   </a>
 </p>
 
-## Launch Your Own Turbosrc Instance
-Turbosrc amplifies community involvement and fosters transparency in your open-source projects by setting up a unique voting system for your projects' pull requests. Though we're currently in the pre-launch phase and actively developing, we appreciate your support and patience and strive to make Turbosrc a useful tool for all open-source projects.
+TurboSrc is a unique platform designed to promote transparency and boost community participation in your open-source projects. Our innovative voting system for pull requests not only empowers contributors but also enriches the overall development experience.
+
+While we're currently in active development and the pre-launch phase, your support and patience are much appreciated. Our goal is to develop TurboSrc into a valuable tool for all open-source projects.
+
+## Highlights
+* **Launch Your Own TurboSrc Instance:** Enhance your project's community involvement by setting up your unique TurboSrc instance.
+* **Harness VotePower:** Empower your TurboSrc instance users with the ability to vote on pull requests using VotePower.
+* **Effortless VotePower Distribution:** Distribute VotePower to your project's community members directly through your Github page integrated with TurboSrc.
+
+Let's get you started!
 
 ## Understanding VotePower
-VotePower gives users in your Turbosrc instance the ability to vote on pull requests. Each VotePower represents a single vote that they can use to vote for or against pull requests. Although a user can possess more than one VotePower (for instance, 100,000 VotePower), the total supply is capped at one million per project within your Turbosrc instance. In other words, if a user holds 100,000 VotePower, they have 100,000 votes that they can use.
+In your TurboSrc instance, each user has the capacity to vote on pull requests, courtesy of VotePower. Essentially, each VotePower translates to a single vote that can be cast for or against pull requests. Although a user may possess multiple VotePowers (e.g., 100,000 VotePower), the total supply is capped at one million per project within your TurboSrc instance. So, if a user holds 100,000 VotePower, they have 100,000 votes at their disposal.
 
-Remember, VotePower is specific to each project. This means if you possess VotePower in one project, it cannot be used in another.
+Note: VotePower is specific to each project. Consequently, if you hold VotePower in one project, it cannot be used in another.
 
-## How to Distribute VotePower?
-You can distribute VotePower to the community members of the project you're hosting on your Turbosrc instance. On your Github page you added to Turbosrc, you can look up a users via the web extension. From there you you can transfer VotePower. The users have to sign up (a few clicks only) using the web extension.
+## Distributing VotePower
+As a project maintainer, you can distribute VotePower to the community members of the project hosted on your TurboSrc instance. Simply look up users via the web extension on your Github page linked with TurboSrc, and transfer VotePower to them. Users can sign up conveniently via the web extension.
 
-We recommend project maintainers to distribute VotePower to their contributors and sponsors based on merit.
+We encourage project maintainers to distribute VotePower to their contributors and sponsors, recognizing and rewarding their merit.
 
-Remember, the supply of VotePower is created by the initial maintainer for each project independently within your Turbosrc instance. Therefore, the distribution of VotePower might vary across different projects.
+Bear in mind, the supply of VotePower is created by the initial maintainer for each project independently within your TurboSrc instance. Hence, the distribution of VotePower might differ across various projects.
 
-## How to Use Turbosrc?
-Setting up and using Turbosrc is simple! If users hold VotePower for a project within your Turbosrc instance, they can visit its pull request page on Github and see features that allow them to vote and monitor ongoing activities.
+## TurboSrc Usage
+TurboSrc is designed for simplicity and ease of use. Users holding VotePower for a project within your TurboSrc instance can easily visit its pull request page on Github and utilize features that allow them to vote and track ongoing activities.
 
-To add your project to your Turbosrc instance, visit your project's Github page and open the Turbosrc Extension. You'll see an option to add your project to Turbosrc. You'll need to sign in to your Github account to authenticate yourself.
+To add your project to your TurboSrc instance, visit your project's Github page and open the TurboSrc Extension. There you will find an option to add your project to TurboSrc. Just sign in to your Github account for authentication.
 
-## Setting up a Turbosrc Instance
-We've compiled a simple guide forthose that want to manage a Turbosrc instance:
+## Setting up a TurboSrc Instance
+Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:c instance:
 
-### Step 1: Installation
+**1. Installation**
 To begin, set up the Turbosrc directory and clone each service:
 
 ```
@@ -47,18 +55,20 @@ git clone git@github.com:turbo-src/turbosrc-namespace.git
 git clone git@github.com:turbo-src/turbosrc-gh.git
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
+## Setting up a Turbosrc Instance
+We've compiled a simple guide forthose that want to manage a Turbosrc instance:
 
-### Step 2: Configure Turbosrc Service
+**2. Configure Turbosrc Service**
 Before you can use Turbosrc, you'll need to configure it. Follow the instructions for the Turbosrc service installation <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and then return to this README to continue.
 
-### Step 3: Launch Turbosrc
+**3. Launch Turbosrc**
 Make sure Docker is running and then start services from the Turbosrc service directory
 ```
 cd turbosrc-service
 ./tsrc-dev start
 ```
 
-### Step 3: Load the Extension
+**4. Load the Extension**
 From the chrome-extension directory, install dependencies and start the local development server:
 ```
 # Install dependencies
