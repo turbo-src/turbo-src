@@ -59,7 +59,7 @@ git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 We've compiled a simple guide forthose that want to manage a Turbosrc instance:
 
 **2. Configure Turbosrc Service**
-Before you can use Turbosrc, you'll need to configure it. Follow the instructions for the Turbosrc service installation <a href="https://github.com/turbo-src/turbosrc-service#custom-variables" target="_blank">here</a> and then return to this README to continue.
+Before you can use Turbosrc, you'll need to configure it. Follow the instructions for the Turbosrc service installation <a href="https://github.com/turbo-src/turbosrc-service#config" target="_blank">here</a> and then return to this README to continue.
 
 **3. Launch Turbosrc**
 Make sure Docker is running and then start services from the Turbosrc service directory
