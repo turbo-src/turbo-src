@@ -1,4 +1,4 @@
-<p align="leftr">
+<p align="left">
   <a href="https://turbosrc.org#gh-light-mode-only">
     <img src="images/turbosrc-light-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
@@ -6,6 +6,11 @@
     <img src="images/turbosrc-dark-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
 </p>
+<p align="left">
+  <em><strong>Empowering open source communities</em></strong>
+</p>
+
+<br>
 
 TurboSrc is a unique platform designed to promote transparency and boost community participation in your open-source projects. Our innovative voting system for pull requests not only empowers contributors but also enriches the overall development experience.
 
