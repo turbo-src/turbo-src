@@ -8,7 +8,7 @@
 </p>
 
 ## Launch Your Own Turbosrc Instance
-Turbosrc amplifies community involvement and fosters transparency in your open-source projects by setting up a unique voting system for your projects' pull requests. Though we're currently in the pre-launch phase and actively developing, we appreciate your support and patience and strive to make Turbosrc an essential tool for all open-source projects.
+Turbosrc amplifies community involvement and fosters transparency in your open-source projects by setting up a unique voting system for your projects' pull requests. Though we're currently in the pre-launch phase and actively developing, we appreciate your support and patience and strive to make Turbosrc a useful tool for all open-source projects.
 
 ## Understanding VotePower
 VotePower gives users in your Turbosrc instance the ability to vote on pull requests. Each VotePower represents a single vote that they can use to vote for or against pull requests. Although a user can possess more than one VotePower (for instance, 100,000 VotePower), the total supply is capped at one million per project within your Turbosrc instance. In other words, if a user holds 100,000 VotePower, they have 100,000 votes that they can use.
