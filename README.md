@@ -43,7 +43,7 @@ TurboSrc is designed for simplicity and ease of use. Users holding VotePower for
 To add your project to your TurboSrc instance, visit your project's Github page and open the TurboSrc Extension. There you will find an option to add your project to TurboSrc. Just sign in to your Github account for authentication.
 
 ## Setting up a TurboSrc Instance
-Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:c instance:
+Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:
 
 **1. Installation**
 
