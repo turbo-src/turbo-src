@@ -87,17 +87,21 @@ For more detailed instructions on each service installation, check out the respe
 ## Advanced Installation Instructions (For Development Purposes)
 The following instructions are intended for development, test automation, and DevOps uses:
 
-**jwt_hash_decrypt**
-You can follow the instructions at this link.
+### jwt_hash_decrypt
 
-**fork-repo tool**
-You can follow the instructions at this link.
+You can follow the instructions at this [link](https://github.com/turbo-src/jwt_hash_decrypt).
 
-**create_pull_requests tool**
-You can follow the instructions at this link.
+### fork-repo tool
 
-**GithubMakerTools**
-You can follow the instructions at this link.
+You can follow the instructions at this [link](github.com/turbo-src/fork-repo).
+
+### create_pull_requests tool
+
+You can follow the instructions at this [link](github.com/turbo-src/create_pull_requests)
+
+### GithubMakerTools
+
+You can follow the instructions at this [link](github.com/turbo-src/GihtubMakerTools).
 
 ### Creating the 'forall' Command
 
