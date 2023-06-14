@@ -9,7 +9,25 @@
 
 Turbosrc allows maintainers to create vote power on pull requests on their projects. Now their open source communities can be fully-engaged and participate in the project in a more transparent way.
 
-Turbosrc is under rapid development and is in alpha phase
+Turbosrc is under rapid development and in pre-launch phase.
+
+# About
+
+**VotePower**
+
+VotePower grants you a single vote on a pull request, allowing you to vote either for merges or against them to close. You can possess more than one VotePower (e.g., 100,000 VotePower). The total supply of VotePowers is capped at one million per project. Thus, if you hold 100,000 VotePower, you have 100,000 votes at your disposal.
+
+**Use**
+
+If you hold VotePower for a project, simply visit its pull request page on Github. Features will load that allow you to vote and monitor ongoing activities. If you wish to add your project to Turbosrc, navigate to your project's Github page and open the Extension. The Extension will provide an option to add your project to Turbosrc. It will prompt you to sign into your Github account for authentication.
+
+**Get VotePower**
+
+Join the community of the project in which you seek VotePower. Project maintainers are advised to distribute VotePower to their contributors based on merit or to their sponsors.
+
+**More on VotePower**
+
+The supply of VotePower is created by the initial maintainer for each project independently. You could possess 1 VotePower on Project A, 500,000 VotePower on Project B, or none at all on Project C, and so on.
 
 # Step 1: Install
 
