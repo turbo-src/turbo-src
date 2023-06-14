@@ -46,6 +46,7 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:c instance:
 
 **1. Installation**
+
 To begin, set up the Turbosrc directory and clone each service:
 
 ```
@@ -62,29 +63,27 @@ git clone git@github.com:turbo-src/turbosrc-namespace.git
 git clone git@github.com:turbo-src/turbosrc-gh.git
 git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
 ```
-## Setting up a Turbosrc Instance
-We've compiled a simple guide forthose that want to manage a Turbosrc instance:
 
 **2. Configure Turbosrc Service**
 
 You'll need a `.config.json` file in the root directory of turbosrc-service.
 
-#### 1. A Github API Token
+##### a. Get your Github API Token
 
 [See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-#### 2. Create YOUR_SECRET
+##### b. Create YOUR_SECRET
 
 It can be anything, as long as no one can guess it.
 
-#### 3. Create YOUR_ENCRYPTED_TOKEN
+##### c. Create YOUR_ENCRYPTED_TOKEN
 
 To create `YOUR_ENCRYPTED_TOKEN`, install [**jwt_hash_encrypt**](github.com/turbo-src/jwt_hash_decrypt) and run the command below (edit with your info).
 
 ```
 node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."}'
 ```
-#### 4. Create `turbosrc-service/.config.json`
+##### d. Create `turbosrc-service/.config.json`
    
 - Replace YOUR_USERNAME with your Github username
 - Replace YOUR_SECRET with your secret to sign the token
