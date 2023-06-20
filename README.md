@@ -90,7 +90,7 @@ To create `YOUR_ENCRYPTED_TOKEN`, install [**jwt_hash_encrypt**](github.com/turb
 node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."}'
 ```
 ##### d. Create `turbosrc-service/.config.json`
-   
+
 - Replace YOUR_USERNAME with your Github username
 - Replace YOUR_SECRET with your secret to sign the token
 - Replace YOUR_ENCRYPTED_TOKEN with the JWT string from **'step 2'** above
@@ -105,7 +105,7 @@ node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."
     "turbosrc": {
         "endpoint": {
           "mode": "online",
-           "url": "http://localhost:4000/graphql"
+           "url": "http://turbosrc-service:4000/graphql"
         },
         "jwt": "YOUR_SECRET",
         "store": {
@@ -121,20 +121,20 @@ node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."
     },
     "offchain": {
         "endpoint": {
-          "mode": "online",
-          "url": "http://localhost:4002/graphql"
+            "mode": "online",
+            "url": "http://library:4002/graphql"
         }
     },
     "namespace": {
         "endpoint": {
-          "mode": "online",
-          "url": "http://localhost:4003/graphql"
+            "mode": "online",
+            "url": "http://namespace-service:4003/graphql"
         }
     },
     "gh": {
         "endpoint": {
-          "mode": "online",
-          "url": "http://localhost:4004/graphql"
+            "mode": "online",
+            "url": "http://gh-service:4004/graphql"
         }
     },
     "testers": {}
