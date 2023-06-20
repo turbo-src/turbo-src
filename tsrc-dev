@@ -1,0 +1,53 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage: $0 [start|stop|restart|test [USERNAME REPO ACTION]]"
+  echo "  test: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
+  exit 1
+}
+
+stop_services() {
+  echo "Stopping all services..."
+  sleep 1
+  docker-compose -f ./docker-compose.yml down
+  docker volume rm turbosrc-engine_db-data
+  docker volume rm turbosrc-gh_db-data
+  docker volume rm turbosrc-namespace_db-data
+
+}
+
+start_services() {
+  echo "Starting services..."
+  docker-compose -f ./docker-compose.yml up --build -d
+}
+
+run_tests() {
+  if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
+    exit 1
+  fi
+
+  USERNAME=$1
+  REPO=$2
+  ACTION=$3
+
+  ./tsrc-test $USERNAME $REPO $ACTION
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+fi
+
+if [[ "$1" == "stop" ]]; then
+  stop_services
+elif [[ "$1" == "start" ]]; then
+  start_services
+elif [[ "$1" == "restart" ]]; then
+  stop_services
+  start_services
+elif [[ "$1" == "test" ]]; then
+  shift
+  run_tests "$@"
+else
+  usage
+fi
