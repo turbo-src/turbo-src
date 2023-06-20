@@ -132,9 +132,8 @@ node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."
 ```
 
 **3. Launch Turbosrc**
-Make sure Docker is running and then start services from the Turbosrc service directory
+Make sure Docker is running and then start services from the project's root directory.
 ```
-cd turbosrc-service
 ./tsrc-dev start
 ```
 
@@ -188,7 +187,7 @@ You can follow the instructions at this [link](github.com/turbo-src/GihtubMakerT
 
 This command will help you to perform Git commands across all repositories simultaneously.
 
-In the turbosrc directory:
+In the project's root:
 
 ```
 # Create the forall script
