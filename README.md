@@ -53,21 +53,10 @@ Setting up your own TurboSrc instance is straightforward. Here's a step-by-step 
 
 **1. Installation**
 
-To begin, set up the Turbosrc directory and clone each service:
+To begin, clone this project.
 
 ```
-# Create Turbosrc directory
-mkdir turbosrc
-
-# Navigate to the directory
-cd turbosrc
-
-# Clone each service into the directory
-git clone git@github.com:turbo-src/turbosrc-service.git
-git clone git@github.com:turbo-src/turbosrc-engine.git
-git clone git@github.com:turbo-src/turbosrc-namespace.git
-git clone git@github.com:turbo-src/turbosrc-gh.git
-git clone git@github.com:turbo-src/turbosrc-chrome-extension.git
+git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 ```
 
 **2. Configure Turbosrc Service**
