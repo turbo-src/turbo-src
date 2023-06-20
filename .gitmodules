@@ -1,9 +1,6 @@
 [submodule "chrome-extension"]
 	path = chrome-extension
 	url = https://github.com/turbo-src/chrome-extension
-[submodule "turbo-src"]
-	path = turbo-src
-	url = https://github.com/reibase/turbo-src
 [submodule "turbosrc-engine"]
 	path = turbosrc-engine
 	url = https://github.com/turbo-src/turbosrc-engine
