@@ -1,0 +1,92 @@
+version: "3.0"
+
+services:
+  library:
+    build: ./turbosrc-engine/
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 4002:4002
+    env_file:
+      - ./turbosrc-engine/service.env
+    tty: true
+
+  db:
+    image: postgres:13.7-bullseye
+    restart: always
+    ports:
+      - 54320:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: privatestore
+    volumes:
+      - db-data:/db-data/
+
+  turbosrc-service:
+    build: ./turbosrc-service/
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+
+  turbosrc-engine:
+    build: ./turbosrc-engine/
+    restart: always
+    ports:
+      - 4001:4001
+    depends_on:
+      - db
+
+  gh-service:
+    build: ./turbosrc-gh/
+    restart: always
+    ports:
+      - 4004:4004
+    environment:
+      DOCKER_DB_URL: postgresql://user:password@gh-db:5432/gh-service
+    depends_on:
+      - gh-db
+    tty: true
+
+  gh-db:
+    image: postgres:13.7-bullseye
+    restart: always
+    ports:
+      - 54350:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gh-service
+    volumes:
+      - gh-db-data:/db-data/
+
+  namespace-service:
+    build: ./turbosrc-namespace/
+    restart: always
+    ports:
+      - 4003:4003
+    environment:
+      DOCKER_DB_URL: postgresql://user:password@namespace-db:5432/namespace-db
+    depends_on:
+      - namespace-db
+    tty: true
+
+  namespace-db:
+    image: postgres:13.7-bullseye
+    restart: always
+    ports:
+      - 54330:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: namespace-db
+    volumes:
+      - namespace-db-data:/db-data/
+
+volumes:
+  db-data:
+  gh-db-data:
+  namespace-db-data:
