@@ -111,7 +111,7 @@ node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."
     "offchain": {
         "endpoint": {
             "mode": "online",
-            "url": "http://library:4002/graphql"
+            "url": "http://turbosrc-engine:4002/graphql"
         }
     },
     "namespace": {
