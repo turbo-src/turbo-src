@@ -10,10 +10,6 @@ stop_services() {
   echo "Stopping all services..."
   sleep 1
   docker-compose -f ./docker-compose.yml down
-  docker volume rm turbosrc-engine_db-data
-  docker volume rm turbosrc-gh_db-data
-  docker volume rm turbosrc-namespace_db-data
-
 }
 
 start_services() {

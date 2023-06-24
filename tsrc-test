@@ -37,7 +37,6 @@ function run_tests() {
   echo "Running tests..."
   echo "" && sleep 1
   docker-compose exec turbosrc-service npm test testing/integration/privaterepo/createUser.js && sleep 5
-  docker-compose exec turbosrc-service npm test testing/integration/privaterepo/createUser.js && sleep 5
   docker-compose exec turbosrc-service npm test testing/integration/privaterepo/createRepo.js && sleep 5
   docker-compose exec turbosrc-service npm test testing/integration/privaterepo/transferTokens.js && sleep 5
   docker-compose exec turbosrc-service npm test testing/integration/privaterepo/twoVoters.js && sleep 5

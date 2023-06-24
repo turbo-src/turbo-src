@@ -1,7 +1,7 @@
 version: "3.0"
 
 services:
-  library:
+  turbosrc-engine:
     build: ./turbosrc-engine/
     restart: always
     depends_on:
@@ -29,14 +29,6 @@ services:
     restart: always
     ports:
       - 4000:4000
-    depends_on:
-      - db
-
-  turbosrc-engine:
-    build: ./turbosrc-engine/
-    restart: always
-    ports:
-      - 4001:4001
     depends_on:
       - db
 
