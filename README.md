@@ -156,13 +156,19 @@ Then, in a Chromium based web browser:
 
 ![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
-For more detailed instructions on each service installation, check out the respective links below:
+## Developer usage
 
-* [Turbosrc web extension](https://github.com/turbo-src/extension/tree/alpha-devOps)
-* [Turbosrc main service](https://github.com/turbo-src/turbosrc-service/tree/alpha-devOps)
-* [Turbosrc engine](https://github.com/turbo-src/turbosrc-reibase-engine/tree/alpha-devOps)
-* [Turbosrc namespace](https://github.com/turbo-src/turbosrc-reibase-namespace/tree/alpha-devOps)
-* [Turbosrc gh](https://github.com/turbo-src/turbosrc-reibase-gh/tree/alpha-devOps)
+Turbosrc is a monorepo of several submodules.
+
+#### Get lastest changes
+
+`git pull` and `git submodule update --remote`
+
+#### To make changes
+
+Work on changes in the individual repos that the submodules represents. Merge there then get latest changes as shown above.
+
+Do not work in the directories of the submodules in the monorepo locally.
 
 ## Advanced Installation Instructions (For Development Purposes)
 The following instructions are intended for development, test automation, and DevOps uses:
