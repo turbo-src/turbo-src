@@ -78,6 +78,18 @@ services:
     volumes:
       - namespace-db-data:/db-data/
 
+  gihtubmakertools:
+    build: ./GihtubMakerTools/
+
+  create_pull_requests:
+    build: ./create_pull_requests/
+
+  fork-repo:
+    build: ./fork-repo/
+
+  jwt_hash_decrypt:
+    build: ./jwt_hash_decrypt/
+
 volumes:
   db-data:
   gh-db-data:
