@@ -160,6 +160,78 @@ Then, in a Chromium based web browser:
 
 Turbosrc is a monorepo of several submodules.
 
+Here is an example
+
+**1. Checkout feature branch in the turbo-src**
+
+```git checkout -b myFeature```
+
+**2. Checkout feature branch in the targeted submodule**
+
+```
+cd turbosrc-engine
+git checkout -b myFeature
+```
+
+**3. Stage and commit in both the submodule and monorepo after you make changes.**
+
+`turbosrc-engine`
+
+```
+git add <file>
+git commmit -m "New feature!"
+```
+
+`turbo-src`
+
+```
+git add <submodule>
+git commmit -m "New feature!"
+```
+
+**4. Push changes to both the submodule and the monorepo.**
+
+`turbosrc-engine`
+
+```
+git push origin myFeature
+```
+
+`turbo-src`
+
+```
+git push origin myFeature
+```
+
+**5. Go back to master and forget about myFeature**
+
+`turbo-src`
+
+```
+git checkout master
+git submodule --init --recursive
+```
+
+**6. You want to go back into myFeature branch.**
+
+`turbo-src`
+
+```
+git checkout master
+git submodule --init --recursive
+```
+
+**7. Let's say another developer wants to experiment with this new feature.**
+
+`turbo-src`
+
+```
+git fetch myFeature
+git checkout myFeature
+git submodule update --remote
+```
+
+
 #### Get lastest changes
 
 `git pull` and `git submodule update --remote`
