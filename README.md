@@ -217,7 +217,7 @@ git submodule --init --recursive
 `turbo-src`
 
 ```
-git checkout master
+git checkout myFeature
 git submodule --init --recursive
 ```
 
@@ -243,6 +243,7 @@ Work on changes in the individual repos that the submodules represents. Merge th
 Do not work in the directories of the submodules in the monorepo locally.
 
 ## Advanced Installation Instructions (For Development Purposes)
+
 The following instructions are intended for development, test automation, and DevOps uses:
 
 ### jwt_hash_decrypt
