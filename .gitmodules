@@ -13,3 +13,15 @@
 [submodule "turbosrc-service"]
 	path = turbosrc-service
 	url = https://github.com/turbo-src/turbosrc-service
+[submodule "GihtubMakerTools"]
+	path = GihtubMakerTools
+	url = https://github.com/turbo-src/GihtubMakerTools
+[submodule "jwt_hash_decrypt"]
+	path = jwt_hash_decrypt
+	url = https://github.com/turbo-src/jwt_hash_decrypt
+[submodule "create_pull_requests"]
+	path = create_pull_requests
+	url = https://github.com/turbo-src/create_pull_requests
+[submodule "fork-repo"]
+	path = fork-repo
+	url = https://github.com/turbo-src/fork-repo
