@@ -160,6 +160,12 @@ Then, in a Chromium based web browser:
 
 Turbosrc is a monorepo of several submodules.
 
+#### Get lastest changes
+
+`git pull` and `git submodule update --remote`
+
+#### Make changes
+
 Here is an example
 
 **1. Checkout feature branch in the turbo-src**
@@ -230,21 +236,6 @@ git fetch myFeature
 git checkout myFeature
 git submodule update --remote
 ```
-
-
-#### Get lastest changes
-
-`git pull` and `git submodule update --remote`
-
-#### To make changes
-
-Work on changes in the individual repos that the submodules represents. Merge there then get latest changes as shown above.
-
-Do not work in the directories of the submodules in the monorepo locally.
-
-## Advanced Installation Instructions (For Development Purposes)
-
-The following instructions are intended for development, test automation, and DevOps uses:
 
 ### jwt_hash_decrypt
 
