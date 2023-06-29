@@ -61,7 +61,13 @@ git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 
 **2. Configure Turbosrc Service**
 
-You'll need a `.config.json` file in the root directory of turbosrc-service.
+You'll need a `turbosrc.config` file in the root directory.
+
+```
+myGithubName
+myGithubApiToken
+mySecret
+```
 
 ##### a. Get your Github API Token
 
@@ -71,67 +77,30 @@ You'll need a `.config.json` file in the root directory of turbosrc-service.
 
 It can be anything, as long as no one can guess it.
 
-##### c. Create YOUR_ENCRYPTED_TOKEN
-
-To create `YOUR_ENCRYPTED_TOKEN`, install [**jwt_hash_encrypt**](github.com/turbo-src/jwt_hash_decrypt) and run the command below (edit with your info).
+##### c. Replace the following lines with your info from above in your turbosrc.config
 
 ```
-node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."}'
+myGithubName
+myGithubApiToken
+mySecret
 ```
-##### d. Create `turbosrc-service/.config.json`
 
-- Replace YOUR_USERNAME with your Github username
-- Replace YOUR_SECRET with your secret to sign the token
-- Replace YOUR_ENCRYPTED_TOKEN with the JWT string from **'step 2'** above
+Here is an example with pretend info (again replace with your real values for each line)
 
 ```
-{
-    "github": {
-        "organization": "turbo-src",
-        "user": "YOUR_USERNAME",
-        "apiToken": "YOUR_ENCRYPTED_TOKEN"
-    },
-    "turbosrc": {
-        "endpoint": {
-          "mode": "online",
-           "url": "http://turbosrc-service:4000/graphql"
-        },
-        "jwt": "YOUR_SECRET",
-        "store": {
-            "repo": {
-                "addr": "REPO_ADDR",
-                "key": "REPO_KEY"
-            },
-            "contributor": {
-                "addr": "YOUR_ADDR",
-                "key": "YOUR_KEY"
-            }
-        }
-    },
-    "offchain": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://turbosrc-engine:4002/graphql"
-        }
-    },
-    "namespace": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://namespace-service:4003/graphql"
-        }
-    },
-    "gh": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://gh-service:4004/graphql"
-        }
-    },
-    "testers": {}
-    }
-}
+oss4ever
+ghp_bAcAXkRHiCU13DSQh5diqlRFUY8qbF3D46z5
+mysupersafesecretknowonecanguess
 ```
+
+**3. Intitialize Turbosrc**
+
+`./tsrc-dev init`
+
+You shouldn't see any output from this command. If you see errors, likely it's because the above steps were not followed - rather than try and 'debug' just delete the repo and do it all over again starting with the clone step.
 
 **3. Launch Turbosrc**
+
 Make sure Docker is running and then start services from the project's root directory.
 ```
 ./tsrc-dev start
@@ -158,7 +127,17 @@ Then, in a Chromium based web browser:
 
 ## Developer usage
 
-Turbosrc is a monorepo of several submodules.
+#### Start TurboSrc
+
+```
+./tsrc-dev start
+```
+
+#### Stop TurboSrc
+
+```
+./tsrc-dev stop
+```
 
 #### Get lastest changes
 
