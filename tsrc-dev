@@ -36,13 +36,13 @@ initialize_files() {
   GITHUB_API_TOKEN=$(sed -n '2p' ./turbosrc.config)
 
   # Create directories
-  mkdir -p ./GithubMakerTools
+  mkdir -p ./GihtubMakerTools
   mkdir -p ./fork-repo
   mkdir -p ./create_pull_requests
   mkdir -p ./turbosrc-service
 
   # Create and update ght.ini
-  echo -e "[github.org]\nUser =\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GithubMakerTools/ght.ini
+  echo -e "[github.org]\nUser =\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GihtubMakerTools/ght.ini
 
   # Create and update env.list in fork-repo
   echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./fork-repo/env.list
