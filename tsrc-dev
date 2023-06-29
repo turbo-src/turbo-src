@@ -33,13 +33,13 @@ run_tests() {
 
 initialize_files() {
   # create directories
-  mkdir -p ./GithubMakerTools
+  mkdir -p ./GihtubMakerTools
   mkdir -p ./fork-repo
   mkdir -p ./create_pull_requests
   mkdir -p ./turbosrc-service
 
   # create ght.ini
-  echo -e "[github.org]\nUser =\nToken =\nOrganization =" > ./GithubMakerTools/ght.ini
+  echo -e "[github.org]\nUser =\nToken =\nOrganization =" > ./GihtubMakerTools/ght.ini
 
   # create env.list in fork-repo
   echo -e "GITHUB_TOKEN=" > ./fork-repo/env.list
