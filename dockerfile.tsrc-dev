@@ -5,7 +5,7 @@ FROM python:3.9
 WORKDIR /app
 
 # Add only requirements.txt and tsrc-dev.py into the container at /app
-ADD requirements.txt tsrc-dev.py /app/
+ADD requirements.txt tsrc-dev.py turbosrc.config /app/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
