@@ -150,7 +150,7 @@ Then, in a Chromium based web browser:
 
 `git pull` and `git submodule update --remote`
 
-#### Make changes
+### Make changes
 
 Here is an example
 
