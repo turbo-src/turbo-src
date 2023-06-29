@@ -90,7 +90,7 @@ mySecret
 Here is a fake turbosrc.config with pretend info:
 
 ```
-oss4ever
+foss4ever
 ghp_bAcAXkRHiCU13DSQh5diqlRFUY8qbF3D46z5
 mysupersafesecretknowonecanguess
 ```
