@@ -103,8 +103,11 @@ update_api_token() {
   # Retrieve github.apiToken from ./turbosrc-service/.config.json
   apiToken=$(grep -oP '"apiToken": "\K[^"]*' ./turbosrc-service/.config.json)
 
+  # Retrieve the secret from the third line of ./turbosrc.config
+  secret=$(sed -n '3p' ./turbosrc.config)
+
   # Use the apiToken value to run the docker-compose command and retrieve the output
-  decryptedToken=$(docker-compose run --rm jwt_hash_decrypt --secret=mary --string="{\"githubToken\": \"$apiToken\"}" | tail -n 1)
+  decryptedToken=$(docker-compose run --rm jwt_hash_decrypt --secret="$secret" --string="{\"githubToken\": \"$apiToken\"}" | tail -n 1)
 
   # Escape decryptedToken for use in sed replacement
   escapedDecryptedToken=$(echo "$decryptedToken" | sed 's/[\/&]/\\&/g')
