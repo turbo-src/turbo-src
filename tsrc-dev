@@ -99,12 +99,27 @@ initialize_files() {
 EOF
 }
 
+update_api_token() {
+  # Retrieve github.apiToken from ./turbosrc-service/.config.json
+  apiToken=$(grep -oP '"apiToken": "\K[^"]*' ./turbosrc-service/.config.json)
+
+  # Use the apiToken value to run the docker-compose command and retrieve the output
+  decryptedToken=$(docker-compose run --rm jwt_hash_decrypt --secret=mary --string="{\"githubToken\": \"$apiToken\"}" | tail -n 1)
+
+  # Escape decryptedToken for use in sed replacement
+  escapedDecryptedToken=$(echo "$decryptedToken" | sed 's/[\/&]/\\&/g')
+
+  # Replace github.apiToken in ./turbosrc-service/.config.json with the output from the docker command
+  sed -i.bak "s/\"apiToken\": \"$apiToken\"/\"apiToken\": \"$escapedDecryptedToken\"/" ./turbosrc-service/.config.json
+}
+
 if [[ $# -lt 1 ]]; then
   usage
 fi
 
 if [[ "$1" == "init" ]]; then
   initialize_files
+  update_api_token
 elif [[ "$1" == "stop" ]]; then
   stop_services
 elif [[ "$1" == "start" ]]; then
