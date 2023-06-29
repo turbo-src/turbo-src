@@ -98,6 +98,9 @@ def update_api_token():
     with open('./turbosrc-service/.config.json', 'w') as f:
         json.dump(data, f, indent=4)
 
+def is_valid_ethereum_address(address):
+    return bool(re.match("^0x[a-fA-F0-9]{40}$", address))
+
 def get_contributor_id():
     with open('./turbosrc-service/.config.json', 'r') as f:
         data = json.load(f)
@@ -109,9 +112,9 @@ def get_contributor_id():
     query = f"""
     {{
         findOrCreateUser(owner: "", repo: "", contributor_id: "", contributor_name: "{contributor_name}", contributor_signature: "", token: "{token}") {{
-            contributor_name, 
-            contributor_id, 
-            contributor_signature, 
+            contributor_name,
+            contributor_id,
+            contributor_signature,
             token
         }}
     }}
@@ -126,10 +129,13 @@ def update_contributor_id(contributor_id):
     with open('./turbosrc-service/.config.json', 'r') as f:
         data = json.load(f)
 
-    data['turbosrc']['store']['contributor']['addr'] = contributor_id
+    current_address = data['turbosrc']['store']['contributor']['addr']
 
-    with open('./turbosrc-service/.config.json', 'w') as f:
-        json.dump(data, f, indent=4)
+    if not is_valid_ethereum_address(current_address):
+        data['turbosrc']['store']['contributor']['addr'] = contributor_id
+
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(data, f, indent=4)
 
 def manage_docker_service(action):
     subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
