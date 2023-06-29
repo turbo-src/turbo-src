@@ -78,6 +78,11 @@ services:
     volumes:
       - namespace-db-data:/db-data/
 
+  tsrc-dev:
+    build:
+      context: .
+      dockerfile: ./dockerfile.tsrc-dev
+
   gihtubmakertools:
     build: ./GihtubMakerTools/
 
