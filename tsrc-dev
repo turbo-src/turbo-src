@@ -32,10 +32,11 @@ run_tests() {
 }
 
 initialize_files() {
-  # Get the Github API token, USER, and secret from the turbosrc.config file
+  # Get the Github API token, USER, SECRET, and ADDR from the turbosrc.config file
   USER=$(sed -n '1p' ./turbosrc.config)
   GITHUB_API_TOKEN=$(sed -n '2p' ./turbosrc.config)
   SECRET=$(sed -n '3p' ./turbosrc.config)
+  ADDR=$(sed -n '4p' ./turbosrc.config)
 
   # Create directories
   mkdir -p ./GihtubMakerTools
@@ -52,7 +53,7 @@ initialize_files() {
   # Create and update env.list in create_pull_requests
   echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./create_pull_requests/env.list
 
-  # Create .config.json in turbosrc-service with updated github.apiToken, github.user, and turbosrc.jwt
+  # Create .config.json in turbosrc-service with updated values
   cat << EOF > ./turbosrc-service/.config.json
 {
     "github": {
@@ -72,7 +73,7 @@ initialize_files() {
                 "key": "REPO_KEY"
             },
             "contributor": {
-                "addr": "YOUR_ADDR",
+                "addr": "$ADDR",
                 "key": "YOUR_KEY"
             }
         }
