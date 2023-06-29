@@ -73,11 +73,13 @@ mySecret
 
 [See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-##### b. Create YOUR_SECRET
+##### b. Generate a secret
 
 It can be anything, as long as no one can guess it.
 
-##### c. Replace the following lines with your info from above in your turbosrc.config
+##### c. Create the turbosrc.config
+
+It should be in this form:
 
 ```
 myGithubName
@@ -85,7 +87,7 @@ myGithubApiToken
 mySecret
 ```
 
-Here is an example with pretend info (again replace with your real values for each line)
+Here is a fake turbosrc.config with pretend info:
 
 ```
 oss4ever
@@ -97,31 +99,36 @@ mysupersafesecretknowonecanguess
 
 `./tsrc-dev init`
 
-You shouldn't see any output from this command. If you see errors, likely it's because the above steps were not followed - rather than try and 'debug' just delete the repo and do it all over again starting with the clone step.
+It will configure Turbosrc for you using your turbosrc.config. You shouldn't see any output from this command.
 
 **3. Launch Turbosrc**
 
-Make sure Docker is running and then start services from the project's root directory.
 ```
 ./tsrc-dev start
 ```
 
 **4. Load the Extension**
-From the chrome-extension directory, install dependencies and start the local development server:
-```
-# Install dependencies
-yarn install
 
-# Start the local development server
+From the chrome-extension directory, install dependencies and start the local development server:
+
+Install dependencies.
+
+```
+yarn install
+```
+Start the local development server for the chrome extension and build the chrome extension.
+
+```
 yarn devLocal
 ```
+You may stop the local devopmemnt server after it finishes, but if you leave it on it will automatically rebuild the chrome extension for you if you make code changes to the chrome-extension submodule.
 
 Then, in a Chromium based web browser:
 
 1. Go to Manage Extensions
 2. Enable developer mode
 3. Select Load unpacked
-4. Select the `dist` directory in `turbosrc/chrome-extension`. You can then open the Turbosrc web extension in your browser.
+4. Select the `dist` directory in `chrome-extension`. You can then open the Turbosrc web extension in your browser.
 
 ![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
