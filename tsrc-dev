@@ -32,28 +32,31 @@ run_tests() {
 }
 
 initialize_files() {
-  # create directories
-  mkdir -p ./GihtubMakerTools
+  # Get the Github API token from the turbosrc.config file
+  GITHUB_API_TOKEN=$(sed -n '2p' ./turbosrc.config)
+
+  # Create directories
+  mkdir -p ./GithubMakerTools
   mkdir -p ./fork-repo
   mkdir -p ./create_pull_requests
   mkdir -p ./turbosrc-service
 
-  # create ght.ini
-  echo -e "[github.org]\nUser =\nToken =\nOrganization =" > ./GihtubMakerTools/ght.ini
+  # Create and update ght.ini
+  echo -e "[github.org]\nUser =\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GithubMakerTools/ght.ini
 
-  # create env.list in fork-repo
-  echo -e "GITHUB_TOKEN=" > ./fork-repo/env.list
+  # Create and update env.list in fork-repo
+  echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./fork-repo/env.list
 
-  # create env.list in create_pull_requests
-  echo -e "GITHUB_TOKEN=" > ./create_pull_requests/env.list
+  # Create and update env.list in create_pull_requests
+  echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./create_pull_requests/env.list
 
-  # create .config.json in turbosrc-service
+  # Create .config.json in turbosrc-service with updated github.apiToken
   cat << EOF > ./turbosrc-service/.config.json
 {
     "github": {
         "organization": "turbo-src",
         "user": "YOUR_USERNAME",
-        "apiToken": "YOUR_ENCRYPTED_TOKEN"
+        "apiToken": "$GITHUB_API_TOKEN"
     },
     "turbosrc": {
         "endpoint": {
