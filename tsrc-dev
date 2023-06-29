@@ -1,7 +1,8 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [start|stop|restart|test [USERNAME REPO ACTION]]"
+  echo "Usage: $0 [init|start|stop|restart|test [USERNAME REPO ACTION]]"
+  echo "  init: initialize necessary files and directories"
   echo "  test: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
   exit 1
 }
@@ -30,20 +31,79 @@ run_tests() {
   ./tsrc-test $USERNAME $REPO $ACTION
 }
 
+initialize_files() {
+  # create directories
+  mkdir -p ./GithubMakerTools
+  mkdir -p ./fork-repo
+  mkdir -p ./create_pull_requests
+  mkdir -p ./turbosrc-service
+
+  # create ght.ini
+  echo -e "[github.org]\nUser =\nToken =\nOrganization =" > ./GithubMakerTools/ght.ini
+
+  # create env.list in fork-repo
+  echo -e "GITHUB_TOKEN=" > ./fork-repo/env.list
+
+  # create env.list in create_pull_requests
+  echo -e "GITHUB_TOKEN=" > ./create_pull_requests/env.list
+
+  # create .config.json in turbosrc-service
+  cat << EOF > ./turbosrc-service/.config.json
+{
+    "github": {
+        "organization": "turbo-src",
+        "user": "YOUR_USERNAME",
+        "apiToken": "YOUR_ENCRYPTED_TOKEN"
+    },
+    "turbosrc": {
+        "endpoint": {
+          "mode": "online",
+           "url": "http://turbosrc-service:4000/graphql"
+        },
+        "jwt": "YOUR_SECRET",
+        "store": {
+            "repo": {
+                "addr": "REPO_ADDR",
+                "key": "REPO_KEY"
+            },
+            "contributor": {
+                "addr": "YOUR_ADDR",
+                "key": "YOUR_KEY"
+            }
+        }
+    },
+    "offchain": {
+        "endpoint": {
+            "mode": "online",
+            "url": "http://turbosrc-engine:4002/graphql"
+        }
+    },
+    "namespace": {
+        "endpoint": {
+            "mode": "online",
+            "url": "http://namespace-service:4003/graphql"
+        }
+    },
+    "gh": {
+        "endpoint": {
+            "mode": "online",
+            "url": "http://gh-service:4004/graphql"
+        }
+    },
+    "testers": {}
+}
+EOF
+}
+
 if [[ $# -lt 1 ]]; then
   usage
 fi
 
-if [[ "$1" == "stop" ]]; then
+if [[ "$1" == "init" ]]; then
+  initialize_files
+elif [[ "$1" == "stop" ]]; then
   stop_services
 elif [[ "$1" == "start" ]]; then
   start_services
 elif [[ "$1" == "restart" ]]; then
-  stop_services
-  start_services
-elif [[ "$1" == "test" ]]; then
-  shift
-  run_tests "$@"
-else
-  usage
-fi
+  stop
