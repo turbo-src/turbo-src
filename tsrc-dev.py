@@ -2,11 +2,13 @@ import os
 import json
 import subprocess
 import argparse
+import requests
 
 def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
     print("  init: initialize necessary files and directories")
     exit(1)
+
 
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
@@ -96,6 +98,45 @@ def update_api_token():
     with open('./turbosrc-service/.config.json', 'w') as f:
         json.dump(data, f, indent=4)
 
+def get_contributor_id():
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        data = json.load(f)
+
+    url = data['namespace']['endpoint']['url']
+    token = data['github']['apiToken']
+    contributor_name = data['github']['user']
+
+    query = f"""
+    {{
+        findOrCreateUser(owner: "", repo: "", contributor_id: "", contributor_name: "{contributor_name}", contributor_signature: "", token: "{token}") {{
+            contributor_name, 
+            contributor_id, 
+            contributor_signature, 
+            token
+        }}
+    }}
+    """
+
+    response = requests.post(f"{url}/graphql", json={'query': query}, headers={"accept": "json"})
+    response.raise_for_status()
+    result = response.json()
+    return result['data']['findOrCreateUser']['contributor_id']
+
+def update_contributor_id(contributor_id):
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        data = json.load(f)
+
+    data['turbosrc']['store']['contributor']['addr'] = contributor_id
+
+    with open('./turbosrc-service/.config.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+def manage_docker_service(action):
+    subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
+    if action == 'stop':
+        subprocess.run(['docker-compose', 'down', '-v', 'namespace-service'], check=True)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -106,5 +147,9 @@ if __name__ == "__main__":
     if args.operation.lower() == 'init':
         initialize_files()
         update_api_token()
+        manage_docker_service('start')
+        contributor_id = get_contributor_id()
+        update_contributor_id(contributor_id)
+        manage_docker_service('stop')
     else:
         usage()
