@@ -32,7 +32,8 @@ run_tests() {
 }
 
 initialize_files() {
-  # Get the Github API token from the turbosrc.config file
+  # Get the Github API token and USER from the turbosrc.config file
+  USER=$(sed -n '1p' ./turbosrc.config)
   GITHUB_API_TOKEN=$(sed -n '2p' ./turbosrc.config)
 
   # Create directories
@@ -42,7 +43,7 @@ initialize_files() {
   mkdir -p ./turbosrc-service
 
   # Create and update ght.ini
-  echo -e "[github.org]\nUser =\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GihtubMakerTools/ght.ini
+  echo -e "[github.org]\nUser = $USER\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GihtubMakerTools/ght.ini
 
   # Create and update env.list in fork-repo
   echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./fork-repo/env.list
@@ -50,12 +51,12 @@ initialize_files() {
   # Create and update env.list in create_pull_requests
   echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./create_pull_requests/env.list
 
-  # Create .config.json in turbosrc-service with updated github.apiToken
+  # Create .config.json in turbosrc-service with updated github.apiToken and github.user
   cat << EOF > ./turbosrc-service/.config.json
 {
     "github": {
         "organization": "turbo-src",
-        "user": "YOUR_USERNAME",
+        "user": "$USER",
         "apiToken": "$GITHUB_API_TOKEN"
     },
     "turbosrc": {
