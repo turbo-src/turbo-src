@@ -3,6 +3,8 @@ import json
 import subprocess
 import argparse
 import requests
+import re
+import traceback
 
 def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
@@ -16,7 +18,7 @@ def initialize_files():
     USER = lines[0].strip()
     GITHUB_API_TOKEN = lines[1].strip()
     SECRET = lines[2].strip()
-    ADDR = lines[3].strip()
+    ADDR = lines[3].strip() if is_valid_ethereum_address(lines[3].strip()) else None
 
     os.makedirs('./GihtubMakerTools', exist_ok=True)
     os.makedirs('./fork-repo', exist_ok=True)
@@ -99,43 +101,57 @@ def update_api_token():
         json.dump(data, f, indent=4)
 
 def is_valid_ethereum_address(address):
-    return bool(re.match("^0x[a-fA-F0-9]{40}$", address))
+    try:
+        return bool(re.match("^0x[a-fA-F0-9]{40}$", address))
+    except Exception as e:
+        print(f"Failed to check if provided string is a valid Ethereum address. Error: {str(e)}")
+        traceback.print_exc()
+        return False
 
 def get_contributor_id():
-    with open('./turbosrc-service/.config.json', 'r') as f:
-        data = json.load(f)
+    try:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
 
-    url = data['namespace']['endpoint']['url']
-    token = data['github']['apiToken']
-    contributor_name = data['github']['user']
+        url = data['namespace']['endpoint']['url']
+        token = data['github']['apiToken']
+        contributor_name = data['github']['user']
 
-    query = f"""
-    {{
-        findOrCreateUser(owner: "", repo: "", contributor_id: "", contributor_name: "{contributor_name}", contributor_signature: "", token: "{token}") {{
-            contributor_name,
-            contributor_id,
-            contributor_signature,
-            token
+        query = f"""
+        {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "", contributor_name: "{contributor_name}", contributor_signature: "", token: "{token}") {{
+                contributor_name,
+                contributor_id,
+                contributor_signature,
+                token
+            }}
         }}
-    }}
-    """
+        """
 
-    response = requests.post(f"{url}/graphql", json={'query': query}, headers={"accept": "json"})
-    response.raise_for_status()
-    result = response.json()
-    return result['data']['findOrCreateUser']['contributor_id']
+        response = requests.post(f"{url}/graphql", json={'query': query}, headers={"accept": "json"})
+        response.raise_for_status()
+        result = response.json()
+        return result['data']['findOrCreateUser']['contributor_id']
+    except Exception as e:
+        print(f"Failed to get contributor id. Error: {str(e)}")
+        traceback.print_exc()
+        return None
 
 def update_contributor_id(contributor_id):
-    with open('./turbosrc-service/.config.json', 'r') as f:
-        data = json.load(f)
+    try:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
 
-    current_address = data['turbosrc']['store']['contributor']['addr']
+        current_address = data['turbosrc']['store']['contributor']['addr']
 
-    if not is_valid_ethereum_address(current_address):
-        data['turbosrc']['store']['contributor']['addr'] = contributor_id
+        if not is_valid_ethereum_address(current_address):
+            data['turbosrc']['store']['contributor']['addr'] = contributor_id
 
-        with open('./turbosrc-service/.config.json', 'w') as f:
-            json.dump(data, f, indent=4)
+            with open('./turbosrc-service/.config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+    except Exception as e:
+        print(f"Failed to update contributor id. Error: {str(e)}")
+        traceback.print_exc()
 
 def manage_docker_service(action):
     subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
@@ -155,7 +171,13 @@ if __name__ == "__main__":
         update_api_token()
         manage_docker_service('start')
         contributor_id = get_contributor_id()
-        update_contributor_id(contributor_id)
+
+        if contributor_id is not None:
+            update_contributor_id(contributor_id)
+        else:
+            print("Failed to fetch contributor id. Exiting...")
+            sys.exit(1)
+
         manage_docker_service('stop')
     else:
         usage()
