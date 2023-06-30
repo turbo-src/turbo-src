@@ -18,7 +18,7 @@ def initialize_files():
     USER = lines[0].strip()
     GITHUB_API_TOKEN = lines[1].strip()
     SECRET = lines[2].strip()
-    ADDR = lines[3].strip() if is_valid_ethereum_address(lines[3].strip()) else None
+    ADDR = lines[3].strip() if len(lines) > 3 and is_valid_eth_address(lines[3].strip()) else None
 
     os.makedirs('./GihtubMakerTools', exist_ok=True)
     os.makedirs('./fork-repo', exist_ok=True)
