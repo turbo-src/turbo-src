@@ -5,6 +5,7 @@ import argparse
 import requests
 import re
 import traceback
+import sys
 
 def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
