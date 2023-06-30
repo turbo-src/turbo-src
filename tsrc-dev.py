@@ -1,3 +1,4 @@
+import hashlib
 import os
 import json
 import subprocess
@@ -14,6 +15,64 @@ def usage():
     print("  init: initialize necessary files and directories")
     exit(1)
 
+def get_tester_details():
+    with open('./turbosrc.config', 'r') as f:
+        config = json.load(f)
+
+    # Assuming tester usernames are listed as "a", "b", ... "l"
+    testers = {}
+    for tester in list(map(chr, range(97, 109))):
+        USERNAME = config[tester]['USERNAME']
+        GITHUB_API_TOKEN = config[tester]['GITHUB_API_TOKEN']
+
+        # Fetch the contributor_signature
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
+        url = 'http://localhost:4003'  # or another endpoint depending on your setup
+        token = data['github']['apiToken']
+
+        query = f"""
+        {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{USERNAME}", contributor_signature: "none", token: "{token}") {{
+                contributor_name,
+                contributor_id,
+                contributor_signature,
+                token
+            }}
+        }}
+        """
+
+        response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
+        response.raise_for_status()
+        result = response.json()
+
+        key = result['data']['findOrCreateUser']['contributor_signature']
+
+        # Hash and decrypt the API Token using docker
+        with open('./turbosrc.config', 'r') as f:
+            lines = f.readlines()
+        secret = lines[2].strip()
+
+        apiTokenHashed = hashlib.sha256(GITHUB_API_TOKEN.encode()).hexdigest()
+        decryptedToken = subprocess.check_output([
+            'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiTokenHashed + '\"}'
+        ]).decode('utf-8').split('\n')[-2]
+
+        testers[tester] = {
+            "user": USERNAME,
+            "key": key,
+            "apiToken": decryptedToken
+        }
+
+    return testers
+
+def add_testers_to_config():
+    testers = get_tester_details()
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        config = json.load(f)
+    config["testers"] = testers
+    with open('./turbosrc-service/.config.json', 'w') as f:
+        json.dump(config, f, indent=4)
 
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
@@ -193,6 +252,7 @@ if __name__ == "__main__":
         initialize_files()
         update_api_token()
         manage_docker_service('start')
+        add_testers_to_config()
         manage_docker_service('stop')
     else:
         usage()
