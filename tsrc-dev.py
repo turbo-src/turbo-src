@@ -6,6 +6,8 @@ import requests
 import re
 import traceback
 import sys
+import time
+from requests.exceptions import ConnectionError
 
 def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
@@ -114,13 +116,13 @@ def get_contributor_id():
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
 
-        url = data['namespace']['endpoint']['url']
+        url = 'http://localhost:4003' # data['namespace']['endpoint']['url']
         token = data['github']['apiToken']
         contributor_name = data['github']['user']
 
         query = f"""
         {{
-            findOrCreateUser(owner: "", repo: "", contributor_id: "", contributor_name: "{contributor_name}", contributor_signature: "", token: "{token}") {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
                 contributor_name,
                 contributor_id,
                 contributor_signature,
@@ -129,7 +131,7 @@ def get_contributor_id():
         }}
         """
 
-        response = requests.post(f"{url}/graphql", json={'query': query}, headers={"accept": "json"})
+        response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
         response.raise_for_status()
         result = response.json()
         return result['data']['findOrCreateUser']['contributor_id']
@@ -155,9 +157,28 @@ def update_contributor_id(contributor_id):
         traceback.print_exc()
 
 def manage_docker_service(action):
-    subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
-    if action == 'stop':
-        subprocess.run(['docker-compose', 'down', '-v', 'namespace-service'], check=True)
+    if action == 'start':
+        subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
+        max_retries = 30  # maximum attempts to check if the service is up
+        retries = 0
+        while retries < max_retries:
+            try:
+                # Try to fetch contributor id
+                contributor_id = get_contributor_id()
+                # If fetch is successful, update contributor_id and break from loop
+                if contributor_id is not None:
+                    update_contributor_id(contributor_id)
+                    break
+            except ConnectionError:
+                # If a connection error occurred, sleep for a while and try again
+                time.sleep(2)
+                retries += 1
+        else:
+            # If the loop has exhausted the max_retries without success, print error message and exit
+            print("Failed to fetch contributor id. Exiting...")
+            sys.exit(1)
+    elif action == 'stop':
+        subprocess.run(['docker-compose', 'stop','namespace-service'], check=True)
 
 
 parser = argparse.ArgumentParser()
@@ -171,14 +192,6 @@ if __name__ == "__main__":
         initialize_files()
         update_api_token()
         manage_docker_service('start')
-        contributor_id = get_contributor_id()
-
-        if contributor_id is not None:
-            update_contributor_id(contributor_id)
-        else:
-            print("Failed to fetch contributor id. Exiting...")
-            sys.exit(1)
-
         manage_docker_service('stop')
     else:
         usage()
