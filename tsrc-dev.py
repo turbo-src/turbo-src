@@ -17,22 +17,12 @@ def usage():
 
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
-        lines = f.readlines()
+        config = json.load(f)
 
-    USER, GITHUB_API_TOKEN, SECRET, ADDR = None, None, None, None
-
-    if len(lines) >= 3:
-        USER = lines[0].strip()
-        GITHUB_API_TOKEN = lines[1].strip()
-        SECRET = lines[2].strip()
-
-    if len(lines) > 3:
-        ADDR = lines[3].strip()
-        if not is_valid_eth_address(ADDR):
-            ADDR = None
-
-    if None in (USER, GITHUB_API_TOKEN, SECRET):
-        raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
+    USER = config.get('USER')
+    GITHUB_API_TOKEN = config.get('GITHUB_API_TOKEN')
+    SECRET = config.get('SECRET')
+    ADDR = config.get('ADDR') if is_valid_ethereum_address(config.get('ADDR')) else None
 
     os.makedirs('./GihtubMakerTools', exist_ok=True)
     os.makedirs('./fork-repo', exist_ok=True)
