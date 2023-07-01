@@ -29,11 +29,10 @@ def get_tester_details():
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
         url = 'http://localhost:4003'  # or another endpoint depending on your setup
-        token = data['github']['apiToken']
 
         query = f"""
         {{
-            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{USERNAME}", contributor_signature: "none", token: "{token}") {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{USERNAME}", contributor_signature: "none", token: "{GITHUB_API_TOKEN}") {{
                 contributor_name,
                 contributor_id,
                 contributor_signature,
@@ -43,7 +42,9 @@ def get_tester_details():
         """
 
         response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
+
         response.raise_for_status()
+
         result = response.json()
 
         key = result['data']['findOrCreateUser']['contributor_signature']
@@ -53,9 +54,8 @@ def get_tester_details():
             lines = f.readlines()
         secret = lines[2].strip()
 
-        apiTokenHashed = hashlib.sha256(GITHUB_API_TOKEN.encode()).hexdigest()
         decryptedToken = subprocess.check_output([
-            'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiTokenHashed + '\"}'
+            'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + GITHUB_API_TOKEN + '\"}'
         ]).decode('utf-8').split('\n')[-2]
 
         testers[tester] = {
