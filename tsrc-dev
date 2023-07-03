@@ -12,13 +12,13 @@ stop_services() {
   sleep 1
   docker-compose -f ./docker-compose.yml down
   # Deactivating environment
-  conda deactivate
+  deactivate
 }
 
 start_services() {
   echo "Starting services..."
   # Activating environment
-  conda activate tsrc-dev
+  source venv/bin/activate
   docker-compose -f ./docker-compose.yml up --build -d
 }
 
@@ -33,22 +33,22 @@ run_tests() {
   ACTION=$3
 
   # Activating environment
-  conda activate tsrc-dev
+  source venv/bin/activate
   ./tsrc-test $USERNAME $REPO $ACTION
 }
 
 initialize_files() {
     # Checking if environment exists
-    if conda env list | grep -q 'tsrc-dev'; then
-        echo "Environment tsrc-dev already exists."
+    if [ -d "venv" ]; then
+        echo "Environment venv already exists."
     else
-        echo "Creating environment tsrc-dev..."
-        conda create -n tsrc-dev python=3
+        echo "Creating environment venv..."
+        python3 -m venv venv
     fi
 
     # Activating environment and installing dependencies
     echo "Activating environment and installing dependencies..."
-    conda activate tsrc-dev
+    source venv/bin/activate
     pip install -r requirements.txt
 
     # Running python3 tsrc-dev.py init
