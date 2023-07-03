@@ -1,0 +1,32 @@
+name: Run Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Set script permissions
+      run: |
+        chmod +x ./tsrc-dev
+        chmod +x ./tsrc-dev.py
+
+    - name: Create turbosrc.config from secret
+      run: echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
+
+    - name: Run turbosrc init
+      run: ./turbosrc init
+
+    - name: Restart and test tsrc-dev
+      run: |
+        ./tsrc-dev restart
+        ./tsrc-dev test 7db9a demo execute_all
