@@ -84,6 +84,15 @@ Optionally, you can add a Turbosrc `Contributor ID` line. Otherwise, the `init` 
 
 [See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
+You'll need the following scopes checked off:
+
+- repo (all repo scopes)
+
+If you want ci/cd automatically configured for you (run end-to-end tests or want to contribute to Turbosrc development), you'll also need these scopes:
+
+- delete repo
+- workflow
+
 ##### b. Generate a secret
 
 It can be anything, as long as no one can guess it.
