@@ -24,7 +24,7 @@ jobs:
       run: echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
 
     - name: Run turbosrc init
-      run: ./turbosrc init
+      run: ./tsrc-dev init
 
     - name: Restart and test tsrc-dev
       run: |
