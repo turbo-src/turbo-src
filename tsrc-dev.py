@@ -7,6 +7,7 @@ import re
 import traceback
 import sys
 import time
+import random
 from requests.exceptions import ConnectionError
 
 def usage():
@@ -123,11 +124,12 @@ def is_valid_ethereum_address(address):
         return False
 
 def get_contributor_id():
+    last_exception = None
     try:
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
 
-        url = 'http://localhost:4003' # data['namespace']['endpoint']['url']
+        url = 'http://localhost:4003'  # data['namespace']['endpoint']['url']
         token = data['github']['apiToken']
         contributor_name = data['github']['user']
 
@@ -142,10 +144,24 @@ def get_contributor_id():
         }}
         """
 
-        response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
-        response.raise_for_status()
-        result = response.json()
-        return result['data']['findOrCreateUser']['contributor_id']
+        max_retries = 5  # Number of attempts before printing an error message
+
+        for i in range(max_retries):
+            try:
+                response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
+                response.raise_for_status()
+                result = response.json()
+                if result.get('data') and result['data'].get('findOrCreateUser'):
+                    return result['data']['findOrCreateUser']['contributor_id']
+            except Exception as e:
+                last_exception = e
+                if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
+                    # exponential backoff with jitter
+                    wait_time = (2 ** i) + random.random()
+                    time.sleep(wait_time)
+                    continue
+                else:  # if this is the last attempt, then raise the exception
+                    raise last_exception
     except Exception as e:
         print(f"Failed to get contributor id. Error: {str(e)}")
         traceback.print_exc()
@@ -172,6 +188,7 @@ def manage_docker_service(action):
         subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
         max_retries = 30  # maximum attempts to check if the service is up
         retries = 0
+        last_error = None
         while retries < max_retries:
             try:
                 # Try to fetch contributor id
@@ -180,17 +197,18 @@ def manage_docker_service(action):
                 if contributor_id is not None:
                     update_contributor_id(contributor_id)
                     break
-            except ConnectionError:
+            except ConnectionError as e:
+                last_error = e
                 # If a connection error occurred, sleep for a while and try again
                 time.sleep(2)
                 retries += 1
         else:
             # If the loop has exhausted the max_retries without success, print error message and exit
-            print("Failed to fetch contributor id. Exiting...")
-            sys.exit(1)
+            if last_error is not None:
+                print(f"Failed to fetch contributor id. Error: {str(last_error)}. Exiting...")
+                sys.exit(1)
     elif action == 'stop':
-        subprocess.run(['docker-compose', 'stop','namespace-service'], check=True)
-
+        subprocess.run(['docker-compose', 'stop', 'namespace-service'], check=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
