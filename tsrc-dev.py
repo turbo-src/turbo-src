@@ -28,7 +28,7 @@ def initialize_files():
 
     if len(lines) > 3:
         ADDR = lines[3].strip()
-        if not is_valid_eth_address(ADDR):
+        if not is_valid_ethereum_address(ADDR):
             ADDR = None
 
     if None in (USER, GITHUB_API_TOKEN, SECRET):
