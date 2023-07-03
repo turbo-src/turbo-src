@@ -49,9 +49,39 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 ![ezgif com-crop (1)](https://github.com/turbo-src/turbo-src/assets/75996017/9b25fb92-f8e5-493b-b4d2-f6bc37cf49f7)
 
 ## Setting up a TurboSrc Instance
+
 Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:
 
-**1. Installation**
+**1. Install dependencies**
+
+Install
+
+- docker
+- docker-compose
+- yarn
+- Miniconda
+
+#### Miniconda
+
+On linux.
+
+```
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+./Miniconda3-latest-Linux-x86_64.sh
+```
+
+On Mac.
+
+```
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+chmod +x Miniconda3-latest-MacOSX-x86_64.sh
+./Miniconda3-latest-MacOSX-x86_64.sh
+```
+
+
+
+**2. Installation**
 
 To begin, clone this project.
 
@@ -59,7 +89,7 @@ To begin, clone this project.
 git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 ```
 
-**2. Configure Turbosrc Service**
+**3. Configure Turbosrc Service**
 
 You'll need a `turbosrc.config` file in the root directory.
 
@@ -97,19 +127,19 @@ ghp_bAcAXkRHiCU13DSQh5diqlRFUY8qbF3D46z5
 mysupersafesecretknowonecanguess
 ```
 
-**3. Intitialize Turbosrc**
+**4. Intitialize Turbosrc**
 
 `./tsrc-dev init`
 
 It will configure Turbosrc for you using your turbosrc.config. You shouldn't see any output from this command.
 
-**3. Launch Turbosrc**
+**5. Launch Turbosrc**
 
 ```
 ./tsrc-dev start
 ```
 
-**4. Load the Extension**
+**6. Load the Extension**
 
 From the chrome-extension directory, install dependencies and start the local development server:
 
