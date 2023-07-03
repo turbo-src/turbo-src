@@ -32,90 +32,7 @@ run_tests() {
 }
 
 initialize_files() {
-  # Get the Github API token, USER, SECRET, and ADDR from the turbosrc.config file
-  USER=$(sed -n '1p' ./turbosrc.config)
-  GITHUB_API_TOKEN=$(sed -n '2p' ./turbosrc.config)
-  SECRET=$(sed -n '3p' ./turbosrc.config)
-  ADDR=$(sed -n '4p' ./turbosrc.config)
-
-  # Create directories
-  mkdir -p ./GihtubMakerTools
-  mkdir -p ./fork-repo
-  mkdir -p ./create_pull_requests
-  mkdir -p ./turbosrc-service
-
-  # Create and update ght.ini
-  echo -e "[github.org]\nUser = $USER\nToken = $GITHUB_API_TOKEN\nOrganization =" > ./GihtubMakerTools/ght.ini
-
-  # Create and update env.list in fork-repo
-  echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./fork-repo/env.list
-
-  # Create and update env.list in create_pull_requests
-  echo -e "GITHUB_TOKEN=$GITHUB_API_TOKEN" > ./create_pull_requests/env.list
-
-  # Create .config.json in turbosrc-service with updated values
-  cat << EOF > ./turbosrc-service/.config.json
-{
-    "github": {
-        "organization": "turbo-src",
-        "user": "$USER",
-        "apiToken": "$GITHUB_API_TOKEN"
-    },
-    "turbosrc": {
-        "endpoint": {
-          "mode": "online",
-           "url": "http://turbosrc-service:4000/graphql"
-        },
-        "jwt": "$SECRET",
-        "store": {
-            "repo": {
-                "addr": "REPO_ADDR",
-                "key": "REPO_KEY"
-            },
-            "contributor": {
-                "addr": "$ADDR",
-                "key": "YOUR_KEY"
-            }
-        }
-    },
-    "offchain": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://turbosrc-engine:4002/graphql"
-        }
-    },
-    "namespace": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://namespace-service:4003/graphql"
-        }
-    },
-    "gh": {
-        "endpoint": {
-            "mode": "online",
-            "url": "http://gh-service:4004/graphql"
-        }
-    },
-    "testers": {}
-}
-EOF
-}
-
-update_api_token() {
-  # Retrieve github.apiToken from ./turbosrc-service/.config.json
-  apiToken=$(grep -oP '"apiToken": "\K[^"]*' ./turbosrc-service/.config.json)
-
-  # Retrieve the secret from the third line of ./turbosrc.config
-  secret=$(sed -n '3p' ./turbosrc.config)
-
-  # Use the apiToken value to run the docker-compose command and retrieve the output
-  decryptedToken=$(docker-compose run --rm jwt_hash_decrypt --secret="$secret" --string="{\"githubToken\": \"$apiToken\"}" | tail -n 1)
-
-  # Escape decryptedToken for use in sed replacement
-  escapedDecryptedToken=$(echo "$decryptedToken" | sed 's/[\/&]/\\&/g')
-
-  # Replace github.apiToken in ./turbosrc-service/.config.json with the output from the docker command
-  sed -i.bak "s/\"apiToken\": \"$apiToken\"/\"apiToken\": \"$escapedDecryptedToken\"/" ./turbosrc-service/.config.json
+    python3 tsrc-dev.py init
 }
 
 if [[ $# -lt 1 ]]; then
@@ -124,7 +41,6 @@ fi
 
 if [[ "$1" == "init" ]]; then
   initialize_files
-  update_api_token
 elif [[ "$1" == "stop" ]]; then
   stop_services
 elif [[ "$1" == "start" ]]; then
