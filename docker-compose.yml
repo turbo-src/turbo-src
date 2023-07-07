@@ -7,8 +7,8 @@ services:
     ports:
       - 4005:4005
 
-  turbosrc-engress-router:
-    build: ./turbosrc-engress-router/
+  turbosrc-egress-router:
+    build: ./turbosrc-egress-router/
     restart: always
     ports:
       - 4006:4006
