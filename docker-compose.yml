@@ -1,6 +1,18 @@
 version: "3.0"
 
 services:
+  turbosrc-ingress-router:
+    build: ./turbosrc-ingress-router/
+    restart: always
+    ports:
+      - 4005:4005
+
+  turbosrc-engress-router:
+    build: ./turbosrc-engress-router/
+    restart: always
+    ports:
+      - 4006:4006
+
   turbosrc-engine:
     build: ./turbosrc-engine/
     restart: always
