@@ -28,3 +28,6 @@
 [submodule "turbosrc-ingress-router"]
 	path = turbosrc-ingress-router
 	url = https://github.com/turbo-src/turbosrc-ingress-router.git
+[submodule "turbosrc-egress-router"]
+	path = turbosrc-egress-router
+	url = https://github.com/turbo-src/turbosrc-egress-router.git
