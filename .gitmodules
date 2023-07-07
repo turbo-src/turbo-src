@@ -25,3 +25,6 @@
 [submodule "fork-repo"]
 	path = fork-repo
 	url = https://github.com/turbo-src/fork-repo
+[submodule "turbosrc-ingress-router"]
+	path = turbosrc-ingress-router
+	url = https://github.com/turbo-src/turbosrc-ingress-router.git
