@@ -20,9 +20,9 @@ def initialize_files():
     with open('./turbosrc.config', 'r') as f:
         config_data = json.load(f)
 
-    USER = config_data.get('myGithubName', None)
-    GITHUB_API_TOKEN = config_data.get('myGithubApiToken', None)
-    SECRET = config_data.get('mySecret', None)
+    USER = config_data.get('GithubName', None)
+    GITHUB_API_TOKEN = config_data.get('GithubApiToken', None)
+    SECRET = config_data.get('Secret', None)
     ADDR = config_data.get('TurboSrcID', None)
 
     if ADDR:
