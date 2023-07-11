@@ -103,7 +103,7 @@ def update_api_token():
 
     with open('./turbosrc.config', 'r') as f:
         turbosrcConfigData = json.load(f)
-    with open('./turbosrc-service/.config', 'r') as f:
+    with open('./turbosrc-service/.config.json', 'r') as f:
         serviceConfigData = json.load(f)
 
     secret = turbosrcConfigData.get('Secret')
