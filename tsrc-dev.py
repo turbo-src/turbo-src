@@ -104,7 +104,7 @@ def update_api_token():
     with open('./turbosrc.config', 'r') as f:
         data = json.load(f)
 
-    secret = data.get('SECRET')
+    secret = data.get('Secret')
 
     decryptedToken = subprocess.check_output([
         'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiToken + '\"}'
