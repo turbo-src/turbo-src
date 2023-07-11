@@ -18,20 +18,16 @@ def usage():
 
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
-        lines = f.readlines()
+        config_data = json.load(f)
 
-    USER, GITHUB_API_TOKEN, SECRET, ADDR = None, None, None, None
+    USER = config_data.get('myGithubName', None)
+    GITHUB_API_TOKEN = config_data.get('myGithubApiToken', None)
+    SECRET = config_data.get('mySecret', None)
+    ADDR = config_data.get('TurboSrcID', None)
 
-    if len(lines) >= 3:
-        USER = lines[0].strip()
-        GITHUB_API_TOKEN = lines[1].strip()
-        SECRET = lines[2].strip()
-
-    if len(lines) > 3:
-        ADDR = lines[3].strip()
+    if ADDR:
         if not is_valid_ethereum_address(ADDR):
             ADDR = None
-
     if None in (USER, GITHUB_API_TOKEN, SECRET):
         raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
 
@@ -102,9 +98,10 @@ def update_api_token():
 
     apiToken = data['github']['apiToken']
 
-    with open('./turbosrc.config', 'r') as f:
-        lines = f.readlines()
-    secret = lines[2].strip()
+    with open('./turbosrc.json', 'r') as f:
+        data = json.load(f)
+
+    secret = data.get('SECRET')
 
     decryptedToken = subprocess.check_output([
         'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiToken + '\"}'
