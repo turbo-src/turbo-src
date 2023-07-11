@@ -102,15 +102,17 @@ def update_api_token():
     apiToken = data['github']['apiToken']
 
     with open('./turbosrc.config', 'r') as f:
-        data = json.load(f)
+        turbosrcConfigData = json.load(f)
+    with open('./turbosrc-service/.config', 'r') as f:
+        serviceConfigData = json.load(f)
 
-    secret = data.get('Secret')
+    secret = turbosrcConfigData.get('Secret')
 
     decryptedToken = subprocess.check_output([
         'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiToken + '\"}'
     ]).decode('utf-8').split('\n')[-2]
 
-    data['github']['apiToken'] = decryptedToken
+    serviceConfigData['github']['apiToken'] = decryptedToken
 
     with open('./turbosrc-service/.config.json', 'w') as f:
         json.dump(data, f, indent=4)
