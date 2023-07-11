@@ -101,7 +101,7 @@ def update_api_token():
 
     apiToken = data['github']['apiToken']
 
-    with open('./turbosrc.json', 'r') as f:
+    with open('./turbosrc.config', 'r') as f:
         data = json.load(f)
 
     secret = data.get('SECRET')
