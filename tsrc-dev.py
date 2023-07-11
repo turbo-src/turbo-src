@@ -28,6 +28,9 @@ def initialize_files():
     if ADDR:
         if not is_valid_ethereum_address(ADDR):
             ADDR = None
+    else:
+        ADDR = None
+
     if None in (USER, GITHUB_API_TOKEN, SECRET):
         raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
 
