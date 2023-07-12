@@ -57,7 +57,7 @@ def initialize_files():
         "turbosrc": {
             "endpoint": {
               "mode": "online",
-               "url": "http://turbosrc-service:4000/graphql"
+              "url": "http://turbosrc-egress-router:4006/graphql"
             },
             "jwt": SECRET,
             "store": {
