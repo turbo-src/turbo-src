@@ -115,7 +115,7 @@ def update_api_token():
     serviceConfigData['github']['apiToken'] = decryptedToken
 
     with open('./turbosrc-service/.config.json', 'w') as f:
-        json.dump(data, f, indent=4)
+        json.dump(serviceConfigData, f, indent=4)
 
 def is_valid_ethereum_address(address):
     try:
