@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [init|start|stop|restart|test [USERNAME REPO ACTION]]"
+  echo "Usage: $0 [init [--router]|start|stop|restart|test [USERNAME REPO ACTION]]"
   echo "  init: initialize necessary files and directories"
   echo "  test: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
   exit 1
@@ -38,22 +38,28 @@ run_tests() {
 }
 
 initialize_files() {
-    # Checking if environment exists
-    if [ -d "venv" ]; then
-        echo "Environment venv already exists."
-    else
-        echo "Creating environment venv..."
-        python3 -m venv venv
-    fi
+  ROUTER_FLAG=$1
 
-    # Activating environment and installing dependencies
-    echo "Activating environment and installing dependencies..."
-    source venv/bin/activate
-    pip install -r requirements.txt
+  # Checking if environment exists
+  if [ -d "venv" ]; then
+      echo "Environment venv already exists."
+  else
+      echo "Creating environment venv..."
+      python3 -m venv venv
+  fi
 
-    # Running python3 tsrc-dev.py init
-    echo "Running tsrc-dev.py init..."
-    python3 tsrc-dev.py init
+  # Activating environment and installing dependencies
+  echo "Activating environment and installing dependencies..."
+  source venv/bin/activate
+  pip install -r requirements.txt
+
+  # Running python3 tsrc-dev.py init
+  echo "Running tsrc-dev.py init..."
+  if [[ $ROUTER_FLAG == "--router" ]]; then
+      python3 tsrc-dev.py init --router
+  else
+      python3 tsrc-dev.py init
+  fi
 }
 
 if [[ $# -lt 1 ]]; then
@@ -61,7 +67,8 @@ if [[ $# -lt 1 ]]; then
 fi
 
 if [[ "$1" == "init" ]]; then
-  initialize_files
+  shift
+  initialize_files "$@"
 elif [[ "$1" == "stop" ]]; then
   stop_services
 elif [[ "$1" == "start" ]]; then

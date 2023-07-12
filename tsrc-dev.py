@@ -16,7 +16,7 @@ def usage():
     exit(1)
 
 
-def initialize_files():
+def initialize_files(router):
     with open('./turbosrc.config', 'r') as f:
         config_data = json.load(f)
 
@@ -57,7 +57,7 @@ def initialize_files():
         "turbosrc": {
             "endpoint": {
               "mode": "online",
-              "url": "http://turbosrc-egress-router:4006/graphql"
+              "url": "http://turbosrc-egress-router:4006/graphql" if router else "http://turbosrc-service:4000/graphql"
             },
             "jwt": SECRET,
             "store": {
@@ -214,13 +214,14 @@ def manage_docker_service(action):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
+parser.add_argument("--router", help="Option to use the router", action="store_true")
 
 args = parser.parse_args
 
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
-        initialize_files()
+        initialize_files(args.router)
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
