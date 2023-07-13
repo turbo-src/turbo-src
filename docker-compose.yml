@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - 4005:4005
+    env_file:
+      - ./turbosrc-ingress-router/service.env
 
   turbosrc-egress-router:
     build: ./turbosrc-egress-router/
