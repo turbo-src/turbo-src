@@ -212,6 +212,46 @@ def manage_docker_service(action):
     elif action == 'stop':
         subprocess.run(['docker-compose', 'stop', 'namespace-service'], check=True)
 
+def update_turbosrc_id_in_env_file():
+    # load turbosrc.store.contributor from .config.json
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        service_config_data = json.load(f)
+
+    turbosrc_id = service_config_data.get('turbosrc', {}).get('store', {}).get('contributor', {}).get('addr', None)
+    if turbosrc_id is None:
+        raise ValueError("'turbosrc.store.contributor' not found in turbosrc-service/.config.json")
+
+    # update turbosrc_id in service.env
+    env_file_path = './turbosrc-ingress-router/service.env'
+
+    # Read the original lines from the file
+    with open(env_file_path, 'r') as f:
+        original_lines = f.readlines()
+
+    # Prepare the updated lines
+    updated_lines = []
+    found_turbosrc_id = False
+    for line in original_lines:
+        if line.startswith('TURBOSRC_ID'):
+            line = f"TURBOSRC_ID={turbosrc_id}\n"
+            found_turbosrc_id = True
+        updated_lines.append(line)
+
+    # If we didn't find a TURBOSRC_ID line, append one
+    if not found_turbosrc_id:
+        updated_lines.append(f"TURBOSRC_ID={turbosrc_id}\n")
+
+    # Write the updated lines back to the file
+    with open(env_file_path, 'w') as f:
+        f.writelines(updated_lines)
+
+def check_and_create_service_env():
+    env_file_path = './turbosrc-ingress-router/service.env'
+    # Check if the service.env file exists
+    if not os.path.exists(env_file_path):
+        # If not, create an empty file
+        open(env_file_path, 'a').close()
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument("--router", help="Option to use the router", action="store_true")
@@ -221,9 +261,13 @@ args = parser.parse_args
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
+        # upfront or docker-compose commands fail.
+        check_and_create_service_env()
+
         initialize_files(args.router)
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
+        update_turbosrc_id_in_env_file()
     else:
         usage()
