@@ -73,12 +73,20 @@ git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 You'll need a `turbosrc.config` file in the root directory.
 
 ```
-myGithubName
-myGithubApiToken
+
+
 mySecret
 ```
+```
+{
+    "GithubName": "myGithubName",
+    "GithubApiToken": "myGithubApiToken",
+    "Secret": "mySecret",
+    "TurboSrcID": ""
+}
+```
 
-Optionally, you can add a Turbosrc `Contributor ID` line. Otherwise, the `init` command will just generate an id and configure everything using it.
+Optionally, you can add a TurboSrcID. Long story, leave it blank for now; It enables a future feature not fully rolled-out.
 
 ##### a. Get your Github API Token
 
@@ -221,7 +229,7 @@ git push origin myFeature
 
 ```
 git checkout master
-git submodule --init --recursive
+git submodule update --init --recursive
 ```
 
 **6. You want to go back into myFeature branch.**
@@ -230,7 +238,7 @@ git submodule --init --recursive
 
 ```
 git checkout myFeature
-git submodule --init --recursive
+git submodule update --init --recursive
 ```
 
 **7. Let's say another developer wants to experiment with this new feature.**
