@@ -73,11 +73,6 @@ git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 You'll need a `turbosrc.config` file in the root directory.
 
 ```
-
-
-mySecret
-```
-```
 {
     "GithubName": "myGithubName",
     "GithubApiToken": "myGithubApiToken",
