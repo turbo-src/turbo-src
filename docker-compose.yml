@@ -15,7 +15,7 @@ services:
     ports:
       - 4006:4006
     volumes:
-      - ./turbosrc-egress-router/turboSrcInstances:/app/turboSrcInstances
+      - turboSrcInstancesVolume:/app/turboSrcInstances
 
   turbosrc-engine:
     build: ./turbosrc-engine/
@@ -115,3 +115,4 @@ volumes:
   db-data:
   gh-db-data:
   namespace-db-data:
+  turboSrcInstancesVolume:
