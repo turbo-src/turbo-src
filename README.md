@@ -105,17 +105,25 @@ It can be anything, as long as no one can guess it.
 It should be in this form:
 
 ```
-myGithubName
-myGithubApiToken
-mySecret
+{
+    "GithubName": "myGithubName",
+    "GithubApiToken": "myGithubApiToken",
+    "Secret": "mySecret",
+    "TurboSrcID": ""
+}
 ```
+
+You can leave the value of `TurboSrcID` as is above, just modify the other fields.
 
 Here is a fake turbosrc.config with pretend info:
 
 ```
-foss4ever
-ghp_bAcAXkRHiCU13DSQh5diqlRFUY8qbF3D46z5
-mysupersafesecretknowonecanguess
+{
+    "GithubName": "foss4ever",
+    "GithubApiToken": "ghp_bAcAXk...",
+    "Secret": "mysupersafesecretknowonecanguess",
+    "TurboSrcID": ""
+}
 ```
 
 **4. Intitialize Turbosrc**
