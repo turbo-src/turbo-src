@@ -18,6 +18,8 @@ It currently works as a Chrome web extension for Github, but the plan is to deve
 
 While we're currently in active development and the pre-alpha phase, your support and patience are much appreciated. Our goal is to develop TurboSrc into a valuable tool for all open-source projects.
 
+For your convenience, we make it super easy to experiment with TurboSrc in the meantime. Setup a local instance and safely play around as much as you like: skip to [Setting up a local TurboSrc instance](#setting-up-a-local-turbosrc-instance).
+
 ## Highlights
 * **Launch Your Own TurboSrc Instance:** Enhance your project's community involvement by setting up your unique TurboSrc instance.
 * **Harness VotePower:** Empower your TurboSrc instance users with the ability to vote on pull requests using VotePower.
@@ -48,9 +50,11 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 
 ![ezgif com-crop (1)](https://github.com/turbo-src/turbo-src/assets/75996017/9b25fb92-f8e5-493b-b4d2-f6bc37cf49f7)
 
-## Setting up a TurboSrc Instance
+## Setting up a local TurboSrc instance
 
-Setting up your own TurboSrc instance is straightforward. Here's a step-by-step guide to help you get started:
+Setting up your own local TurboSrc instance is straightforward. Online setup instructions are forthcomining. Hosting it online allows you to host other users.
+
+Here's a step-by-step guide to help you get started. No one other than you will be able to interact with your local instance - so have fun trying it out without any worries!
 
 **1. Install dependencies**
 
@@ -252,4 +256,4 @@ git submodule update --init --recursive
 git fetch myFeature
 git checkout myFeature
 git submodule update --remote
-```
+``
