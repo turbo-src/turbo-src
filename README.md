@@ -52,9 +52,11 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 
 ## Setting up a local TurboSrc instance
 
-Setting up your own local TurboSrc instance is straightforward (online hosting setup instructions are not yet ready).
+Setting up your own local TurboSrc instance is straightforward. Please note that the online hosting setup instructions are not yet available.
 
-Here's a step-by-step guide to help you get started with your local instance. No one other than you will be able to interact with your local instance - so have fun trying it out without any worries!
+To assist you, we've provided a step-by-step guide to help you get started with your local instance. To simplify the process, the company Reibase conveniently hosts a Github Oauth for your local instance, saving you the hassle. If you prefer to handle this yourself, you can find the necessary code [here](https://github.com/turbo-src/turbosrc-auth).
+
+Remember, your local instance is exclusive to you. No one else will be able to interact with it, so feel free to explore and experiment without any concerns!
 
 **1. Install dependencies**
 
