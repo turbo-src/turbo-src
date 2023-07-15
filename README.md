@@ -52,9 +52,9 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 
 ## Setting up a local TurboSrc instance
 
-Setting up your own local TurboSrc instance is straightforward. Online setup instructions are forthcomining. Hosting it online allows you to host other users.
+Setting up your own local TurboSrc instance is straightforward (online hosting setup instructions are not yet ready).
 
-Here's a step-by-step guide to help you get started. No one other than you will be able to interact with your local instance - so have fun trying it out without any worries!
+Here's a step-by-step guide to help you get started with your local instance. No one other than you will be able to interact with your local instance - so have fun trying it out without any worries!
 
 **1. Install dependencies**
 
