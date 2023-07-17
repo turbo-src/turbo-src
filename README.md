@@ -136,7 +136,7 @@ Here is a fake turbosrc.config with pretend info:
 
 `./tsrc-dev init`
 
-It will configure Turbosrc for you using your turbosrc.config. You shouldn't see any output from this command.
+It will configure Turbosrc for you using your turbosrc.config. You may see an error about "string" or "bytes": it's not a fatal error and TurboSrc was likley configured correctly.
 
 **5. Launch Turbosrc**
 
