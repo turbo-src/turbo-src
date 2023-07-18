@@ -259,3 +259,37 @@ git fetch myFeature
 git checkout myFeature
 git submodule update --remote
 ``
+
+### graphiQL query examples
+
+You may want to query the graphql endpoint in the browser for development purposes.
+
+Locally, go to `http://localhost:4000/graphql`. If hosting a network (most likely you are not), go to your domain name or ipaddress endpoint `https://<address>` (no `graphql` appended to the address).
+
+Create a user.
+
+```
+query {
+  createUser(
+    owner: "",
+    repo: "",
+    contributor_id: "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
+    contributor_name: "tsrctester1",
+    contributor_signature: "e0c911adbce919ea366cdeb5015b18b0e7980e659c3a89cd962a29ff743370b8",
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnaXRodWJUb2tlbiI6ImdocF9UcmFTbFJwVDhkczJucXk0OGxEdE1oTHNieXlpNmgxenRiWWQiLCJpYXQiOjE2ODIxNzkzNDN9.IPcPO05RaEjb8fk0wd7AiiaPjWMRri5P9vMYtALnZHI"
+  )
+}
+```
+
+Get the name of a contributor from their contributor ID.
+
+```
+query {
+  getContributorName(
+    owner: "tsrctester1",
+    repo: "demo",
+    defaultHash: "defaultHash4",
+    contributor_id: "0x09D56A39599Dd81e213EB2A9Bd6785945B662662"
+  )
+}
+```
