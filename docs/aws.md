@@ -1,20 +1,96 @@
-# AWS ec2 instance
+# AWS Linux ec2 instance
 
+Select 30GB for root volume. Should be in free tier range.
+
+Update system.
+
+```
 sudo yum update -y
+```
 
 ## Install git
 
 sudo yum install git -y
 
-## Install docker
+## Setup docker
+
+Install docker
+
+```
+sudo yum install docker
+```
+
+Start docker
+
+```
+sudo service docker start
+```
+
+Enable running docker without sudo.
+
+```
+sudo usermod -a -G docker ec2-user
+```
+
+You'll have to logout and back into the shell.
 
 
-It also has instruction on allowing the use of docker without sudo.
+We didn't choose to start docker on startup. But we should do that.
+
+### Other sources
+
+**install latest version of docker**
+
+Docker package versions in the default repositories of many Linux distributions might not always keep up with the latest versions released by Docker. If you installed Docker from the default repositories of your Linux distribution, you may have an older version. To upgrade Docker and ensure you always have the latest version, you need to set up Docker's official repositories on your system and install from them.
+
+Here is the general process to upgrade Docker on a CentOS or RHEL system:
+
+Uninstall the older version of Docker:
+
+```
+sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+```
+
+This command will not remove images, containers, volumes, or user-created configuration files on your host. It's just removing the Docker package and associated dependencies. If you want to save and load Docker data, check Docker documentation on docker save and docker load.
+
+Set up the Docker repository on your system. You need to first update the yum package index and then install a few packages that Docker needs:
+
+```
+sudo yum update -y
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+```
+
+Then, you can add the Docker repository with the following command:
+
+```
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+```
+
+Install the latest version of Docker CE (Community Edition) using the following command:
+
+```
+sudo yum install -y docker-ce docker-ce-cli containerd.io
+Start Docker and enable it to start on boot:
+```
+
+```
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+Verify that Docker CE is installed correctly by running the hello-world image:
+
+```
+sudo docker run hello-world
+```
+
+This command downloads a test image and runs it in a container. When the container runs, it prints an informational message and exits.
+
+Please note that the exact names of the packages might change in the future as Docker evolves, so you should always check Docker's official documentation for the most accurate information.
+
+**Even more sources**
 
 Go to section Installing Docker on Amazon Linux 2
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html
-
-We didn't choose to start docker on startup.
 
 But here it says to do something else, which is different than above
 
@@ -24,6 +100,36 @@ Make sure to exit terminal session then rejoin. Otherwise changes for 'no sudo' 
 
 ## Docker-compose install
 
+**Download binary.**
+
+
+Do this one.
+
+```
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+```
+
+or you can install a older version of docker-compose like this but this resulted in breaking turbosrc.
+
+```
+sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+```
+
+
+
+I install the old one as `yum` docker v20.10.23 is an old one.
+
+Give permissions.
+
+```
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+See version and verify it's installed.
+
+```
+docker-compose version
+```
 Make sure to do the line that has the current version of docker-compose. otherwise you'll get very old one.
 
 https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9
