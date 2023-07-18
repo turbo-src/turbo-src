@@ -65,6 +65,7 @@ Install
 - docker
 - docker-compose
 - yarn
+- python3
 
 **2. Installation**
 
