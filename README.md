@@ -258,7 +258,7 @@ git submodule update --init --recursive
 git fetch myFeature
 git checkout myFeature
 git submodule update --remote
-``
+```
 
 ### graphiQL query examples
 
