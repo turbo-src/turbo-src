@@ -293,3 +293,68 @@ query {
   )
 }
 ```
+
+Get repo data.
+
+```
+query {
+  getRepoData(
+    turboSrcID: "0x9e81be64b30a850e038cb5a85241f58528010016", 
+    repo_id: "7db9a/demo",
+    contributor_id: "0x73f16c9b53a83a44e650ee6f25219459d11534e0"
+  ) {
+    status
+    repo_id
+    owner
+    contributor_id
+    head
+    quorum
+    contributor {
+      contributor_id
+      contributor
+      votePower
+    }
+    pullRequests {
+      status
+      repo_id
+      issue_id
+      title
+      head
+      remoteURL
+      baseBranch
+      forkBranch
+      childDefaultHash
+      defaultHash
+      mergeable
+      state
+      voteData {
+        contributor {
+          voted
+          side
+          votePower
+          createdAt
+          contributor_id
+        }
+        voteTotals {
+          totalVotes
+          totalYesVotes
+          totalNoVotes
+          votesToQuorum
+          votesToMerge
+          votesToClose
+          totalVotePercent
+          yesPercent
+          noPercent
+          quorum
+        }
+        votes {
+          contributor_id
+          side
+          votePower
+          createdAt
+        }
+      }
+    }
+  }
+}
+```
