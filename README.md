@@ -233,7 +233,16 @@ git push origin myFeature
 git push origin myFeature
 ```
 
-**5. Go back to master and forget about myFeature**
+**5. Pull in new changes form monorepo and submodules**
+
+`turbo-src`
+
+```
+git pull origin myFeature
+git submodule update --remote
+```
+
+**6. Go back to master and forget about myFeature**
 
 `turbo-src`
 
@@ -242,7 +251,7 @@ git checkout master
 git submodule update --init --recursive
 ```
 
-**6. You want to go back into myFeature branch.**
+**7. You want to go back into myFeature branch.**
 
 `turbo-src`
 
@@ -251,7 +260,7 @@ git checkout myFeature
 git submodule update --init --recursive
 ```
 
-**7. Let's say another developer wants to experiment with this new feature.**
+**8. Let's say another developer wants to experiment with this new feature.**
 
 `turbo-src`
 
