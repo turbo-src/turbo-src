@@ -14,6 +14,7 @@ services:
     restart: always
     ports:
       - 4006:4006
+      - 4007:4007
     volumes:
       - turboSrcInstancesVolume:/app/turboSrcInstances
 
