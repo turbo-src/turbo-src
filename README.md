@@ -265,7 +265,7 @@ git submodule update --init --recursive
 `turbo-src`
 
 ```
-git fetch myFeature
+git fetch origin myFeature
 git checkout myFeature
 git submodule update --remote
 ```
