@@ -31,7 +31,7 @@ vim /etc/nginx/nginx.conf
 Validate nginx config.
 
 ```
-nginx -t
+sudo nginx -t
 ```
 
 Reload nginx config.
