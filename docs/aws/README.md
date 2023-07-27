@@ -27,3 +27,15 @@ Edit nginx config.
 ```
 vim /etc/nginx/nginx.conf
 ```
+
+Validate nginx config.
+
+```
+nginx -t
+```
+
+Reload nginx config.
+
+```
+sudo nginx -s reload
+```
