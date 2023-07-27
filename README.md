@@ -239,7 +239,6 @@ git push origin myFeature
 
 ```
 git pull origin myFeature
-git submodule update --remote
 ```
 
 **6. Go back to master and forget about myFeature**
@@ -267,5 +266,5 @@ git submodule update --init --recursive
 ```
 git fetch origin myFeature
 git checkout myFeature
-git submodule update --remote
+git submodule update --init --recursive
 ```
