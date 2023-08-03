@@ -238,7 +238,7 @@ def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
             line = f"TURBOSRC_ID={turbosrc_id}\n"
             found_turbosrc_id = True
         if line.startswith('EGRESS_ROUTER_URL'):
-            line = f"TURBOSRC_ID={egress_router_url}\n"
+            line = f"EGRESS_ROUTER_URL={egress_router_url}\n"
             found_egress_router_url = True
         updated_lines.append(line)
 
