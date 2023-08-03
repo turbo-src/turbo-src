@@ -16,7 +16,7 @@ def usage():
     exit(1)
 
 
-def initialize_files(router):
+def initialize_files():
     with open('./turbosrc.config', 'r') as f:
         config_data = json.load(f)
 
@@ -24,12 +24,17 @@ def initialize_files(router):
     GITHUB_API_TOKEN = config_data.get('GithubApiToken', None)
     SECRET = config_data.get('Secret', None)
     ADDR = config_data.get('TurboSrcID', None)
+    turboSrcURL = config_data.get('TurboSrcURL', None)
 
     if ADDR:
         if not is_valid_ethereum_address(ADDR):
             ADDR = None
     else:
         ADDR = None
+
+    # Validate the URL and set it to default if it is None or empty
+    if not turboSrcURL:
+        turboSrcURL = "http://turbosrc-service:4000/graphql"
 
     if None in (USER, GITHUB_API_TOKEN, SECRET):
         raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
@@ -57,7 +62,7 @@ def initialize_files(router):
         "turbosrc": {
             "endpoint": {
               "mode": "online",
-              "url": "http://turbosrc-egress-router:4006/graphql" if router else "http://turbosrc-service:4000/graphql"
+              "url": turboSrcURL
             },
             "jwt": SECRET,
             "store": {
@@ -260,7 +265,6 @@ def check_and_create_service_env(env_file_path):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
-parser.add_argument("--router", help="Option to use the router", action="store_true")
 
 args = parser.parse_args
 
@@ -271,7 +275,7 @@ if __name__ == "__main__":
         check_and_create_service_env('./turbosrc-ingress-router/service.env')
         check_and_create_service_env('./turbosrc-egress-router/service.env')
 
-        initialize_files(args.router)
+        initialize_files()
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
