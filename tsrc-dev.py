@@ -212,7 +212,7 @@ def manage_docker_service(action):
     elif action == 'stop':
         subprocess.run(['docker-compose', 'stop', 'namespace-service'], check=True)
 
-def update_turbosrc_id_in_env_file():
+def update_turbosrc_id_egress_router_url_in_env_file():
     # load turbosrc.store.contributor from .config.json
     with open('./turbosrc-service/.config.json', 'r') as f:
         service_config_data = json.load(f)
@@ -221,7 +221,10 @@ def update_turbosrc_id_in_env_file():
     if turbosrc_id is None:
         raise ValueError("'turbosrc.store.contributor' not found in turbosrc-service/.config.json")
 
-    # update turbosrc_id in service.env
+    egress_router_url = service_config_data.get('turbosrc', {}).get('endpoint', {}).get('url', None)
+    if egress_router_url is None:
+        raise ValueError("'turbosrc.turbosrc.endpoint' not found in turbosrc-service/.config.json")
+
     env_file_path = './turbosrc-ingress-router/service.env'
 
     # Read the original lines from the file
@@ -231,15 +234,21 @@ def update_turbosrc_id_in_env_file():
     # Prepare the updated lines
     updated_lines = []
     found_turbosrc_id = False
+    found_egress_router_url = False
     for line in original_lines:
         if line.startswith('TURBOSRC_ID'):
             line = f"TURBOSRC_ID={turbosrc_id}\n"
             found_turbosrc_id = True
+        if line.startswith('EGRESS_ROUTER_URL'):
+            line = f"TURBOSRC_ID={egress_router_url}\n"
+            found_egress_router_url = True
         updated_lines.append(line)
 
     # If we didn't find a TURBOSRC_ID line, append one
     if not found_turbosrc_id:
         updated_lines.append(f"TURBOSRC_ID={turbosrc_id}\n")
+    if not found_egress_router_url:
+        updated_lines.append(f"EGRESS_ROUTER_URL={egress_router_url}\n")
 
     # Write the updated lines back to the file
     with open(env_file_path, 'w') as f:
@@ -268,6 +277,6 @@ if __name__ == "__main__":
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
-        update_turbosrc_id_in_env_file()
+        update_turbosrc_id_egress_router_url_in_env_file()
     else:
         usage()
