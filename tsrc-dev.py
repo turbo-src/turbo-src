@@ -212,7 +212,7 @@ def manage_docker_service(action):
     elif action == 'stop':
         subprocess.run(['docker-compose', 'stop', 'namespace-service'], check=True)
 
-def update_turbosrc_id_egress_router_url_in_env_file():
+def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
     # load turbosrc.store.contributor from .config.json
     with open('./turbosrc-service/.config.json', 'r') as f:
         service_config_data = json.load(f)
@@ -224,8 +224,6 @@ def update_turbosrc_id_egress_router_url_in_env_file():
     egress_router_url = service_config_data.get('turbosrc', {}).get('endpoint', {}).get('url', None)
     if egress_router_url is None:
         raise ValueError("'turbosrc.turbosrc.endpoint' not found in turbosrc-service/.config.json")
-
-    env_file_path = './turbosrc-ingress-router/service.env'
 
     # Read the original lines from the file
     with open(env_file_path, 'r') as f:
@@ -254,8 +252,7 @@ def update_turbosrc_id_egress_router_url_in_env_file():
     with open(env_file_path, 'w') as f:
         f.writelines(updated_lines)
 
-def check_and_create_service_env():
-    env_file_path = './turbosrc-ingress-router/service.env'
+def check_and_create_service_env(env_file_path):
     # Check if the service.env file exists
     if not os.path.exists(env_file_path):
         # If not, create an empty file
@@ -271,12 +268,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
         # upfront or docker-compose commands fail.
-        check_and_create_service_env()
+        check_and_create_service_env('./turbosrc-ingress-router/service.env')
+        check_and_create_service_env('./turbosrc-egress-router/service.env')
 
         initialize_files(args.router)
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
-        update_turbosrc_id_egress_router_url_in_env_file()
+        update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
+        update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-egress-router/service.env')
     else:
         usage()
