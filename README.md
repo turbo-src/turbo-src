@@ -84,6 +84,7 @@ You'll need a `turbosrc.config` file in the root directory.
     "GithubName": "myGithubName",
     "GithubApiToken": "myGithubApiToken",
     "Secret": "mySecret",
+    "IsOnline": false,
     "TurboSrcURL": "",
     "TurboSrcID": ""
 }
@@ -117,6 +118,7 @@ It should be in this form:
     "GithubName": "myGithubName",
     "GithubApiToken": "myGithubApiToken",
     "Secret": "mySecret",
+    "IsOnline": false,
     "TurboSrcURL": "",
     "TurboSrcID": ""
 }
@@ -131,6 +133,7 @@ Here is a fake turbosrc.config with pretend info:
     "GithubName": "foss4ever",
     "GithubApiToken": "ghp_bAcAXk...",
     "Secret": "mysupersafesecretknowonecanguess",
+    "IsOnline": false,
     "TurboSrcURL": "",
     "TurboSrcID": ""
 }
