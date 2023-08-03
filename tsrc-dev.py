@@ -34,7 +34,7 @@ def initialize_files():
 
     # Validate the URL and set it to default if it is None or empty
     if not turboSrcURL:
-        turboSrcURL = "http://turbosrc-service:4000/graphql"
+        turboSrcURL = "http://turbosrc-egress-router:4006/graphql"
 
     if None in (USER, GITHUB_API_TOKEN, SECRET):
         raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
@@ -263,6 +263,27 @@ def check_and_create_service_env(env_file_path):
         # If not, create an empty file
         open(env_file_path, 'a').close()
 
+def validate_and_update_endpoint_url():
+    with open('./turbosrc.config', 'r') as f:
+        config_data = json.load(f)
+
+    is_online = config_data.get('IsOnline', None)
+
+    if is_online is not None:
+        if isinstance(is_online, bool):
+            if not is_online:
+                with open('./turbosrc-service/.config.json', 'r') as f:
+                    service_config_data = json.load(f)
+
+                service_config_data['turbosrc']['endpoint']['url'] = "http://turbosrc-service:4000/graphql"
+
+                with open('./turbosrc-service/.config.json', 'w') as f:
+                    json.dump(service_config_data, f, indent=4)
+        else:
+            raise ValueError("Invalid value for 'IsOnline' in 'turbosrc.config', expected boolean true or false")
+    else:
+        raise ValueError("Missing 'IsOnline' value in 'turbosrc.config'")
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -281,5 +302,6 @@ if __name__ == "__main__":
         manage_docker_service('stop')
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-egress-router/service.env')
+        validate_and_update_endpoint_url()
     else:
         usage()
