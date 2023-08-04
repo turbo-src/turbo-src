@@ -84,13 +84,12 @@ You'll need a `turbosrc.config` file in the root directory.
     "GithubName": "myGithubName",
     "GithubApiToken": "myGithubApiToken",
     "Secret": "mySecret",
-    "IsOnline": false,
-    "TurboSrcURL": "",
+    "Mode": "local",
     "TurboSrcID": ""
 }
 ```
 
-Optionally, you can add a TurboSrcID or TurboSrcURL. Long story, leave it blank for now; It enables a future feature not fully rolled-out.
+Optionally, you can add a TurboSrcID. Long story, leave it blank for now; It enables a future feature not fully rolled-out.
 
 ##### a. Get your Github API Token
 
@@ -118,8 +117,7 @@ It should be in this form:
     "GithubName": "myGithubName",
     "GithubApiToken": "myGithubApiToken",
     "Secret": "mySecret",
-    "IsOnline": false,
-    "TurboSrcURL": "",
+    "Mode": "local",
     "TurboSrcID": ""
 }
 ```
@@ -133,8 +131,7 @@ Here is a fake turbosrc.config with pretend info:
     "GithubName": "foss4ever",
     "GithubApiToken": "ghp_bAcAXk...",
     "Secret": "mysupersafesecretknowonecanguess",
-    "IsOnline": false,
-    "TurboSrcURL": "",
+    "Mode": "local",
     "TurboSrcID": ""
 }
 ```
