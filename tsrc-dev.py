@@ -15,7 +15,6 @@ def usage():
     print("  init: initialize necessary files and directories")
     exit(1)
 
-
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
         config_data = json.load(f)
@@ -24,7 +23,7 @@ def initialize_files():
     GITHUB_API_TOKEN = config_data.get('GithubApiToken', None)
     SECRET = config_data.get('Secret', None)
     ADDR = config_data.get('TurboSrcID', None)
-    turboSrcURL = config_data.get('TurboSrcURL', None)
+    MODE = config_data.get('Mode', None)
 
     if ADDR:
         if not is_valid_ethereum_address(ADDR):
@@ -32,11 +31,12 @@ def initialize_files():
     else:
         ADDR = None
 
-    # Validate the URL and set it to default if it is None or empty
-    if not turboSrcURL:
-        turboSrcURL = "http://turbosrc-egress-router:4006/graphql"
+    if MODE == 'local':
+        URL = "http://turbosrc-service:4000/graphql"
+    elif MODE == 'router-client':
+        URL = ""
 
-    if None in (USER, GITHUB_API_TOKEN, SECRET):
+    if None in (USER, GITHUB_API_TOKEN, SECRET, MODE):
         raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
 
     os.makedirs('./GihtubMakerTools', exist_ok=True)
@@ -62,7 +62,8 @@ def initialize_files():
         "turbosrc": {
             "endpoint": {
               "mode": "online",
-              "url": turboSrcURL
+              "url": URL,
+              "egressURLoption": URL
             },
             "jwt": SECRET,
             "store": {
@@ -99,6 +100,8 @@ def initialize_files():
 
     with open('./turbosrc-service/.config.json', 'w') as f:
         json.dump(config, f, indent=4)
+
+    return MODE
 
 def update_api_token():
     with open('./turbosrc-service/.config.json', 'r') as f:
@@ -226,7 +229,7 @@ def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
     if turbosrc_id is None:
         raise ValueError("'turbosrc.store.contributor' not found in turbosrc-service/.config.json")
 
-    egress_router_url = service_config_data.get('turbosrc', {}).get('endpoint', {}).get('url', None)
+    egress_router_url = service_config_data.get('turbosrc', {}).get('endpoint', {}).get('egressURLoption', None)
     if egress_router_url is None:
         raise ValueError("'turbosrc.turbosrc.endpoint' not found in turbosrc-service/.config.json")
 
@@ -267,22 +270,36 @@ def validate_and_update_endpoint_url():
     with open('./turbosrc.config', 'r') as f:
         config_data = json.load(f)
 
-    is_online = config_data.get('IsOnline', None)
+    mode = config_data.get('Mode', None)
 
-    if is_online is not None:
-        if isinstance(is_online, bool):
-            if not is_online:
-                with open('./turbosrc-service/.config.json', 'r') as f:
-                    service_config_data = json.load(f)
+    if mode is not None:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            service_config_data = json.load(f)
 
-                service_config_data['turbosrc']['endpoint']['url'] = "http://turbosrc-service:4000/graphql"
+        service_config_data['turbosrc']['endpoint']['egressURLoption'] = "http://turbosrc-egress-router:4006/graphql"
 
-                with open('./turbosrc-service/.config.json', 'w') as f:
-                    json.dump(service_config_data, f, indent=4)
-        else:
-            raise ValueError("Invalid value for 'IsOnline' in 'turbosrc.config', expected boolean true or false")
+        if mode == 'local':
+            service_config_data['turbosrc']['endpoint']['url'] = "http://turbosrc-service:4000/graphql"
+
+        if mode == 'router-client':
+            service_config_data['turbosrc']['endpoint']['url'] = "http://turbosrc-service:4000/graphql"
+
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(service_config_data, f, indent=4)
+
     else:
-        raise ValueError("Missing 'IsOnline' value in 'turbosrc.config'")
+        raise ValueError("Missing 'Mode' value in 'turbosrc.config'")
+
+def remove_egressURLoption():
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        config = json.load(f)
+
+    if config.get('turbosrc', {}).get('endpoint', {}).get('egressURLoption', None) is not None:
+        del config['turbosrc']['endpoint']['egressURLoption']
+
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(config, f, indent=4)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
@@ -296,12 +313,14 @@ if __name__ == "__main__":
         check_and_create_service_env('./turbosrc-ingress-router/service.env')
         check_and_create_service_env('./turbosrc-egress-router/service.env')
 
-        initialize_files()
+        MODE = initialize_files()
         update_api_token()
         manage_docker_service('start')
         manage_docker_service('stop')
+        validate_and_update_endpoint_url()
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-egress-router/service.env')
-        validate_and_update_endpoint_url()
+        if MODE != 'router-client':
+            remove_egressURLoption()
     else:
         usage()
