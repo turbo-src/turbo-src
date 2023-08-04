@@ -300,6 +300,15 @@ def remove_egressURLoption():
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def update_egressURLoption():
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        config = json.load(f)
+
+    if config.get('turbosrc', {}).get('endpoint', {}).get('egressURLoption', None) is not None:
+        config['turbosrc']['endpoint']['egressURLoption'] = "https://turbosrc-marialis.dev"
+
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(config, f, indent=4)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
@@ -322,5 +331,7 @@ if __name__ == "__main__":
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-egress-router/service.env')
         if MODE != 'router-client':
             remove_egressURLoption()
+        if MODE == 'router-client':
+            update_egressURLoption()
     else:
         usage()
