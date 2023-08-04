@@ -342,6 +342,7 @@ if __name__ == "__main__":
             remove_egressURLoption()
         if MODE == 'router-client':
             update_egressURLoption()
+            update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
         if MODE == 'router-host':
             update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
 
