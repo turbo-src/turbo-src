@@ -31,7 +31,7 @@ def initialize_files():
     else:
         ADDR = None
 
-    if MODE == 'local':
+    if MODE in ['local', 'router-host']:
         URL = "http://turbosrc-service:4000/graphql"
     elif MODE == 'router-client':
         URL = ""
@@ -278,7 +278,7 @@ def validate_and_update_endpoint_url():
 
         service_config_data['turbosrc']['endpoint']['egressURLoption'] = "http://turbosrc-egress-router:4006/graphql"
 
-        if mode == 'local':
+        if mode in ['local', 'router-host']:
             service_config_data['turbosrc']['endpoint']['url'] = "http://turbosrc-service:4000/graphql"
 
         if mode == 'router-client':
@@ -310,6 +310,15 @@ def update_egressURLoption():
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def update_turbosrc_url(url):
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        config = json.load(f)
+
+    if config.get('turbosrc', {}).get('endpoint', {}).get('url', None) is not None:
+        config['turbosrc']['endpoint']['url'] = url
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(config, f, indent=4)
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -333,5 +342,8 @@ if __name__ == "__main__":
             remove_egressURLoption()
         if MODE == 'router-client':
             update_egressURLoption()
+        if MODE == 'router-host':
+            update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
+
     else:
         usage()
