@@ -319,6 +319,31 @@ def update_turbosrc_url(url):
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def update_extension_config():
+    # 1. Read the contents of `./turbosrc-service/.config.json`.
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        turbosrc_data = json.load(f)
+
+    # 2. Extract the necessary values from it.
+    github_user = turbosrc_data.get('github', {}).get('user')
+    turbosrc_id = turbosrc_data.get('turbosrc', {}).get('store', {}).get('contributor', {}).get('addr')
+
+    # Check and raise specific errors if values are not found
+    if not github_user:
+        raise ValueError("github.user field not found in turbosrc-service/.config.json.")
+    if not turbosrc_id:
+        raise ValueError("turbosrc.store.contributor.addr field not found in turbosrc-service/.config.json.")
+
+    # 3. Write the new fields and values into `./chrome-extension/config.devOnline.json`.
+    with open('./chrome-extension/config.devOnline.json', 'r') as f:
+        dev_online_data = json.load(f)
+
+    dev_online_data['myGithubName'] = github_user
+    dev_online_data['myTurboSrcID'] = turbosrc_id
+
+    with open('./chrome-extension/config.devOnline.json', 'w') as f:
+        json.dump(dev_online_data, f, indent=4)
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -345,6 +370,10 @@ if __name__ == "__main__":
             update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
         if MODE == 'router-host':
             update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
+        try:
+            update_extension_config()
+        except ValueError as e:
+            print(f"Error: {e}")
 
     else:
         usage()
