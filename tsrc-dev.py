@@ -133,7 +133,7 @@ def is_valid_ethereum_address(address):
         traceback.print_exc()
         return False
 
-def get_contributor_id():
+def get_contributor_id_and_signature():
     last_exception = None
     try:
         with open('./turbosrc-service/.config.json', 'r') as f:
@@ -162,7 +162,9 @@ def get_contributor_id():
                 response.raise_for_status()
                 result = response.json()
                 if result.get('data') and result['data'].get('findOrCreateUser'):
-                    return result['data']['findOrCreateUser']['contributor_id']
+                    contributor_id = result['data']['findOrCreateUser']['contributor_id']
+                    contributor_signature = result['data']['findOrCreateUser']['contributor_signature']
+                    return (contributor_id, contributor_signature)
             except Exception as e:
                 last_exception = e
                 if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
@@ -177,10 +179,12 @@ def get_contributor_id():
         traceback.print_exc()
         return None
 
-def update_contributor_id(contributor_id):
+def update_contributor_id(contributor_id, contributor_signature):
     try:
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
+
+        data['turbosrc']['store']['contributor']['key'] = contributor_signature
 
         current_address = data['turbosrc']['store']['contributor']['addr']
 
@@ -202,10 +206,10 @@ def manage_docker_service(action):
         while retries < max_retries:
             try:
                 # Try to fetch contributor id
-                contributor_id = get_contributor_id()
+                contributor_id, contributor_signature = get_contributor_id_and_signature()
                 # If fetch is successful, update contributor_id and break from loop
                 if contributor_id is not None:
-                    update_contributor_id(contributor_id)
+                    update_contributor_id(contributor_id, contributor_signature)
                     break
             except ConnectionError as e:
                 last_error = e
@@ -226,8 +230,11 @@ def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
         service_config_data = json.load(f)
 
     turbosrc_id = service_config_data.get('turbosrc', {}).get('store', {}).get('contributor', {}).get('addr', None)
+    turbosrc_key = service_config_data.get('turbosrc', {}).get('store', {}).get('contributor', {}).get('key', None)
     if turbosrc_id is None:
-        raise ValueError("'turbosrc.store.contributor' not found in turbosrc-service/.config.json")
+        raise ValueError("'turbosrc.store.contributor.addr' not found in turbosrc-service/.config.json")
+    if turbosrc_key is None:
+        raise ValueError("'turbosrc.store.contributor.key' not found in turbosrc-service/.config.json")
 
     egress_router_url = service_config_data.get('turbosrc', {}).get('endpoint', {}).get('egressURLoption', None)
     if egress_router_url is None:
@@ -240,11 +247,15 @@ def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
     # Prepare the updated lines
     updated_lines = []
     found_turbosrc_id = False
+    found_turbosrc_key = False
     found_egress_router_url = False
     for line in original_lines:
         if line.startswith('TURBOSRC_ID'):
             line = f"TURBOSRC_ID={turbosrc_id}\n"
             found_turbosrc_id = True
+        if line.startswith('TURBOSRC_KEY'):
+            line = f"TURBOSRC_KEY={turbosrc_key}\n"
+            found_turbosrc_key = True
         if line.startswith('EGRESS_ROUTER_URL'):
             line = f"EGRESS_ROUTER_URL={egress_router_url}\n"
             found_egress_router_url = True
@@ -253,6 +264,8 @@ def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
     # If we didn't find a TURBOSRC_ID line, append one
     if not found_turbosrc_id:
         updated_lines.append(f"TURBOSRC_ID={turbosrc_id}\n")
+    if not found_turbosrc_key:
+        updated_lines.append(f"TURBOSRC_KEY={turbosrc_key}\n")
     if not found_egress_router_url:
         updated_lines.append(f"EGRESS_ROUTER_URL={egress_router_url}\n")
 
