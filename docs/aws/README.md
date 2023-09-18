@@ -39,3 +39,81 @@ Reload nginx config.
 ```
 sudo nginx -s reload
 ```
+
+## Security Rules
+
+The following are the security group rules for the reverse proxy (nginx) and turbosrc itself.
+
+### turbosrc-nginx
+
+
+Inbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type  | Protocol | Port Range | Source         | Description                  |
+|------|------------------------|------------|-------|----------|------------|----------------|------------------------------|
+| –    | placeholder-id-1       | IPv4       | SSH   | TCP      | 22         | 13.52.6.112/29 | EC2 Instance Connect only    |
+| –    | placeholder-id-2       | IPv4       | HTTPS | TCP      | 443        | –              | –                            |
+
+```
+
+Outbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type       | Protocol | Port Range | Destination | Description |
+|------|------------------------|------------|------------|----------|------------|-------------|-------------|
+| –    | placeholder-id-1       | IPv4       | All traffic| All      | All        | –           | –           |
+```
+
+
+### turbosrc
+
+Inbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type       | Protocol | Port Range | Source        | Description                  |
+|------|------------------------|------------|------------|----------|------------|---------------|------------------------------|
+| –    | placeholder-id-1       | IPv4       | SSH        | TCP      | 22         | 13.52.6.112/29| EC2 Instance Connect only    |
+| –    | placeholder-id-2       | IPv4       | Custom TCP | TCP      | 4007       | 0.0.0.0/0     | –                            |
+| –    | placeholder-id-3       | IPv4       | Custom TCP | TCP      | 4006       | 0.0.0.0/0     | –                            |
+
+```
+
+Outbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type       | Protocol | Port Range | Destination | Description |
+|------|------------------------|------------|------------|----------|------------|-------------|-------------|
+| –    | placeholder-id-1       | IPv4       | All traffic| All      | All        | –           | –           |
+```
+
+### EC2 Instance Connect
+
+In order to ascertain AWS ip range for `source` in the inbound SSH rule, I used the following script.
+
+```
+import requests
+
+def get_ec2_instance_connect_ip_ranges(region):
+    # URL for the AWS IP ranges JSON
+    AWS_IP_RANGES_URL = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+
+    # Fetch the JSON data
+    response = requests.get(AWS_IP_RANGES_URL)
+    data = response.json()
+
+    # Extract relevant IP ranges
+    ip_ranges = [
+        prefix['ip_prefix'] for prefix in data['prefixes']
+        if prefix['service'] == 'EC2_INSTANCE_CONNECT' and prefix['region'] == region
+    ]
+
+    return ip_ranges
+
+if __name__ == "__main__":
+    region = "us-west-1"  # Northern California
+    ip_ranges = get_ec2_instance_connect_ip_ranges(region)
+
+    print(f"EC2_INSTANCE_CONNECT IP ranges for {region}:")
+    print(ip_ranges)
+```
