@@ -42,9 +42,10 @@ sudo nginx -s reload
 
 ## Security Rules
 
+The following are the security group rules for the reverse proxy (nginx) and turbosrc itself.
+
 ### turbosrc-nginx
 
-Here are the following rules for the security group on AWS:
 
 Inbound rules
 
@@ -63,6 +64,30 @@ Outbound rules
 |------|------------------------|------------|------------|----------|------------|-------------|-------------|
 | –    | placeholder-id-1       | IPv4       | All traffic| All      | All        | –           | –           |
 ```
+
+
+### turbosrc
+
+Inbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type       | Protocol | Port Range | Source        | Description                  |
+|------|------------------------|------------|------------|----------|------------|---------------|------------------------------|
+| –    | placeholder-id-1       | IPv4       | SSH        | TCP      | 22         | 13.52.6.112/29| EC2 Instance Connect only    |
+| –    | placeholder-id-2       | IPv4       | Custom TCP | TCP      | 4007       | 0.0.0.0/0     | –                            |
+| –    | placeholder-id-3       | IPv4       | Custom TCP | TCP      | 4006       | 0.0.0.0/0     | –                            |
+
+```
+
+Outbound rules
+
+```
+| Name | Security Group Rule ID | IP Version | Type       | Protocol | Port Range | Destination | Description |
+|------|------------------------|------------|------------|----------|------------|-------------|-------------|
+| –    | placeholder-id-1       | IPv4       | All traffic| All      | All        | –           | –           |
+```
+
+### EC2 Instance Connect
 
 In order to ascertain AWS ip range for `source` in the inbound SSH rule, I used the following script.
 
