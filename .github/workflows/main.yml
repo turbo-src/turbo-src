@@ -1,10 +1,10 @@
 name: Run Tests
 
 on:
-  workflow_dispatch:
-  push:
   pull_request:
-
+    types: [opened, synchronize]
+  push:
+    branches:
 jobs:
   test:
     runs-on: ubuntu-latest
