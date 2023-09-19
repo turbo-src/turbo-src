@@ -25,9 +25,9 @@ jobs:
         chmod +x ./tsrc-dev
         chmod +x ./tsrc-dev.py
 
-    - name: Create turbosrc.config using printf
+    - name: Decode and create turbosrc.config
       run: |
-        printf '%s\n' "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
+        echo "${{ secrets.TURBOSRC_CONFIG }}" | base64 --decode > ./turbosrc.config
         jq '.' ./turbosrc.config
 
     - name: Run turbosrc init
