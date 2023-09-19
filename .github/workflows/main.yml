@@ -40,7 +40,7 @@ jobs:
       run: python add_testers.py
 
 
-    -name: Start turbosrc and run tests
+    - name: Start turbosrc and run tests
       run:
         ./tsrc-dev restart
         sleep 10
