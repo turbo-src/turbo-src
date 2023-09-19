@@ -49,20 +49,30 @@ function create_pull_request() {
 }
 
 function run_tests() {
-  # If we want to run from another director you can do for example
-  # npm test --prefix turbosrc-service/ testing/integration/privaterepo/createUser.js
+    echo ""
+    echo "Running tests..."
+    echo "" && sleep 1
 
-  echo ""
-  echo "Running tests..."
-  echo "" && sleep 1
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/createUser.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/createRepo.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/transferTokens.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/twoVoters.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/singleMajorityVoter.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/duplicateVote.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/manyVoters.js && sleep 5
-  docker-compose exec -T turbosrc-service npm test testing/integration/privaterepo/semiAutoManyVoters.js && sleep 5
+    tests=(
+        "testing/integration/privaterepo/createUser.js"
+        "testing/integration/privaterepo/createRepo.js"
+        "testing/integration/privaterepo/transferTokens.js"
+        "testing/integration/privaterepo/twoVoters.js"
+        "testing/integration/privaterepo/singleMajorityVoter.js"
+        "testing/integration/privaterepo/duplicateVote.js"
+        "testing/integration/privaterepo/manyVoters.js"
+        "testing/integration/privaterepo/semiAutoManyVoters.js"
+    )
+
+    for test in "${tests[@]}"; do
+        OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$test")
+        echo "$OUTPUT"
+        if [ $? -ne 0 ]; then
+            echo "Error running $test test"
+            exit 1
+        fi
+        sleep 5
+    done
 }
 
 function execute_all_except_tests() {
