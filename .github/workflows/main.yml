@@ -40,4 +40,4 @@ jobs:
         ./tsrc-dev init
         ./tsrc-dev restart
         sleep 10
-        ./tsrc-dev test 7db9a demo execute_all
+        ./tsrc-dev test 7db9a demo run_tests
