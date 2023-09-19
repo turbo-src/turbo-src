@@ -16,17 +16,36 @@ function create_pull_request() {
   echo "" && sleep 1
   USERNAME=$1
   REPO=$2
-  docker-compose run  create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest1" "refactor(lsp): remove redundant client cleanup" "auto pull request"
-  docker-compose run  create_pull_requests \
-  python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest2" "refactor(uncrustify): set maximum number of consecutive newlines" "auto pull request"
-  docker-compose run  create_pull_requests \
-  python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest3" "ci(mingw): only enable -municode for MinGW" "auto pull request"
-  docker-compose run  create_pull_requests \
-  python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest4" "docs: add missing termdebug docs from Vim runtime updates" "auto pull request"
-  docker-compose run  create_pull_requests \
-  python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest5" "refactor: missing parenthesis may cause unexpected problems" "auto pull request"
-  docker-compose run  create_pull_requests \
-  python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest6" "refactor(normal): convert function comments to doxygen format" "auto pull request"
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest1" "refactor(lsp): remove redundant client cleanup" "auto pull request"; then
+    echo "Error: pullRequest1 failed."
+    exit 1
+  fi
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest2" "refactor(uncrustify): set maximum number of consecutive newlines" "auto pull request"; then
+    echo "Error: pullRequest2 failed."
+    exit 1
+  fi
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest3" "ci(mingw): only enable -municode for MinGW" "auto pull request"; then
+    echo "Error: pullRequest3 failed."
+    exit 1
+  fi
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest4" "docs: add missing termdebug docs from Vim runtime updates" "auto pull request"; then
+    echo "Error: pullRequest4 failed."
+    exit 1
+  fi
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest5" "refactor: missing parenthesis may cause unexpected problems" "auto pull request"; then
+    echo "Error: pullRequest5 failed."
+    exit 1
+  fi
+
+  if ! docker-compose run create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest6" "refactor(normal): convert function comments to doxygen format" "auto pull request"; then
+    echo "Error: pullRequest6 failed."
+    exit 1
+  fi
 }
 
 function run_tests() {
