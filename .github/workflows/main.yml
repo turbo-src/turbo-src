@@ -41,7 +41,6 @@ jobs:
 
 
     - name: Start turbosrc and run tests
-      run:
-        ./tsrc-dev restart
-        sleep 10
-        ./tsrc-dev test 7db9a demo run_tests
+      run: |
+        ./tsrc-dev restart && sleep 10 && ./tsrc-dev test 7db9a demo run_tests
+

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function delete_fork() {
   REPO=$1
   docker-compose run  gihtubmakertools -d -r $REPO
