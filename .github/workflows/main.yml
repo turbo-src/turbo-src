@@ -1,7 +1,10 @@
 name: Run Tests
 
-on: [push, pull_request]
-
+on:
+  pull_request:
+    types: [opened, synchronize]
+  push:
+    branches:
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,13 +25,22 @@ jobs:
         chmod +x ./tsrc-dev
         chmod +x ./tsrc-dev.py
 
-    - name: Create turbosrc.config from secret
-      run: echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
+    - name: Decode and create turbosrc.config
+      run: |
+        echo "${{ secrets.TURBOSRC_CONFIG }}" | base64 --decode > ./turbosrc.config
+        jq '.' ./turbosrc.config
 
     - name: Run turbosrc init
-      run: ./tsrc-dev init
-
-    - name: Restart and test tsrc-dev
       run: |
-        ./tsrc-dev restart
-        ./tsrc-dev test 7db9a demo execute_all
+        ./tsrc-dev init
+
+    - name: Update .config.json with testers data
+      env:
+        TURBOSRC_TESTERS_DATA: ${{ secrets.TURBOSRC_TESTERS }}
+      run: python add_testers.py
+
+
+    - name: Start turbosrc and run tests
+      run: |
+        ./tsrc-dev restart && sleep 10 && ./tsrc-dev test 7db9a demo run_tests
+
