@@ -27,6 +27,7 @@ jobs:
 
     - name: Create turbosrc.config from secret
       run: echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
+      run: cat turbosrc.config
 
     - name: Run turbosrc init
       run: ./tsrc-dev init
