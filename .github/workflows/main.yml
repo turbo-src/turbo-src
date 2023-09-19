@@ -28,10 +28,14 @@ jobs:
     - name: Create turbosrc.config from secret
       run: echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
 
+    - name: Build project
+      run: docker-compose build
+
     - name: Run turbosrc init
       run: ./tsrc-dev init
 
     - name: Restart and test tsrc-dev
       run: |
         ./tsrc-dev restart
+        sleep 10
         ./tsrc-dev test 7db9a demo execute_all
