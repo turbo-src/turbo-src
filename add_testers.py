@@ -5,11 +5,11 @@ import json
 # Path to the config file
 CONFIG_FILE_PATH = './turbosrc-service/.config.json'
 
-# Fetch the base64 encoded environment variable
-turbosrc_testers_b64 = os.environ.get("TURBOSRC_TESTERS")
+# Fetch the base64 encoded value passed as an argument
+turbosrc_testers_b64 = os.environ.get("TURBOSRC_TESTERS_DATA")
 
 if not turbosrc_testers_b64:
-    raise ValueError("TURBOSRC_TESTERS environment variable is not set.")
+    raise ValueError("TURBOSRC_TESTERS_DATA is not provided.")
 
 # Decode base64 content to get the actual JSON data
 turbosrc_testers_json = base64.b64decode(turbosrc_testers_b64).decode('utf-8')
