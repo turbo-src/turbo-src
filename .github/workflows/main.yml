@@ -25,12 +25,9 @@ jobs:
         chmod +x ./tsrc-dev
         chmod +x ./tsrc-dev.py
 
-    - name: Echo secret directly
-      run: echo "${{ secrets.TURBOSRC_CONFIG }}"
-
-    - name: Create turbosrc.config from secret
+    - name: Create turbosrc.config using printf
       run: |
-        echo "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
+        printf '%s\n' "${{ secrets.TURBOSRC_CONFIG }}" > ./turbosrc.config
         jq '.' ./turbosrc.config
 
     - name: Run turbosrc init
