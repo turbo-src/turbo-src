@@ -30,14 +30,18 @@ jobs:
         echo "${{ secrets.TURBOSRC_CONFIG }}" | base64 --decode > ./turbosrc.config
         jq '.' ./turbosrc.config
 
+    - name: Run turbosrc init
+      run: |
+        ./tsrc-dev init
+
     - name: Update .config.json with testers data
       env:
         TURBOSRC_TESTERS_DATA: ${{ secrets.TURBOSRC_TESTERS }}
       run: python add_testers.py
 
-    - name: Run turbosrc init and test tsrc-dev
-      run: |
-        ./tsrc-dev init
+
+    -name: Start turbosrc and run tests
+      run:
         ./tsrc-dev restart
         sleep 10
         ./tsrc-dev test 7db9a demo run_tests
