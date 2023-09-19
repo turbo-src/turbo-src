@@ -2,12 +2,12 @@
 
 function delete_fork() {
   REPO=$1
-  docker run -it gihtub-maker-tools -d -r $REPO
+  docker-compose run -it gihtubmakertools -d -r $REPO
 }
 
 function fork_repo() {
   REPO=$1
-  docker run -it fork-repo node fork-repo.js "turbo-src/$REPO"
+  docker-compose run -it fork-repo node fork-repo.js "turbo-src/$REPO"
 }
 
 function create_pull_request() {
@@ -16,16 +16,16 @@ function create_pull_request() {
   echo "" && sleep 1
   USERNAME=$1
   REPO=$2
-  docker run -it create-pull-requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest1" "refactor(lsp): remove redundant client cleanup" "auto pull request"
-  docker run -it create-pull-requests \
+  docker-compose run -it create_pull_requests python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest1" "refactor(lsp): remove redundant client cleanup" "auto pull request"
+  docker-compose run -it create_pull_requests \
   python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest2" "refactor(uncrustify): set maximum number of consecutive newlines" "auto pull request"
-  docker run -it create-pull-requests \
+  docker-compose run -it create_pull_requests \
   python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest3" "ci(mingw): only enable -municode for MinGW" "auto pull request"
-  docker run -it create-pull-requests \
+  docker-compose run -it create_pull_requests \
   python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest4" "docs: add missing termdebug docs from Vim runtime updates" "auto pull request"
-  docker run -it create-pull-requests \
+  docker-compose run -it create_pull_requests \
   python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest5" "refactor: missing parenthesis may cause unexpected problems" "auto pull request"
-  docker run -it create-pull-requests \
+  docker-compose run -it create_pull_requests \
   python create_pull_requests.py "$USERNAME" "$REPO" "master" "pullRequest6" "refactor(normal): convert function comments to doxygen format" "auto pull request"
 }
 
