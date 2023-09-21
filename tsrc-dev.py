@@ -344,8 +344,8 @@ def update_chrome_extension_config():
         "myGithubName": turbosrc_config_data['github']['user']
     }
 
-    # Save the data back to ./chome-extension/config.devOnline.json
-    with open('./chome-extension/config.devOnline.json', 'w') as f:
+    # Save the data back to ./chrome-extension/config.devOnline.json
+    with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
 
 
