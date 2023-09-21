@@ -332,6 +332,23 @@ def update_turbosrc_url(url):
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def update_chrome_extension_config():
+    # Load turbosrc_config_data from ./turbosrc-service/.config.json
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        turbosrc_config_data = json.load(f)
+
+    # Create or update the Chrome extension config data
+    chrome_extension_config = {
+        "url": "https://turbosrc-marialis.dev",
+        "myTurboSrcID": turbosrc_config_data['turbosrc']['store']['contributor']['addr'],
+        "myGithubName": turbosrc_config_data['github']['user']
+    }
+
+    # Save the data back to ./chome-extension/config.devOnline.json
+    with open('./chome-extension/config.devOnline.json', 'w') as f:
+        json.dump(chrome_extension_config, f, indent=4)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -356,8 +373,10 @@ if __name__ == "__main__":
         if MODE == 'router-client':
             update_egressURLoption()
             update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
+            update_chrome_extension_config()
         if MODE == 'router-host':
             update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
+            update_chrome_extension_config()
 
     else:
         usage()
