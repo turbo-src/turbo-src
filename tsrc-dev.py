@@ -201,7 +201,7 @@ def manage_docker_service(action):
                     contributor_id, contributor_signature = find_or_create_user(contributor_id, contributor_name, token=token)
 
                 # If fetch is successful, update contributor_id and break from loop
-                if contributor_id is not None:
+                if contributor_id is not None and contributor_signature is not None:
                     update_contributor_id(contributor_id, contributor_signature)
                     break
             except ConnectionError as e:
