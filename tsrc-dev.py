@@ -202,6 +202,7 @@ def manage_docker_service(action):
 
                 # If fetch is successful, update contributor_id and break from loop
                 if contributor_id is not None and contributor_signature is not None:
+                    update_turbosrc_config(turboSrcID=contributor_id, turboSrcKey=contributor_signature)
                     update_contributor_id(contributor_id, contributor_signature)
                     break
             except ConnectionError as e:
@@ -446,6 +447,31 @@ def get_contributor_signature(contributor_id):
     else:
         print(f"Unexpected result format: {result}")
         return None
+
+def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
+    """
+    Updates the TurboSrcID or TurboSrcKey in turbosrc.config based on passed values.
+
+    :param turboSrcID: New value for TurboSrcID. If None, it won't be updated.
+    :param turboSrcKey: New value for TurboSrcKey. If None, it won't be updated.
+    :return: None
+    """
+
+    # Load existing data from config
+    with open('./turbosrc.config', 'r') as f:
+        config_data = json.load(f)
+
+    # Update the values if they are provided
+    if turboSrcID:
+        config_data['TurboSrcID'] = turboSrcID
+
+    if turboSrcKey:
+        config_data['TurboSrcKey'] = turboSrcKey
+
+    # Save updated data back to config
+    with open('./turbosrc.config', 'w') as f:
+        json.dump(config_data, f, indent=4)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
