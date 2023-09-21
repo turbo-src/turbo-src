@@ -349,6 +349,108 @@ def update_chrome_extension_config():
         json.dump(chrome_extension_config, f, indent=4)
 
 
+def query_graphql(query):
+    last_exception = None
+    max_retries = 5
+    try:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
+
+        url = 'http://localhost:4003'  # data['namespace']['endpoint']['url']
+
+        for i in range(max_retries):
+            try:
+                response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
+                response.raise_for_status()
+                result = response.json()
+                if 'data' in result:
+                    return result['data']
+            except Exception as e:
+                last_exception = e
+                if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
+                    # exponential backoff with jitter
+                    wait_time = (2 ** i) + random.random()
+                    time.sleep(wait_time)
+                    continue
+                else:  # if this is the last attempt, then raise the exception
+                    raise last_exception
+    except Exception as e:
+        print(f"Error during GraphQL query: {str(e)}")
+        traceback.print_exc()
+        return None
+
+def find_or_create_user(contributor_id=None, contributor_name=None):
+    try:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
+
+        token = data['github']['apiToken']
+
+        query = f"""
+        {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "{contributor_id}", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
+                contributor_name,
+                contributor_id,
+                contributor_signature,
+                token
+            }}
+        }}
+        """
+
+        result = query_graphql(query)
+        if result and result.get('findOrCreateUser'):
+            return (result['findOrCreateUser']['contributor_id'], result['findOrCreateUser']['contributor_signature'])
+
+    except Exception as e:
+        print(f"Failed to find or create user. Error: {str(e)}")
+        traceback.print_exc()
+        return None
+def get_contributor_name(turboSrcID, contributor_id):
+    query = f"""
+    {{
+        getContributorName(turboSrcID: "{turboSrcID}", owner: "", repo: "", defaultHash: "", contributor_id: "{contributor_id}") {{
+            contributor_name
+        }}
+    }}
+    """
+
+    result = query_graphql(query)
+    if result and result.get('getContributorName'):
+        return result['getContributorName']['contributor_name']
+
+    return None
+
+def get_contributor_id(turboSrcID, contributor_name):
+    query = f"""
+    {{
+        getContributorID(turboSrcID: "{turboSrcID}", owner: "", repo: "", defaultHash: "", contributor_name: "{contributor_name}") {{
+            contributor_id
+        }}
+    }}
+    """
+
+    result = query_graphql(query)
+    if result and result.get('getContributorID'):
+        return result['getContributorID']['contributor_id']
+
+    return None
+
+def get_contributor_signature(turboSrcID, contributor_id):
+    query = f"""
+    {{
+        getContributorSignature(turboSrcID: "{turboSrcID}", owner: "", repo: "", defaultHash: "", contributor_id: "{contributor_id}") {{
+            contributor_signature
+        }}
+    }}
+    """
+
+    result = query_graphql(query)
+    if result and result.get('getContributorSignature'):
+        return result['getContributorSignature']['contributor_signature']
+
+    return None
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
