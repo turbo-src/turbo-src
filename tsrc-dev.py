@@ -197,7 +197,7 @@ def manage_docker_service(action):
                 if contributor_signature == "none":
                     contributor_signature = None
                 # Create user if not found
-                if contributor_id is None or contributor_signature is None:
+                if contributor_id is None and contributor_signature is None:
                     contributor_id, contributor_signature = find_or_create_user(contributor_id, contributor_name, token=token)
 
                 # If fetch is successful, update contributor_id and break from loop
