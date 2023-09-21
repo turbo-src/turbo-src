@@ -134,7 +134,6 @@ def is_valid_ethereum_address(address):
         return False
 
 def get_contributor_id_and_signature():
-    last_exception = None
     try:
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
@@ -143,37 +142,9 @@ def get_contributor_id_and_signature():
         token = data['github']['apiToken']
         contributor_name = data['github']['user']
 
-        query = f"""
-        {{
-            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
-                contributor_name,
-                contributor_id,
-                contributor_signature,
-                token
-            }}
-        }}
-        """
+        contributor_id, contributor_signature = find_or_create_user(contributor_id=None, contributor_name=None, token=token)
 
-        max_retries = 5  # Number of attempts before printing an error message
-
-        for i in range(max_retries):
-            try:
-                response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
-                response.raise_for_status()
-                result = response.json()
-                if result.get('data') and result['data'].get('findOrCreateUser'):
-                    contributor_id = result['data']['findOrCreateUser']['contributor_id']
-                    contributor_signature = result['data']['findOrCreateUser']['contributor_signature']
-                    return (contributor_id, contributor_signature)
-            except Exception as e:
-                last_exception = e
-                if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
-                    # exponential backoff with jitter
-                    wait_time = (2 ** i) + random.random()
-                    time.sleep(wait_time)
-                    continue
-                else:  # if this is the last attempt, then raise the exception
-                    raise last_exception
+        return (contributor_id, contributor_signature)
     except Exception as e:
         print(f"Failed to get contributor id. Error: {str(e)}")
         traceback.print_exc()
@@ -379,13 +350,8 @@ def query_graphql(query):
         traceback.print_exc()
         return None
 
-def find_or_create_user(contributor_id=None, contributor_name=None):
+def find_or_create_user(contributor_id=None, contributor_name=None, token=None):
     try:
-        with open('./turbosrc-service/.config.json', 'r') as f:
-            data = json.load(f)
-
-        token = data['github']['apiToken']
-
         query = f"""
         {{
             findOrCreateUser(owner: "", repo: "", contributor_id: "{contributor_id}", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
