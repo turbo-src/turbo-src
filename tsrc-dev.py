@@ -159,11 +159,11 @@ def update_contributor_id(contributor_id, contributor_signature):
 
         current_address = data['turbosrc']['store']['contributor']['addr']
 
-        if not is_valid_ethereum_address(current_address):
-            data['turbosrc']['store']['contributor']['addr'] = contributor_id
+        #if not is_valid_ethereum_address(current_address):
+        data['turbosrc']['store']['contributor']['addr'] = contributor_id
 
-            with open('./turbosrc-service/.config.json', 'w') as f:
-                json.dump(data, f, indent=4)
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(data, f, indent=4)
     except Exception as e:
         print(f"Failed to update contributor id. Error: {str(e)}")
         traceback.print_exc()
@@ -199,12 +199,29 @@ def manage_docker_service(action):
                     contributor_id = None
                 if contributor_signature == "none":
                     contributor_signature = None
+
+                if contributor_id_config == "":
+                   contributor_id_config = None
+                if contributor_signature_config == "":
+                    contributor_signature_config = None
+
+                if contributor_id_config is not None and contributor_signature_config is not None:
+                    print("\nFound TurboSrcID and TurboSrcKey in config!\n")
+                    contributor_id, contributor_signature = find_or_create_user(contributor_id_config, contributor_name, contributor_signature=contributor_signature_config, token=token)
+                    update_turbosrc_config(turboSrcID=contributor_id_config, turboSrcKey=contributor_signature_config)
+                    update_contributor_id(contributor_id_config, contributor_signature_config)
+                    break
+
                 # Create user if not found
                 if contributor_id is None and contributor_signature is None:
-                    contributor_id, contributor_signature = find_or_create_user(contributor_id, contributor_name, token=token)
+                    print("\nCreating TurboSrcID and TurboSrcKey\n")
+                    #if contributor_id_config is not None and contributor_signature_config is not None:
+                    #    contributor_id = contributor_id_config
+                    #    contributor_signature = contributor_signature_config
+                    if contributor_signature is None:
+                        contributor_signature = "none"
+                    contributor_id, contributor_signature = find_or_create_user(contributor_id, contributor_name, contributor_signature, token=token)
 
-                # If fetch is successful, update contributor_id and break from loop
-                if contributor_id is not None and contributor_signature is not None:
                     update_turbosrc_config(turboSrcID=contributor_id, turboSrcKey=contributor_signature)
                     update_contributor_id(contributor_id, contributor_signature)
                     break
