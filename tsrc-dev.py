@@ -142,7 +142,7 @@ def find_or_create_user_from_config():
         token = data['github']['apiToken']
         contributor_name = data['github']['user']
 
-        contributor_id, contributor_signature = find_or_create_user(contributor_id=None, contributor_name=None, token=token)
+        contributor_id, contributor_signature = find_or_create_user(contributor_id=None, contributor_name=None, contributor_signature=None, token=token)
 
         return (contributor_id, contributor_signature)
     except Exception as e:
@@ -179,16 +179,19 @@ def manage_docker_service(action):
                 with open('./turbosrc.config', 'r') as f:
                     config_data = json.load(f)
 
-                contributor_name = config_data.get('GithubName', None)
+                contributor_name_config = config_data.get('GithubName', None)
                 token = config_data.get('GithubApiToken', None)
-                turboSrcID = config_data.get('TurboSrcID', None)
+                contributor_id_config = config_data.get('TurboSrcID', None)
+                contributor_signature_config = config_data.get('TurboSrcKey', None)
                 MODE = config_data.get('Mode', None)
 
                 url = 'http://localhost:4003'  # data['namespace']['endpoint']['url']
 
                 # Try to fetch contributor id and signature rom turbosrc.config
-                contributor_id = get_contributor_id(contributor_name)
+                contributor_id = get_contributor_id(contributor_name_config)
                 contributor_signature = get_contributor_signature(contributor_id)
+
+                contributor_name = contributor_name_config
 
                 # Namespace service unfortunately returns "none" instead of None, if not found,
                 # so normalize here.
@@ -375,11 +378,11 @@ def query_graphql(query):
         traceback.print_exc()
         return None
 
-def find_or_create_user(contributor_id=None, contributor_name=None, token=None):
+def find_or_create_user(contributor_id=None, contributor_name=None, contributor_signature="none", token=None):
     try:
         query = f"""
         {{
-            findOrCreateUser(owner: "", repo: "", contributor_id: "{contributor_id}", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "{contributor_id}", contributor_name: "{contributor_name}", contributor_signature: "{contributor_signature}", token: "{token}") {{
                 contributor_name,
                 contributor_id,
                 contributor_signature,
@@ -391,11 +394,14 @@ def find_or_create_user(contributor_id=None, contributor_name=None, token=None):
         result = query_graphql(query)
         if result and result.get('findOrCreateUser'):
             return (result['findOrCreateUser']['contributor_id'], result['findOrCreateUser']['contributor_signature'])
+        else:
+            print(f"Unexpected result format: {result}")
+            return None, None
 
     except Exception as e:
         print(f"Failed to find or create user. Error: {str(e)}")
         traceback.print_exc()
-        return None
+        return None, None
 
 def get_contributor_name(contributor_id):
     query = f"""
