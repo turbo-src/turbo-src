@@ -133,8 +133,7 @@ def is_valid_ethereum_address(address):
         traceback.print_exc()
         return False
 
-def get_contributor_id_and_signature():
-    last_exception = None
+def find_or_create_user_from_config():
     try:
         with open('./turbosrc-service/.config.json', 'r') as f:
             data = json.load(f)
@@ -143,37 +142,9 @@ def get_contributor_id_and_signature():
         token = data['github']['apiToken']
         contributor_name = data['github']['user']
 
-        query = f"""
-        {{
-            findOrCreateUser(owner: "", repo: "", contributor_id: "none", contributor_name: "{contributor_name}", contributor_signature: "none", token: "{token}") {{
-                contributor_name,
-                contributor_id,
-                contributor_signature,
-                token
-            }}
-        }}
-        """
+        contributor_id, contributor_signature = find_or_create_user(contributor_id=None, contributor_name=None, contributor_signature=None, token=token)
 
-        max_retries = 5  # Number of attempts before printing an error message
-
-        for i in range(max_retries):
-            try:
-                response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
-                response.raise_for_status()
-                result = response.json()
-                if result.get('data') and result['data'].get('findOrCreateUser'):
-                    contributor_id = result['data']['findOrCreateUser']['contributor_id']
-                    contributor_signature = result['data']['findOrCreateUser']['contributor_signature']
-                    return (contributor_id, contributor_signature)
-            except Exception as e:
-                last_exception = e
-                if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
-                    # exponential backoff with jitter
-                    wait_time = (2 ** i) + random.random()
-                    time.sleep(wait_time)
-                    continue
-                else:  # if this is the last attempt, then raise the exception
-                    raise last_exception
+        return (contributor_id, contributor_signature)
     except Exception as e:
         print(f"Failed to get contributor id. Error: {str(e)}")
         traceback.print_exc()
@@ -188,11 +159,11 @@ def update_contributor_id(contributor_id, contributor_signature):
 
         current_address = data['turbosrc']['store']['contributor']['addr']
 
-        if not is_valid_ethereum_address(current_address):
-            data['turbosrc']['store']['contributor']['addr'] = contributor_id
+        #if not is_valid_ethereum_address(current_address):
+        data['turbosrc']['store']['contributor']['addr'] = contributor_id
 
-            with open('./turbosrc-service/.config.json', 'w') as f:
-                json.dump(data, f, indent=4)
+        with open('./turbosrc-service/.config.json', 'w') as f:
+            json.dump(data, f, indent=4)
     except Exception as e:
         print(f"Failed to update contributor id. Error: {str(e)}")
         traceback.print_exc()
@@ -205,10 +176,53 @@ def manage_docker_service(action):
         last_error = None
         while retries < max_retries:
             try:
-                # Try to fetch contributor id
-                contributor_id, contributor_signature = get_contributor_id_and_signature()
-                # If fetch is successful, update contributor_id and break from loop
-                if contributor_id is not None:
+                with open('./turbosrc.config', 'r') as f:
+                    config_data = json.load(f)
+
+                contributor_name_config = config_data.get('GithubName', None)
+                token = config_data.get('GithubApiToken', None)
+                contributor_id_config = config_data.get('TurboSrcID', None)
+                contributor_signature_config = config_data.get('TurboSrcKey', None)
+                MODE = config_data.get('Mode', None)
+
+                url = 'http://localhost:4003'  # data['namespace']['endpoint']['url']
+
+                # Try to fetch contributor id and signature rom turbosrc.config
+                contributor_id = get_contributor_id(contributor_name_config)
+                contributor_signature = get_contributor_signature(contributor_id)
+
+                contributor_name = contributor_name_config
+
+                # Namespace service unfortunately returns "none" instead of None, if not found,
+                # so normalize here.
+                if contributor_id == "none":
+                    contributor_id = None
+                if contributor_signature == "none":
+                    contributor_signature = None
+
+                if contributor_id_config == "":
+                   contributor_id_config = None
+                if contributor_signature_config == "":
+                    contributor_signature_config = None
+
+                if contributor_id_config is not None and contributor_signature_config is not None:
+                    print("\nFound TurboSrcID and TurboSrcKey in config!\n")
+                    contributor_id, contributor_signature = find_or_create_user(contributor_id_config, contributor_name, contributor_signature=contributor_signature_config, token=token)
+                    update_turbosrc_config(turboSrcID=contributor_id_config, turboSrcKey=contributor_signature_config)
+                    update_contributor_id(contributor_id_config, contributor_signature_config)
+                    break
+
+                # Create user if not found
+                if contributor_id is None and contributor_signature is None:
+                    print("\nCreating TurboSrcID and TurboSrcKey\n")
+                    #if contributor_id_config is not None and contributor_signature_config is not None:
+                    #    contributor_id = contributor_id_config
+                    #    contributor_signature = contributor_signature_config
+                    if contributor_signature is None:
+                        contributor_signature = "none"
+                    contributor_id, contributor_signature = find_or_create_user(contributor_id, contributor_name, contributor_signature, token=token)
+
+                    update_turbosrc_config(turboSrcID=contributor_id, turboSrcKey=contributor_signature)
                     update_contributor_id(contributor_id, contributor_signature)
                     break
             except ConnectionError as e:
@@ -347,6 +361,139 @@ def update_chrome_extension_config():
     # Save the data back to ./chrome-extension/config.devOnline.json
     with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
+
+
+def query_graphql(query):
+    last_exception = None
+    max_retries = 5
+    try:
+        with open('./turbosrc-service/.config.json', 'r') as f:
+            data = json.load(f)
+
+        url = 'http://localhost:4003'  # data['namespace']['endpoint']['url']
+
+        for i in range(max_retries):
+            try:
+                response = requests.post(f"{url}/graphql", json={'query': query}, headers={"Content-Type": "application/json", "Accept": "application/json"})
+                if response.status_code != 200:
+                    print(response.text)
+                response.raise_for_status()
+                result = response.json()
+                if 'data' in result:
+                    return result['data']
+            except Exception as e:
+                last_exception = e
+                if i < max_retries - 1:  # if not the last attempt, skip to the next iteration
+                    # exponential backoff with jitter
+                    wait_time = (2 ** i) + random.random()
+                    time.sleep(wait_time)
+                    continue
+                else:  # if this is the last attempt, then raise the exception
+                    raise last_exception
+    except Exception as e:
+        print(f"Error during GraphQL query: {str(e)}")
+        traceback.print_exc()
+        return None
+
+def find_or_create_user(contributor_id=None, contributor_name=None, contributor_signature="none", token=None):
+    try:
+        query = f"""
+        {{
+            findOrCreateUser(owner: "", repo: "", contributor_id: "{contributor_id}", contributor_name: "{contributor_name}", contributor_signature: "{contributor_signature}", token: "{token}") {{
+                contributor_name,
+                contributor_id,
+                contributor_signature,
+                token
+            }}
+        }}
+        """
+
+        result = query_graphql(query)
+        if result and result.get('findOrCreateUser'):
+            return (result['findOrCreateUser']['contributor_id'], result['findOrCreateUser']['contributor_signature'])
+        else:
+            print(f"Unexpected result format: {result}")
+            return None, None
+
+    except Exception as e:
+        print(f"Failed to find or create user. Error: {str(e)}")
+        traceback.print_exc()
+        return None, None
+
+def get_contributor_name(contributor_id):
+    query = f"""
+    {{
+        getContributorName(owner: "", repo: "", defaultHash: "", contributor_id: "{contributor_id}")
+    }}
+    """
+
+    result = query_graphql(query)
+    if result and result.get('getContributorName'):
+        return result['getContributorName']['contributor_name']
+
+    return None
+
+def get_contributor_id(contributor_name):
+    query = f"""
+    {{
+        getContributorID(owner: "", repo: "", defaultHash: "", contributor_name: "{contributor_name}")
+    }}
+    """
+
+    result = query_graphql(query)
+
+    if isinstance(result, str):
+        return result  # It's already the ID or error message.
+    else:
+        print(f"Unexpected result format: {result}")
+        return None
+
+def get_contributor_signature(contributor_id):
+    query = f"""
+    {{
+        getContributorSignature(owner: "", repo: "", defaultHash: "", contributor_id: "{contributor_id}")
+    }}
+    """
+
+    result = query_graphql(query)
+
+    # If 'getContributorSignature' is present in the result and its value is a dictionary
+    if isinstance(result, dict) and 'getContributorSignature' in result:
+        # Check if the result is a string, e.g., "none"
+        if isinstance(result['getContributorSignature'], str):
+            print(f"Unexpected contributor signature format: {result['getContributorSignature']}")
+            return None
+
+        # If the result is structured as expected, return the signature
+        return result['getContributorSignature']
+
+    else:
+        print(f"Unexpected result format: {result}")
+        return None
+
+def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
+    """
+    Updates the TurboSrcID or TurboSrcKey in turbosrc.config based on passed values.
+
+    :param turboSrcID: New value for TurboSrcID. If None, it won't be updated.
+    :param turboSrcKey: New value for TurboSrcKey. If None, it won't be updated.
+    :return: None
+    """
+
+    # Load existing data from config
+    with open('./turbosrc.config', 'r') as f:
+        config_data = json.load(f)
+
+    # Update the values if they are provided
+    if turboSrcID:
+        config_data['TurboSrcID'] = turboSrcID
+
+    if turboSrcKey:
+        config_data['TurboSrcKey'] = turboSrcKey
+
+    # Save updated data back to config
+    with open('./turbosrc.config', 'w') as f:
+        json.dump(config_data, f, indent=4)
 
 
 parser = argparse.ArgumentParser()
