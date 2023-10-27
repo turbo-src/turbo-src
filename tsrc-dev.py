@@ -33,7 +33,7 @@ def initialize_files():
 
     if MODE in ['local', 'router-host']:
         URL = "http://turbosrc-service:4000/graphql"
-    elif MODE == 'router-client':
+    elif MODE in ['router-client', 'online']:
         URL = ""
 
     if None in (USER, GITHUB_API_TOKEN, SECRET, MODE):
@@ -346,22 +346,40 @@ def update_turbosrc_url(url):
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def add_or_update_current_version(path):
+    # Load the existing Chrome extension config data from file
+    with open(path, 'r') as f:
+        chrome_extension_config = json.load(f)
+
+    # Get the latest commit SHA for the currentVersion attribute
+    current_version = get_latest_commit_sha()
+
+    if not current_version:
+        print("Failed to get the latest commit SHA. `currentVersion` will not be updated.")
+        return
+
+    # Add or update the currentVersion field in the Chrome extension config
+    chrome_extension_config["currentVersion"] = current_version
+
+    # Save the updated data back to the file
+    with open(path, 'w') as f:
+        json.dump(chrome_extension_config, f, indent=4)
+
 def update_chrome_extension_config():
     # Load turbosrc_config_data from ./turbosrc-service/.config.json
     with open('./turbosrc-service/.config.json', 'r') as f:
         turbosrc_config_data = json.load(f)
 
-    # Create or update the Chrome extension config data
+    # Create the initial Chrome extension config data
     chrome_extension_config = {
         "url": "https://turbosrc-marialis.dev",
         "myTurboSrcID": turbosrc_config_data['turbosrc']['store']['contributor']['addr'],
-        "myGithubName": turbosrc_config_data['github']['user']
+        "myGithubName": turbosrc_config_data['github']['user'],
     }
 
     # Save the data back to ./chrome-extension/config.devOnline.json
     with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
-
 
 def query_graphql(query):
     last_exception = None
@@ -495,6 +513,64 @@ def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
     with open('./turbosrc.config', 'w') as f:
         json.dump(config_data, f, indent=4)
 
+def get_latest_commit_sha():
+    """
+    Get the latest commit SHA from git.
+
+    Returns:
+        str: The latest commit SHA.
+        None: If there was an error fetching the commit SHA.
+    """
+    try:
+        commit_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('utf-8').strip()
+        return commit_sha
+    except subprocess.CalledProcessError:
+        print("Error fetching the latest commit SHA from git.")
+        return None
+
+
+def update_version_ingress_service_env():
+    # Navigate to the specified directory (can be changed)
+    os.chdir('./')
+
+    commit_sha = get_latest_commit_sha()
+    if not commit_sha:
+        return
+
+    # File path
+    file_path = './turbosrc-ingress-router/service.env'
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        print(f"'{file_path}' does not exist.")
+        return
+
+    # Read the content of the file
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Check if the CURRENT_VERSION line exists
+    found = any(line.startswith('CURRENT_VERSION=') for line in lines)
+
+    # Update or append the CURRENT_VERSION line
+    with open(file_path, 'w') as file:
+        if found:
+            for line in lines:
+                if line.startswith('CURRENT_VERSION='):
+                    file.write(f'CURRENT_VERSION={commit_sha}\n')
+                else:
+                    file.write(line)
+        else:
+            # If the line was not found, append it to the end of the file
+            lines.append(f'CURRENT_VERSION={commit_sha}\n')
+            file.writelines(lines)
+
+    # Validate that the operation succeeded
+    with open(file_path, 'r') as file:
+        if any(line == f'CURRENT_VERSION={commit_sha}\n' for line in file.readlines()):
+            print(f"Updated {file_path} with the latest commit SHA: {commit_sha}")
+        else:
+            print(f"Failed to update {file_path}")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
@@ -521,9 +597,17 @@ if __name__ == "__main__":
             update_egressURLoption()
             update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
             update_chrome_extension_config()
+            update_version_ingress_service_env()
+            add_or_update_current_version('./chrome-extension/config.devOnline.json')
         if MODE == 'router-host':
             update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
             update_chrome_extension_config()
+            update_version_ingress_service_env()
+            add_or_update_current_version('./chrome-extension/config.devOnline.json')
+        if MODE == 'online':
+            add_or_update_current_version('./chrome-extension/config.devOnline.json')
+        if MODE == 'local':
+            add_or_update_current_version('./chrome-extension/config.devLocal.json')
 
     else:
         usage()
