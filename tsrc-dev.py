@@ -495,6 +495,51 @@ def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
     with open('./turbosrc.config', 'w') as f:
         json.dump(config_data, f, indent=4)
 
+def update_version_ingress_service_env():
+    # Navigate to the specified directory (can be changed)
+    os.chdir('./')
+
+    # Get the latest commit SHA from git
+    try:
+        commit_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('utf-8').strip()
+    except subprocess.CalledProcessError:
+        print("Error fetching the latest commit SHA from git.")
+        return
+    
+    # File path
+    file_path = './turbosrc-ingress-router/service.env'
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        print(f"'{file_path}' does not exist.")
+        return
+
+    # Read the content of the file
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Check if the CURRENT_VERSION line exists
+    found = any(line.startswith('CURRENT_VERSION=') for line in lines)
+
+    # Update or append the CURRENT_VERSION line
+    with open(file_path, 'w') as file:
+        if found:
+            for line in lines:
+                if line.startswith('CURRENT_VERSION='):
+                    file.write(f'CURRENT_VERSION={commit_sha}\n')
+                else:
+                    file.write(line)
+        else:
+            # If the line was not found, append it to the end of the file
+            lines.append(f'CURRENT_VERSION={commit_sha}\n')
+            file.writelines(lines)
+    
+    # Validate that the operation succeeded
+    with open(file_path, 'r') as file:
+        if any(line == f'CURRENT_VERSION={commit_sha}\n' for line in file.readlines()):
+            print(f"Updated {file_path} with the latest commit SHA: {commit_sha}")
+        else:
+            print(f"Failed to update {file_path}")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
@@ -521,9 +566,11 @@ if __name__ == "__main__":
             update_egressURLoption()
             update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
             update_chrome_extension_config()
+            update_version_ingress_service_env()
         if MODE == 'router-host':
             update_turbosrc_url("http://turbosrc-egress-router:4006/graphql")
             update_chrome_extension_config()
+            update_version_ingress_service_env()
 
     else:
         usage()
