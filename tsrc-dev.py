@@ -495,17 +495,30 @@ def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
     with open('./turbosrc.config', 'w') as f:
         json.dump(config_data, f, indent=4)
 
+def get_latest_commit_sha():
+    """
+    Get the latest commit SHA from git.
+
+    Returns:
+        str: The latest commit SHA.
+        None: If there was an error fetching the commit SHA.
+    """
+    try:
+        commit_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('utf-8').strip()
+        return commit_sha
+    except subprocess.CalledProcessError:
+        print("Error fetching the latest commit SHA from git.")
+        return None
+
+
 def update_version_ingress_service_env():
     # Navigate to the specified directory (can be changed)
     os.chdir('./')
 
-    # Get the latest commit SHA from git
-    try:
-        commit_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('utf-8').strip()
-    except subprocess.CalledProcessError:
-        print("Error fetching the latest commit SHA from git.")
+    commit_sha = get_latest_commit_sha()
+    if not commit_sha:
         return
-    
+
     # File path
     file_path = './turbosrc-ingress-router/service.env'
 
@@ -533,7 +546,7 @@ def update_version_ingress_service_env():
             # If the line was not found, append it to the end of the file
             lines.append(f'CURRENT_VERSION={commit_sha}\n')
             file.writelines(lines)
-    
+
     # Validate that the operation succeeded
     with open(file_path, 'r') as file:
         if any(line == f'CURRENT_VERSION={commit_sha}\n' for line in file.readlines()):
