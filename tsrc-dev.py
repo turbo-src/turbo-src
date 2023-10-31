@@ -351,17 +351,23 @@ def update_chrome_extension_config():
     with open('./turbosrc-service/.config.json', 'r') as f:
         turbosrc_config_data = json.load(f)
 
+    # Get the latest commit SHA for the currentVersion attribute
+    current_version = get_latest_commit_sha()
+    if not current_version:
+        print("Failed to get the latest commit SHA. `currentVersion` will not be updated.")
+        return
+
     # Create or update the Chrome extension config data
     chrome_extension_config = {
         "url": "https://turbosrc-marialis.dev",
         "myTurboSrcID": turbosrc_config_data['turbosrc']['store']['contributor']['addr'],
-        "myGithubName": turbosrc_config_data['github']['user']
+        "myGithubName": turbosrc_config_data['github']['user'],
+        "currentVersion": current_version
     }
 
     # Save the data back to ./chrome-extension/config.devOnline.json
     with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
-
 
 def query_graphql(query):
     last_exception = None
