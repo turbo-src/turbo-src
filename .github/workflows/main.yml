@@ -28,7 +28,6 @@ jobs:
     - name: Decode and create turbosrc.config
       run: |
         echo "${{ secrets.TURBOSRC_CONFIG }}" | base64 --decode > ./turbosrc.config
-        jq '.' ./turbosrc.config
 
     - name: Run turbosrc init
       run: |
