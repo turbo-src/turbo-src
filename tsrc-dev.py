@@ -356,6 +356,24 @@ def update_turbosrc_url(url):
         with open('./turbosrc-service/.config.json', 'w') as f:
             json.dump(config, f, indent=4)
 
+def create_chrome_extension_config_files():
+    # Define the directory and file names
+    directory = "./chrome-extension"
+    filenames = ["config.devOnline.json", "config.devLocal.json", "config.devRouter.json"]
+
+    # Ensure the directory exists
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Loop through each file and create it if it doesn't exist
+    for filename in filenames:
+        file_path = os.path.join(directory, filename)
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as file:
+                file.write("{}")  # Write an empty JSON object
+
+    print("Chrome extension config files created.")
+
 def add_or_update_current_version(path):
     # Load the existing Chrome extension config data from file
     with open(path, 'r') as f:
@@ -385,6 +403,20 @@ def update_chrome_extension_config():
         "url": "https://turbosrc-marialis.dev",
         "myTurboSrcID": turbosrc_config_data['turbosrc']['store']['contributor']['addr'],
         "myGithubName": turbosrc_config_data['github']['user'],
+    }
+
+    # Save the data back to ./chrome-extension/config.devOnline.json
+    with open('./chrome-extension/config.devOnline.json', 'w') as f:
+        json.dump(chrome_extension_config, f, indent=4)
+
+def update_chrome_extension_config_online():
+    # Load turbosrc_config_data from ./turbosrc-service/.config.json
+    with open('./turbosrc-service/.config.json', 'r') as f:
+        turbosrc_config_data = json.load(f)
+
+    # Create the initial Chrome extension config data
+    chrome_extension_config = {
+        "url": "https://turbosrc-marialis.dev",
     }
 
     # Save the data back to ./chrome-extension/config.devOnline.json
@@ -590,6 +622,7 @@ args = parser.parse_args
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
+        create_chrome_extension_config_files()
         # upfront or docker-compose commands fail.
         check_and_create_service_env('./turbosrc-ingress-router/service.env')
         check_and_create_service_env('./turbosrc-egress-router/service.env')
@@ -615,6 +648,7 @@ if __name__ == "__main__":
             update_version_ingress_service_env()
             add_or_update_current_version('./chrome-extension/config.devOnline.json')
         if MODE == 'online':
+            update_chrome_extension_config_online()
             add_or_update_current_version('./chrome-extension/config.devOnline.json')
         if MODE == 'local':
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
