@@ -36,8 +36,15 @@ def initialize_files():
     elif MODE in ['router-client', 'online']:
         URL = ""
 
-    if None in (USER, GITHUB_API_TOKEN, SECRET, MODE):
-        raise ValueError("Failed to initialize files: not all required parameters found in turbosrc.config")
+    # Check each variable individually and raise an error with specific message
+    if USER is None:
+        raise ValueError("Failed to initialize files: GithubName not found in turbosrc.config")
+    if GITHUB_API_TOKEN is None:
+        raise ValueError("Failed to initialize files: GithubApiToken not found in turbosrc.config")
+    if SECRET is None and MODE != 'online':
+        raise ValueError("Failed to initialize files: Secret not found in turbosrc.config")
+    if MODE is None:
+        raise ValueError("Failed to initialize files: Mode not found in turbosrc.config")
 
     os.makedirs('./GihtubMakerTools', exist_ok=True)
     os.makedirs('./fork-repo', exist_ok=True)
@@ -115,6 +122,9 @@ def update_api_token():
         serviceConfigData = json.load(f)
 
     secret = turbosrcConfigData.get('Secret')
+    mode = turbosrcConfigData.get('Mode')
+    if secret is None and mode == 'online':
+       secret = 'noSecretNeededInOnlineModeThisIsAplaceholder'
 
     decryptedToken = subprocess.check_output([
         'docker-compose', 'run', '--rm', 'jwt_hash_decrypt', '--secret=' + secret, '--string={\"githubToken\": \"' + apiToken + '\"}'
