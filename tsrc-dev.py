@@ -1,4 +1,5 @@
 import os
+import glob
 import json
 import subprocess
 import argparse
@@ -14,6 +15,22 @@ def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
     print("  init: initialize necessary files and directories")
     exit(1)
+
+def remove_files(file_paths):
+    for file_path in file_paths:
+        # Expand wildcard patterns, if any
+        expanded_paths = glob.glob(file_path)
+
+        for path in expanded_paths:
+            # Check if file exists to prevent errors
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                    print(f"Removed: {path}")
+                except Exception as e:
+                    print(f"Error removing {path}: {e}")
+            else:
+                print(f"File not found: {path}")
 
 def initialize_files():
     with open('./turbosrc.config', 'r') as f:
@@ -622,6 +639,18 @@ args = parser.parse_args
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
+        config_files_to_remove = [
+            "turbosrc-service/.config.json",
+            "fork-repo/env.list",
+            "create_pull_requests/env.list",
+            "GihtubMakerTools/ght.ini",
+            "turbosrc-ingress-router/service.env",
+            "turbosrc-egress-router/service.env",
+            "chrome-extension/cypress.env.json",
+            "chrome-extension/config.dev*",  # Handles wildcard characters
+            "chrome-extension/src/config.js"
+        ]
+        remove_files(config_files_to_remove)
         create_chrome_extension_config_files()
         # upfront or docker-compose commands fail.
         check_and_create_service_env('./turbosrc-ingress-router/service.env')
