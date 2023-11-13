@@ -641,6 +641,49 @@ def update_version_ingress_service_env():
         else:
             print(f"Failed to update {file_path}")
 
+def update_version_egress_service_env():
+    # Navigate to the specified directory (can be changed)
+    os.chdir('./')
+
+    commit_sha = get_latest_commit_sha()
+    if not commit_sha:
+        return
+
+    # File path
+    file_path = './turbosrc-egress-router/service.env'
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        print(f"'{file_path}' does not exist.")
+        return
+
+    # Read the content of the file
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Check if the CURRENT_VERSION line exists
+    found = any(line.startswith('COMPATIBLE_VERSIONS=') for line in lines)
+
+    # Update or append the CURRENT_VERSION line
+    with open(file_path, 'w') as file:
+        if found:
+            for line in lines:
+                if line.startswith('COMPATIBLE_VERSIONS='):
+                    file.write(f'COMPATIBLE_VERSIONS=["{commit_sha}"]\n')
+                else:
+                    file.write(line)
+        else:
+            # If the line was not found, append it to the end of the file
+            lines.append(f'COMPATIBLE_VERSIONS=["{commit_sha}"]\n')
+            file.writelines(lines)
+
+    # Validate that the operation succeeded
+    with open(file_path, 'r') as file:
+        if any(line == f'COMPATIBLE_VERSIONS=["{commit_sha}"]\n' for line in file.readlines()):
+            print(f"Updated {file_path} with the latest commit SHA: {commit_sha}")
+        else:
+            print(f"Failed to update {file_path}")
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 
@@ -693,6 +736,7 @@ if __name__ == "__main__":
             update_version_ingress_service_env()
             update_chrome_extension_config_local()
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
+        update_version_egress_service_env()
 
     else:
         usage()
