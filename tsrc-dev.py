@@ -440,6 +440,16 @@ def update_chrome_extension_config_online():
     with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
 
+def update_chrome_extension_config_local():
+    # Create the initial Chrome extension config data
+    chrome_extension_config = {
+        "url": "http://localhost:4000/graphql"
+    }
+
+    # Save the data back to ./chrome-extension/config.devOnline.json
+    with open('./chrome-extension/config.devLocal.json', 'w') as f:
+        json.dump(chrome_extension_config, f, indent=4)
+
 def query_graphql(query):
     last_exception = None
     max_retries = 5
@@ -680,6 +690,8 @@ if __name__ == "__main__":
             update_chrome_extension_config_online()
             add_or_update_current_version('./chrome-extension/config.devOnline.json')
         if MODE == 'local':
+            update_version_ingress_service_env()
+            update_chrome_extension_config_local()
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
 
     else:
