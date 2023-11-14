@@ -50,24 +50,15 @@ To add your project to your TurboSrc instance, visit your project's Github page 
 
 ![ezgif com-crop (1)](https://github.com/turbo-src/turbo-src/assets/75996017/9b25fb92-f8e5-493b-b4d2-f6bc37cf49f7)
 
-## Setting up a local TurboSrc instance
+## Get Started
 
-Setting up your own local TurboSrc instance is straightforward. Please note that the online hosting setup instructions are not yet available.
-
-To assist you, we've provided a step-by-step guide to help you get started with your local instance. To simplify the process, the company Reibase conveniently hosts a Github Oauth for your local instance, saving you the hassle. If you prefer to handle this yourself, you can find the necessary code [here](https://github.com/turbo-src/turbosrc-auth).
-
-Remember, your local instance is exclusive to you. No one else will be able to interact with it, so feel free to explore and experiment without any concerns!
-
-**1. Install dependencies**
-
-Install
+**Dependencies**
 
 - docker
 - docker-compose
-- yarn
-- python3
+- python
 
-**2. Installation**
+**Installation**
 
 To begin, clone this project.
 
@@ -75,96 +66,31 @@ To begin, clone this project.
 git clone --recurse-submodules https://github.com/turbo-src/turbo-src.git
 ```
 
-**3. Configure Turbosrc Service**
+### Online (as courtesy and by invite only)
 
-You'll need a `turbosrc.config` file in the root directory.
-
-```
-{
-    "GithubName": "myGithubName",
-    "GithubApiToken": "myGithubApiToken",
-    "Secret": "mySecret",
-    "Mode": "local",
-    "TurboSrcID": ""
-}
-```
-
-Optionally, you can add a TurboSrcID. Long story, leave it blank for now; It enables a future feature not fully rolled-out.
-
-##### a. Get your Github API Token
-
-[See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-
-You'll need the following scopes checked off:
-
-- repo (all repo scopes)
-
-If you want ci/cd automatically configured for you (run end-to-end tests or want to contribute to Turbosrc development), you'll also need these scopes:
-
-- delete repo
-- workflow
-
-##### b. Generate a secret
-
-It can be anything, as long as no one can guess it.
-
-##### c. Create the turbosrc.config
-
-It should be in this form:
+Add a `turbosrc.config` file to the project directory.
 
 ```
 {
-    "GithubName": "myGithubName",
-    "GithubApiToken": "myGithubApiToken",
-    "Secret": "mySecret",
-    "Mode": "local",
-    "TurboSrcID": ""
+    "GithubName": "yourGithubName",
+    "GithubApiToken": "ghp_...",
+    "Mode": "online",
 }
 ```
 
-You can leave the value of `TurboSrcID` as is above, just modify the other fields.
-
-Here is a fake turbosrc.config with pretend info:
+Initialize.
 
 ```
-{
-    "GithubName": "foss4ever",
-    "GithubApiToken": "ghp_bAcAXk...",
-    "Secret": "mysupersafesecretknowonecanguess",
-    "Mode": "local",
-    "TurboSrcID": ""
-}
+./tsrc-dev init
 ```
 
-**4. Intitialize Turbosrc**
-
-`./tsrc-dev init`
-
-It will configure Turbosrc for you using your turbosrc.config. You may see an error about "string" or "bytes": it's not a fatal error and TurboSrc was likley configured correctly.
-
-**5. Launch Turbosrc**
+Build the extension.
 
 ```
-./tsrc-dev start
+docker-compose build chrome-extension
 ```
 
-**6. Load the Extension**
-
-From the chrome-extension directory, install dependencies and start the local development server:
-
-Install dependencies.
-
-```
-yarn install
-```
-Start the local development server for the chrome extension and build the chrome extension.
-
-```
-yarn devLocal
-```
-You may stop the local devopmemnt server after it finishes, but if you leave it on it will automatically rebuild the chrome extension for you if you make code changes to the chrome-extension submodule.
-
-Then, in a Chromium based web browser:
+Load extension into your chrome-based web browser after it's done building:
 
 1. Go to Manage Extensions
 2. Enable developer mode
@@ -173,101 +99,49 @@ Then, in a Chromium based web browser:
 
 ![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
 
-## Developer usage
 
-#### Start TurboSrc
+## Local
+
+Create `turbosrc.config` file in the project directory.
+
+```
+{
+    "GithubName": "yourGithubName",
+    "GithubApiToken": "ghp_...",
+    "Secret": "theSecret",
+    "Mode": "local",
+}
+```
+
+Load extension into your chrome-based web browser after it's done building:
+
+1. Go to Manage Extensions
+2. Enable developer mode
+3. Select Load unpacked
+4. Select the `dist` directory in `chrome-extension`. You can then open the Turbosrc web extension in your browser.
+
+![loadextension](https://github.com/turbo-src/turbo-src/assets/75996017/ca652882-92ee-4dbd-9c55-781e8c63613a)
+
+Initialize.
+
+```
+./tsrc-dev init
+```
+
+Build everything.
 
 ```
 ./tsrc-dev start
+docker-compose run chrome-extension yarn devLocal
 ```
 
-#### Stop TurboSrc
+## Get your Github API Token (classic)
 
-```
-./tsrc-dev stop
-```
+You'll need at least `public_repo` scope checked off.
 
-#### Get lastest changes
+If you want ci/cd automatically configured for you (run end-to-end tests or want to contribute to Turbosrc development), you'll also need these scopes:
 
-`git pull` and `git submodule update --remote`
+- delete repo
+- workflow
 
-### Make changes
-
-Here is an example
-
-**1. Checkout feature branch in the turbo-src**
-
-```git checkout -b myFeature```
-
-**2. Checkout feature branch in the targeted submodule**
-
-```
-cd turbosrc-engine
-git checkout -b myFeature
-```
-
-**3. Stage and commit in both the submodule and monorepo after you make changes.**
-
-`turbosrc-engine`
-
-```
-git add <file>
-git commmit -m "New feature!"
-```
-
-`turbo-src`
-
-```
-git add <submodule>
-git commmit -m "New feature!"
-```
-
-**4. Push changes to both the submodule and the monorepo.**
-
-`turbosrc-engine`
-
-```
-git push origin myFeature
-```
-
-`turbo-src`
-
-```
-git push origin myFeature
-```
-
-**5. Pull in new changes form monorepo and submodules**
-
-`turbo-src`
-
-```
-git pull origin myFeature
-```
-
-**6. Go back to master and forget about myFeature**
-
-`turbo-src`
-
-```
-git checkout master
-git submodule update --init --recursive
-```
-
-**7. You want to go back into myFeature branch.**
-
-`turbo-src`
-
-```
-git checkout myFeature
-git submodule update --init --recursive
-```
-
-**8. Let's say another developer wants to experiment with this new feature.**
-
-`turbo-src`
-
-```
-git fetch origin myFeature
-git checkout myFeature
-git submodule update --init --recursive
-```
+[See here if you need help getting the token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
