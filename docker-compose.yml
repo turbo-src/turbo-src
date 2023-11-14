@@ -97,12 +97,6 @@ services:
     volumes:
       - namespace-db-data:/db-data/
 
-  chrome-extension:
-    build: ./chrome-extension/
-    volumes:
-      - ./chrome-extension:/app
-    tty: true
-
   tsrc-dev:
     build:
       context: .
