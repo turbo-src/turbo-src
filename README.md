@@ -88,6 +88,7 @@ Build the extension.
 
 ```
 docker-compose build chrome-extension
+docker-compose run chrome-extension yarn devLocal
 ```
 
 Load extension into your chrome-based web browser after it's done building:
