@@ -1,4 +1,5 @@
 import os
+import base64
 import glob
 import json
 import subprocess
@@ -15,6 +16,33 @@ def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
     print("  init: initialize necessary files and directories")
     exit(1)
+
+def local_add_testers():
+    # Path to the config file
+    CONFIG_FILE_PATH = './turbosrc-service/.config.json'
+
+    # Path to the file containing the data
+    DATA_FILE_PATH = '.tester_fields_for_turbosrc_service'
+
+    # Read the data from the file
+    with open(DATA_FILE_PATH, 'r') as file:
+        tester_json = file.read()
+
+    # Parse the JSON content
+    testers_data = json.loads(tester_json)
+
+    # Load the existing config file content
+    with open(CONFIG_FILE_PATH, 'r') as file:
+        config_data = json.load(file)
+
+    # Replace the testers field in the config data with the new testers data
+    config_data['testers'] = testers_data
+
+    # Save the updated config data back to the file
+    with open(CONFIG_FILE_PATH, 'w') as file:
+        json.dump(config_data, file, indent=4)
+
+    print(f"Updated 'testers' field in {CONFIG_FILE_PATH}.")
 
 def remove_files(file_paths):
     for file_path in file_paths:
@@ -687,6 +715,8 @@ def update_version_egress_service_env():
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
+parser.add_argument('--github-actions', action='store_true',
+                    help='Flag to indicate running under GitHub Actions')
 
 args = parser.parse_args
 
@@ -739,6 +769,9 @@ if __name__ == "__main__":
             update_chrome_extension_config_local()
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
         update_version_egress_service_env()
+        # Run local_add_testers() only if --github-actions flag is not set
+        if not args.github_actions:
+            local_add_testers()
 
     else:
         usage()

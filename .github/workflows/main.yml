@@ -31,7 +31,7 @@ jobs:
 
     - name: Run turbosrc init
       run: |
-        ./tsrc-dev init
+        ./tsrc-dev init --github-actions
 
     - name: Update .config.json with testers data
       env:

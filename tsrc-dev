@@ -38,7 +38,8 @@ run_tests() {
 }
 
 initialize_files() {
-  ROUTER_FLAG=$1
+  # Pass all arguments to the Python script
+  ARGS="$@"
 
   # Checking if environment exists
   if [ -d "venv" ]; then
@@ -53,9 +54,9 @@ initialize_files() {
   source venv/bin/activate
   pip install -r requirements.txt
 
-  # Running python3 tsrc-dev.py init
-  echo "Running tsrc-dev.py init..."
-  python3 tsrc-dev.py init
+  # Running python3 tsrc-dev.py init with additional arguments
+  echo "Running tsrc-dev.py init $ARGS..."
+  python3 tsrc-dev.py init $ARGS
 }
 
 if [[ $# -lt 1 ]]; then
