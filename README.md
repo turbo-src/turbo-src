@@ -74,7 +74,7 @@ Add a `turbosrc.config` file to the project directory.
 {
     "GithubName": "yourGithubName",
     "GithubApiToken": "ghp_...",
-    "Mode": "online",
+    "Mode": "online"
 }
 ```
 
@@ -109,7 +109,7 @@ Create `turbosrc.config` file in the project directory.
     "GithubName": "yourGithubName",
     "GithubApiToken": "ghp_...",
     "Secret": "theSecret",
-    "Mode": "local",
+    "Mode": "local"
 }
 ```
 
