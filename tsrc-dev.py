@@ -397,18 +397,19 @@ def add_or_update_current_version(path):
         chrome_extension_config = json.load(f)
 
     # Get the latest commit SHA for the currentVersion attribute
-    current_version = get_latest_commit_sha()
+    commit_sha = get_latest_commit_sha()
 
-    if not current_version:
+    if not commit_sha:
         print("Failed to get the latest commit SHA. `currentVersion` will not be updated.")
         return
 
     # Add or update the currentVersion field in the Chrome extension config
-    chrome_extension_config["currentVersion"] = current_version
+    chrome_extension_config["currentVersion"] = commit_sha
 
     # Save the updated data back to the file
     with open(path, 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
+        print(f"Updated {path} with the latest commit SHA: {commit_sha}")
 
 def update_chrome_extension_config():
     # Load turbosrc_config_data from ./turbosrc-service/.config.json
@@ -499,7 +500,7 @@ def find_or_create_user(contributor_id=None, contributor_name=None, contributor_
         if result and result.get('findOrCreateUser'):
             return (result['findOrCreateUser']['contributor_id'], result['findOrCreateUser']['contributor_signature'])
         else:
-            print(f"Unexpected result format: {result}")
+            #print(f"Unexpected result format: {result}")
             return None, None
 
     except Exception as e:
@@ -532,7 +533,7 @@ def get_contributor_id(contributor_name):
     if isinstance(result, str):
         return result  # It's already the ID or error message.
     else:
-        print(f"Unexpected result format: {result}")
+        #print(f"Unexpected result format: {result}")
         return None
 
 def get_contributor_signature(contributor_id):
@@ -548,14 +549,14 @@ def get_contributor_signature(contributor_id):
     if isinstance(result, dict) and 'getContributorSignature' in result:
         # Check if the result is a string, e.g., "none"
         if isinstance(result['getContributorSignature'], str):
-            print(f"Unexpected contributor signature format: {result['getContributorSignature']}")
+            #print(f"Unexpected contributor signature format: {result['getContributorSignature']}")
             return None
 
         # If the result is structured as expected, return the signature
         return result['getContributorSignature']
 
     else:
-        print(f"Unexpected result format: {result}")
+        #print(f"Unexpected result format: {result}")
         return None
 
 def update_turbosrc_config(turboSrcID=None, turboSrcKey=None):
@@ -711,6 +712,7 @@ if __name__ == "__main__":
 
         MODE = initialize_files()
         update_api_token()
+        print('Getting or generating user info from namespace subsystem...')
         manage_docker_service('start')
         manage_docker_service('stop')
         validate_and_update_endpoint_url()
