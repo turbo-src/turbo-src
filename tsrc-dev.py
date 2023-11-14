@@ -22,7 +22,7 @@ def local_add_testers():
     CONFIG_FILE_PATH = './turbosrc-service/.config.json'
 
     # Path to the file containing the data
-    DATA_FILE_PATH = '.tester_fields_for_turbosrc_service'
+    DATA_FILE_PATH = '.tester_fields_for_turbosrc_service.json'
 
     # Read the data from the file
     with open(DATA_FILE_PATH, 'r') as file:
@@ -715,6 +715,8 @@ def update_version_egress_service_env():
 
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
+parser.add_argument('--testers', action='store_true',
+                    help='Flag to indicate adding testers in .tester_fields_for_turbosrc_service.json into turbosrc-service config.')
 parser.add_argument('--github-actions', action='store_true',
                     help='Flag to indicate running under GitHub Actions')
 
@@ -769,8 +771,8 @@ if __name__ == "__main__":
             update_chrome_extension_config_local()
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
         update_version_egress_service_env()
-        # Run local_add_testers() only if --github-actions flag is not set
-        if not args.github_actions:
+        # Run local_add_testers() only if --github-actions flag is not set and --testers is.
+        if args.testers and not args.github_actions:
             local_add_testers()
 
     else:
