@@ -38,6 +38,7 @@ run_tests() {
 }
 
 initialize_files() {
+  docker-compose -f ./docker-compose.yml build namespace-service
   # Pass all arguments to the Python script
   ARGS="$@"
 
