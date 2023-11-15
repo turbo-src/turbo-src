@@ -31,3 +31,6 @@
 [submodule "turbosrc-egress-router"]
 	path = turbosrc-egress-router
 	url = https://github.com/turbo-src/turbosrc-egress-router.git
+[submodule "turbosrc-auth"]
+	path = turbosrc-auth
+	url = https://github.com/turbo-src/turbosrc-auth
