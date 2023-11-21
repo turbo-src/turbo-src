@@ -48,7 +48,7 @@ TurboSrc is designed for simplicity and ease of use. Users holding VotePower for
 
 To add your project to your TurboSrc instance, visit your project's Github page and open the TurboSrc Extension. There you will find an option to add your project to TurboSrc. Just sign in to your Github account for authentication.
 
-![votingnewui](https://github.com/turbo-src/turbo-src/assets/75996017/a912c0ea-10be-487f-864d-c48b690b34f1)
+![voting](https://github.com/turbo-src/turbo-src/assets/75996017/284e86d8-7d07-4f58-8042-b4dcc76fa5cc)
 
 ## Get Started
 
