@@ -32,7 +32,7 @@ In your TurboSrc instance, each user has the capacity to vote on pull requests, 
 
 Note: VotePower is specific to each project. Consequently, if you hold VotePower in one project, it cannot be used in another.
 
-![ezgif com-video-to-gif](https://github.com/turbo-src/turbo-src/assets/75996017/3e86e207-a1d4-4d84-9f8c-0b85be123fc1)
+![createvotepowernewui](https://github.com/turbo-src/turbo-src/assets/75996017/b5bc9936-40c3-4aef-a8df-7a23875e24e5)
 
 ## Distributing VotePower
 As a project maintainer, you can distribute VotePower to the community members of the project hosted on your TurboSrc instance. Simply look up users via the web extension on your Github page linked with TurboSrc, and transfer VotePower to them. Users can sign up conveniently via the web extension.
@@ -41,14 +41,14 @@ We encourage project maintainers to distribute VotePower to their contributors a
 
 Bear in mind, the supply of VotePower is created by the initial maintainer for each project independently within your TurboSrc instance. Hence, the distribution of VotePower might differ across various projects.
 
-![ezgif com-video-to-gif (2)](https://github.com/turbo-src/turbo-src/assets/75996017/8a4ee3f3-c5a0-45f7-905f-962c16ade766)
+![transfernewui](https://github.com/turbo-src/turbo-src/assets/75996017/e9469ee2-83ae-45b2-8aff-75e14225a25c)
 
 ## TurboSrc Usage
 TurboSrc is designed for simplicity and ease of use. Users holding VotePower for a project within your TurboSrc instance can easily visit its pull request page on Github and utilize features that allow them to vote and track ongoing activities.
 
 To add your project to your TurboSrc instance, visit your project's Github page and open the TurboSrc Extension. There you will find an option to add your project to TurboSrc. Just sign in to your Github account for authentication.
 
-![ezgif com-crop (1)](https://github.com/turbo-src/turbo-src/assets/75996017/9b25fb92-f8e5-493b-b4d2-f6bc37cf49f7)
+![votingnewui](https://github.com/turbo-src/turbo-src/assets/75996017/a912c0ea-10be-487f-864d-c48b690b34f1)
 
 ## Get Started
 
