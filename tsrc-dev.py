@@ -10,6 +10,7 @@ import traceback
 import sys
 import time
 import random
+import shutil
 from requests.exceptions import ConnectionError
 
 def usage():
@@ -713,6 +714,32 @@ def update_version_egress_service_env():
         else:
             print(f"Failed to update {file_path}")
 
+def copy_chrome_extension_to_viatui():
+    source_dir = './chrome-extension/dist'
+    dest_dir = './viatui/dist-chrome-extension'
+    print(f"Copying {source_dir} to {dest_dir}")
+
+    # Check if source directory exists
+    if not os.path.exists(source_dir):
+        print(f"{source_dir} does not exist:", source_dir)
+        return
+
+    # Delete the destination directory, if it exists
+    try:
+        # Delete the destination directory if it exists
+        shutil.rmtree(dest_dir)
+        print(f"viatui's {dest_dir} directory exists already, and it was deleted successfully.")
+
+    except Exception as e:
+        print("An error occurred:", e)
+
+    # Copy the entire directory
+    try:
+        shutil.copytree(source_dir, dest_dir, dirs_exist_ok=True)
+        print("Copy of dist for viatui completed successfully.")
+    except Exception as e:
+        print("An error occurred:", e)
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument('--testers', action='store_true',
@@ -774,6 +801,7 @@ if __name__ == "__main__":
         # Run local_add_testers() only if --github-actions flag is not set and --testers is.
         if args.testers and not args.github_actions:
             local_add_testers()
+        copy_chrome_extension_to_viatui()
 
     else:
         usage()
