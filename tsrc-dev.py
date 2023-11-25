@@ -740,6 +740,54 @@ def copy_chrome_extension_to_viatui():
     except Exception as e:
         print("An error occurred:", e)
 
+def create_viatui_screenshot_directory():
+    dir_path = './viatui/chromium-nix-screenshots'
+
+    # Check if the directory exists
+    if os.path.exists(dir_path):
+        # If it exists, delete it
+        shutil.rmtree(dir_path)
+        print("Existing directory removed:", dir_path)
+
+    # Create the directory
+    os.makedirs(dir_path)
+    print("Directory created:", dir_path)
+
+def create_and_update_viatuix_json():
+    viatuix_json_path = './viatui/viatuix.json'
+    config_path = './turbosrc.config'
+
+    # Step 1: Create viatuix.json with {}
+    with open(viatuix_json_path, 'w') as file:
+        json.dump({}, file)
+
+    # Step 2: Read GitHub credentials from turbosrc.config
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as file:
+            config_data = json.load(file)
+            github_name = config_data.get('GithubName')
+            github_password = config_data.get('GithubPassword')
+
+            if not github_name or not github_password:
+                print("Github credentials not found in config.")
+                return
+
+            # Step 3: Update viatuix.json with additional details
+            data = {
+                "username": github_name,
+                "password": github_password,
+                "url1": "github.com/",
+                "url2": "github.com/login",
+                "url3": f"github.com/{github_name}/demo/pulls"
+            }
+
+            with open(viatuix_json_path, 'w') as file:
+                json.dump(data, file, indent=4)
+
+            print("viatuix.json updated successfully.")
+    else:
+        print("Config file not found:", config_path)
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument('--testers', action='store_true',
@@ -761,7 +809,8 @@ if __name__ == "__main__":
             "turbosrc-egress-router/service.env",
             "chrome-extension/cypress.env.json",
             "chrome-extension/config.dev*",  # Handles wildcard characters
-            "chrome-extension/src/config.js"
+            "chrome-extension/src/config.js",
+            "viatui/viatuix.json"
         ]
         remove_files(config_files_to_remove)
         create_chrome_extension_config_files()
@@ -802,6 +851,8 @@ if __name__ == "__main__":
         if args.testers and not args.github_actions:
             local_add_testers()
         copy_chrome_extension_to_viatui()
+        create_viatui_screenshot_directory()
+        create_and_update_viatuix_json()
 
     else:
         usage()
