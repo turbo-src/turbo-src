@@ -34,3 +34,6 @@
 [submodule "turbosrc-auth"]
 	path = turbosrc-auth
 	url = https://github.com/turbo-src/turbosrc-auth
+[submodule "viatui"]
+	path = viatui
+	url = https://github.com/turbo-src/viatui
