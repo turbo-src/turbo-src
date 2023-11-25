@@ -123,12 +123,7 @@ services:
   viatui:
     build: ./viatui
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - /var/run/dbus:/var/run/dbus
       - ./viatui:/app
-    environment:
-      - DISPLAY=:1
-    privileged: true
 
 volumes:
   db-data:
