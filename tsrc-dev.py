@@ -850,6 +850,14 @@ if __name__ == "__main__":
         # Run local_add_testers() only if --github-actions flag is not set and --testers is.
         if args.testers and not args.github_actions:
             local_add_testers()
+
+        print('Build chrome-extension')
+        subprocess.run(['docker-compose', 'build', 'chrome-extension'], check=True)
+        if MODE == 'local':
+          subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devLocal'], check=True)
+        else:
+          subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devOnline'], check=True)
+
         copy_chrome_extension_to_viatui()
         create_viatui_screenshot_directory()
         create_and_update_viatuix_json()

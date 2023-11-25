@@ -19,7 +19,13 @@ start_services() {
   echo "Starting services..."
   # Activating environment
   source venv/bin/activate
-  docker-compose -f ./docker-compose.yml up --build -d
+  docker-compose -f ./docker-compose.yml up --build -d \
+    turbosrc-egress-router \
+    turbosrc-ingress-router \
+    turbosrc-service \
+    turbosrc-engine \
+    namespace-service \
+    gh-service
 }
 
 run_tests() {
@@ -38,7 +44,13 @@ run_tests() {
 }
 
 initialize_files() {
-  docker-compose -f ./docker-compose.yml build
+  docker-compose -f ./docker-compose.yml build \
+    turbosrc-egress-router \
+    turbosrc-ingress-router \
+    turbosrc-service \
+    turbosrc-engine \
+    namespace-service \
+    gh-service
   # Pass all arguments to the Python script
   ARGS="$@"
 
