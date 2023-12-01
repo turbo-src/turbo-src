@@ -100,8 +100,9 @@ services:
 
   chrome-extension:
     build: ./chrome-extension/
+    user: "${UID}:${GID}"
     volumes:
-      - ./chrome-extension:/app
+      - ./chrome-extension/dist:/app/dist
     tty: true
 
   tsrc-dev:

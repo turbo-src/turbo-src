@@ -745,6 +745,19 @@ def copy_chrome_extension_to_viatui():
     except Exception as e:
         print("An error occurred:", e)
 
+def create_chrome_extension_dist_directory():
+    dir_path = './chrome-extension/dist'
+
+    # Check if the directory exists
+    if os.path.exists(dir_path):
+        # If it exists, delete it
+        shutil.rmtree(dir_path)
+        print("Existing directory removed:", dir_path)
+
+    # Create the directory
+    os.makedirs(dir_path)
+    print("Directory created:", dir_path)
+
 def create_viatui_screenshot_directory():
     dir_path = './viatui/chromium-nix-screenshots'
 
@@ -820,6 +833,7 @@ if __name__ == "__main__":
             "viatui/viatuix.json"
         ]
         remove_files(config_files_to_remove)
+        create_chrome_extension_dist_directory()
         create_chrome_extension_config_files()
         # upfront or docker-compose commands fail.
         check_and_create_service_env('./turbosrc-ingress-router/service.env')

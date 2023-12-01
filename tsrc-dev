@@ -44,6 +44,9 @@ run_tests() {
 }
 
 initialize_files() {
+  echo "Creating .env for docker file permissions (may not work on non-unix like systems)."
+  ./create-env.sh
+
   docker-compose -f ./docker-compose.yml build \
     turbosrc-egress-router \
     turbosrc-ingress-router \
