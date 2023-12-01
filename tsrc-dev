@@ -50,7 +50,8 @@ initialize_files() {
     turbosrc-service \
     turbosrc-engine \
     namespace-service \
-    gh-service
+    gh-service \
+    viatui
   # Pass all arguments to the Python script
   ARGS="$@"
 

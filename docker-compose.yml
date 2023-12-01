@@ -50,6 +50,7 @@ services:
       - 4000:4000
     depends_on:
       - db
+      - ssl-proxy
 
   gh-service:
     build: ./turbosrc-gh/
@@ -120,10 +121,21 @@ services:
   jwt_hash_decrypt:
     build: ./jwt_hash_decrypt/
 
+  ssl-proxy:
+    image: mitmproxy/mitmproxy
+    ports:
+      - "8080:8080"  # Port 8080 for the proxy
+    command: mitmdump --mode reverse:http://turbosrc-service:4000 --ssl-insecure
+
   viatui:
     build: ./viatui
     volumes:
       - ./viatui:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /var/run/dbus:/var/run/dbus
+    environment:
+      - DISPLAY=:1
+    privileged: true
 
 volumes:
   db-data:

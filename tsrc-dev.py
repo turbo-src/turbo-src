@@ -470,11 +470,16 @@ def update_chrome_extension_config_online():
     with open('./chrome-extension/config.devOnline.json', 'w') as f:
         json.dump(chrome_extension_config, f, indent=4)
 
-def update_chrome_extension_config_local():
+def update_chrome_extension_config_local(visual):
     # Create the initial Chrome extension config data
-    chrome_extension_config = {
-        "url": "http://localhost:4000/graphql"
-    }
+    if visual is True:
+      chrome_extension_config = {
+          "url": "http://turbosrc-service:4000/graphql"
+      }
+    else:
+      chrome_extension_config = {
+          "url": "http://localhost:4000/graphql"
+      }
 
     # Save the data back to ./chrome-extension/config.devOnline.json
     with open('./chrome-extension/config.devLocal.json', 'w') as f:
@@ -792,6 +797,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument('--testers', action='store_true',
                     help='Flag to indicate adding testers in .tester_fields_for_turbosrc_service.json into turbosrc-service config.')
+parser.add_argument('--visual', action='store_true',
+                    help='Flag to indicate running visual graphical tester.')
 parser.add_argument('--github-actions', action='store_true',
                     help='Flag to indicate running under GitHub Actions')
 
@@ -843,8 +850,11 @@ if __name__ == "__main__":
             update_chrome_extension_config_online()
             add_or_update_current_version('./chrome-extension/config.devOnline.json')
         if MODE == 'local':
+            visual = False
+            if args.visual:
+                visual = True
             update_version_ingress_service_env()
-            update_chrome_extension_config_local()
+            update_chrome_extension_config_local(visual)
             add_or_update_current_version('./chrome-extension/config.devLocal.json')
         update_version_egress_service_env()
         # Run local_add_testers() only if --github-actions flag is not set and --testers is.
@@ -855,12 +865,13 @@ if __name__ == "__main__":
         subprocess.run(['docker-compose', 'build', 'chrome-extension'], check=True)
         if MODE == 'local':
           subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devLocal'], check=True)
+          if args.visual and not args.github_actions:
+            copy_chrome_extension_to_viatui()
+            create_viatui_screenshot_directory()
+            create_and_update_viatuix_json()
         else:
           subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devOnline'], check=True)
 
-        copy_chrome_extension_to_viatui()
-        create_viatui_screenshot_directory()
-        create_and_update_viatuix_json()
 
     else:
         usage()
