@@ -473,8 +473,10 @@ def update_chrome_extension_config_online():
 def update_chrome_extension_config_local(visual):
     # Create the initial Chrome extension config data
     if visual is True:
+      # For local testing purposes to overcome ssl issues between viatui graphical tester
+      # and locally served turbosrc.
       chrome_extension_config = {
-          "url": "http://turbosrc-service:4000/graphql"
+          "url": "http://ssl-proxy:8080/graphql"
       }
     else:
       chrome_extension_config = {

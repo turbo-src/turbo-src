@@ -122,6 +122,7 @@ services:
   jwt_hash_decrypt:
     build: ./jwt_hash_decrypt/
 
+  # For local testing purposes, deploying a proxy server to accept insecure connections and forward them to the turbosrc, effectively stripping off SSL. This way, Chromium connects to the proxy without SSL, and the proxy handles the SSL part. There are some issues with ssl when connecting via docker network locally.
   ssl-proxy:
     image: mitmproxy/mitmproxy
     ports:
