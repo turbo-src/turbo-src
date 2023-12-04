@@ -48,27 +48,38 @@ function run_tests() {
     echo "" && sleep 1
 
     tests=(
-        "testing/integration/privaterepo/createUser.js"
-        "testing/integration/privaterepo/createRepo.js"
-        "testing/integration/privaterepo/transferTokens.js"
-        "testing/integration/privaterepo/twoVoters.js"
-        "testing/integration/privaterepo/singleMajorityVoter.js"
-        "testing/integration/privaterepo/duplicateVote.js"
-        "testing/integration/privaterepo/manyVoters.js"
-        "testing/integration/privaterepo/semiAutoManyVoters.js"
+        "createUser"
+        "createRepo"
+        "transferTokens"
+        "twoVoters"
+        "singleMajorityVoter"
+        "duplicateVote"
+        "manyVoters"
+        "semiAutoManyVoters"
     )
 
     for test in "${tests[@]}"; do
-        #if [[ "$VISUAL_TESTS" = true && ( "$test" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
-        #    echo "Skipping $test due to --visual flag"
+        # Construct the full path of the test file
+        full_test_path="testing/integration/privaterepo/${test}.js"
+
+        # Uncomment and modify the if condition if you need to skip some tests based on conditions
+        #if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
+        #    echo "Skipping $full_test_path due to --visual flag"
         #    continue
         #fi
-        OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$test" 2>&1) || {
+
+        OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$full_test_path" 2>&1) || {
             echo "Error running $test test";
             echo "Output: $OUTPUT";
             exit 1;
         }
         echo "$OUTPUT"
+        sleep 1
+        echo ""
+        echo "Taking a screenshot of $test test..."
+        docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
+        echo ""
+        echo "Screen shot completed."
         sleep 5
     done
 }
