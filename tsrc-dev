@@ -29,18 +29,19 @@ start_services() {
 }
 
 run_tests() {
-  if [[ $# -ne 3 ]]; then
-    echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
+  if [[ $# -lt 3 ]]; then
+    echo "Usage: $0 test <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests] [--visual]"
     exit 1
   fi
 
   USERNAME=$1
   REPO=$2
   ACTION=$3
+  VISUAL_FLAG=${4:-}  # Set VISUAL_FLAG to fourth argument, if provided
 
   # Activating environment
   source venv/bin/activate
-  ./tsrc-test $USERNAME $REPO $ACTION
+  ./tsrc-test $USERNAME $REPO $ACTION $VISUAL_FLAG
 }
 
 initialize_files() {

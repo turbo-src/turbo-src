@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+VISUAL_TESTS=false
+
 function delete_fork() {
   REPO=$1
   docker-compose run gihtubmakertools -d -r $REPO
@@ -57,6 +59,10 @@ function run_tests() {
     )
 
     for test in "${tests[@]}"; do
+        #if [[ "$VISUAL_TESTS" = true && ( "$test" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
+        #    echo "Skipping $test due to --visual flag"
+        #    continue
+        #fi
         OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$test" 2>&1) || {
             echo "Error running $test test";
             echo "Output: $OUTPUT";
@@ -74,14 +80,46 @@ function execute_all_except_tests() {
 }
 
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
+  echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests] [--visual]"
   exit 1
 fi
 
 USERNAME=$1
 REPO=$2
+ACTION=""
+VISUAL_FLAG=""
 
-case "$3" in
+shift 2
+
+while (( "$#" )); do
+  case "$1" in
+    delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests)
+      if [ -z "$ACTION" ]; then
+        ACTION=$1
+      else
+        echo "Multiple actions specified."
+        exit 1
+      fi
+      ;;
+    --visual)
+      VISUAL_FLAG="--visual"
+      VISUAL_TESTS=true
+      ;;
+    *)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+if [ -z "$ACTION" ]; then
+  echo "No action specified."
+  echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests] [--visual]"
+  exit 1
+fi
+
+case "$ACTION" in
   "delete_fork")
     delete_fork $REPO
     ;;
@@ -103,9 +141,4 @@ case "$3" in
   "execute_all_except_tests")
     execute_all_except_tests
     ;;
-  *)
-    echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
-    exit 1
-    ;;
 esac
-
