@@ -877,6 +877,9 @@ if __name__ == "__main__":
         if args.testers and not args.github_actions:
             local_add_testers()
 
+        print('Build viatui')
+        subprocess.run(['docker-compose', 'build', 'viatui'], check=True)
+
         print('Build chrome-extension')
         subprocess.run(['docker-compose', 'build', 'chrome-extension'], check=True)
         if MODE == 'local':
