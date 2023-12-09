@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [init|start|stop|restart|start-viatui|stop-viatui|load-turbosrc-viatui|test [USERNAME REPO ACTION]]"
+  echo "Usage: $0 [init|start|stop|restart|start-viatui|stop-viatui|load-turbosrc-viatui|login-viatui|test [USERNAME REPO ACTION]]"
   echo "  init: initialize necessary files and directories"
   echo "  test: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
   exit 1
@@ -32,6 +32,12 @@ load_turbosrc_viatui() {
     docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/load_turbosrc.py
     sleep 2
     docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py load-turbosrc.png
+}
+
+login_viatui() {
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/login.py
+    sleep 2
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py login.png
 }
 
 start_viatui() {
@@ -113,6 +119,8 @@ elif [[ "$1" == "start-viatui" ]]; then
   start_viatui
 elif [[ "$1" == "stop-viatui" ]]; then
   stop_viatui
+elif [[ "$1" == "login-viatui" ]]; then
+  login_viatui
 elif [[ "$1" == "test" ]]; then
   shift
   run_tests "$@"
