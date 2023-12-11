@@ -76,11 +76,13 @@ function run_tests() {
         echo "$OUTPUT"
         sleep 1
         echo ""
-        echo "Taking a screenshot of $test test..."
-        docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
-        echo ""
-        echo "Screen shot completed."
-        sleep 5
+        if [[ "$VISUAL_TESTS" = true ]]; then
+            echo "Taking a screenshot of $test test..."
+            docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
+            echo ""
+            echo "Screen shot completed."
+            sleep 5
+	fi
     done
 }
 

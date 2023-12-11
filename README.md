@@ -155,18 +155,10 @@ To initialize with visual testing.
 ./tsrc-dev init --testers --visual
 ```
 
-If something related to viatui failing to, you'll have to `sudo cp -r chrome-extension/dist viatui/dist-chrome-extension`
-
-Go to chrome-extension and modify `config.devLocal`
-
-```
-"url": "http:ssl-proxy:8080/graphql"
-```
-
 Build extension. For some reason `sudo` may be necessary, but this should be resolved.
 
 ```
-sudo yarn devLocal
+yarn devLocal
 ```
 
 Start everything
@@ -175,12 +167,37 @@ Start everything
 ./tsrc-dev start
 ```
 
-And then run tests.
+**If you want to run visual testing do the following `viatui` related commands.**
 
-Aspirational right now as of right now you have to run `docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py` after doing `docker-compose run viatui (give some time to let it start up and also the errors about different fluxbox things is okay.
+
+```
+./tsrc-dev start-viatui
+```
+
+**In a seperate terminal window do following commands.**
+
+Load the turbosrc button.
+
+```
+./tsrc-dev load-turbosrc-viatui
+```
+
+Login to codehost.
+
+```
+./tsrc-dev login-viatui
+```
+
+And then run tests.
 
 ```
 ./tsrc-dev test --visual <username> demo run_tests
+```
+
+After it finishes the first two tests (creatUser and createRepo):
+
+```
+./tsrc-dev load-buttons-viatui
 ```
 
 [See here if you need help getting the token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
