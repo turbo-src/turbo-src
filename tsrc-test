@@ -59,14 +59,7 @@ function run_tests() {
     )
 
     for test in "${tests[@]}"; do
-        # Construct the full path of the test file
         full_test_path="testing/integration/privaterepo/${test}.js"
-
-        # Uncomment and modify the if condition if you need to skip some tests based on conditions
-        #if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
-        #    echo "Skipping $full_test_path due to --visual flag"
-        #    continue
-        #fi
 
         OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$full_test_path" 2>&1) || {
             echo "Error running $test test";
@@ -76,13 +69,27 @@ function run_tests() {
         echo "$OUTPUT"
         sleep 1
         echo ""
+
+        # New code to prompt the user to continue for specific tests
+        if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" || "$full_test_path" = "testing/integration/privaterepo/createUser.js" ) ]]; then
+            echo "Finished $test test. Press 'y' to continue..."
+            read -n 1 -r key
+            if [[ $key != "y" ]]; then
+                echo "Test skipped by user."
+                continue
+            fi
+            echo "" # New line after user input
+        fi
+
         if [[ "$VISUAL_TESTS" = true ]]; then
-            echo "Taking a screenshot of $test test..."
-            docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
-            echo ""
-            echo "Screen shot completed."
-            sleep 5
-	fi
+            if [[ "$full_test_path" != "testing/integration/privaterepo/createRepo.js" && "$full_test_path" != "testing/integration/privaterepo/createUser.js" ]]; then
+                echo "Taking a screenshot of $test test..."
+                docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
+                echo ""
+                echo "Screen shot completed."
+                sleep 5
+            fi
+        fi
     done
 }
 

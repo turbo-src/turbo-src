@@ -134,7 +134,6 @@ services:
     volumes:
       - ./viatui:/app
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - /var/run/dbus:/var/run/dbus
     environment:
       - DISPLAY=:1
     privileged: true
