@@ -71,8 +71,8 @@ function run_tests() {
         echo ""
 
         # New code to prompt the user to continue for specific tests
-        if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" || "$full_test_path" = "testing/integration/privaterepo/createUser.js" ) ]]; then
-            echo "Finished $test test. Press 'y' to continue..."
+        if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
+            echo "Finished $test test. Press 'y' to continue"
             read -n 1 -r key
             if [[ $key != "y" ]]; then
                 echo "Test skipped by user."
@@ -88,9 +88,42 @@ function run_tests() {
                 echo ""
                 echo "Screen shot completed."
                 sleep 5
+                view_image "viatui/chromium-nix-screenshots/${test}.png"
             fi
         fi
     done
+}
+
+function view_image() {
+    image_path="$1"
+
+    # Check if the image path is provided
+    if [[ -z "$image_path" ]]; then
+        echo "No image path provided."
+        return 1
+    fi
+
+    # Check if the file exists
+    if [[ ! -f "$image_path" ]]; then
+        echo "File does not exist: $image_path"
+        return 1
+    fi
+
+    # Determine the operating system
+    case "$(uname)" in
+        "Linux")
+            # For Linux, using eog (Eye of GNOME) as a common viewer
+            xdg-open "$image_path" # Removed redirection to /dev/null for debugging
+            ;;
+        "Darwin")
+            # For macOS, using the 'open' command
+            open "$image_path" # Removed redirection to /dev/null for debugging
+            ;;
+        *)
+            echo "Unsupported operating system."
+            return 1
+            ;;
+    esac
 }
 
 function execute_all_except_tests() {
