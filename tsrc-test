@@ -72,13 +72,27 @@ function run_tests() {
 
         # New code to prompt the user to continue for specific tests
         if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/createRepo.js" ) ]]; then
-            echo "Finished $test test. Press 'y' to continue"
-            read -n 1 -r key
-            if [[ $key != "y" ]]; then
+            echo "Finished $test test. Press 'y' and enter to continue go thru login process"
+            read -n 1 -r key_login
+            if [[ $key_login = "y" ]]; then
+                login_viatui
+                view_image "viatui/chromium-nix-screenshots/login.png"
+                echo "Check if login successful. Run, if necesssary"
+                echo ""
+                echo "docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/login_confirm XXXXX"
+                echo ""
+                echo "Press 'y' and enter when complete."
+                read -n 1 -r key_load_buttons
+                if [[ $key_load_buttons = "y" ]]; then
+                    load_buttons_viatui
+                fi
+                load_buttons_viatui
+                view_image "viatui/chromium-nix-screenshots/load-vote-buttons.png"
+
+            else
                 echo "Test skipped by user."
                 continue
             fi
-            echo "" # New line after user input
         fi
 
         if [[ "$VISUAL_TESTS" = true ]]; then
@@ -126,10 +140,28 @@ function view_image() {
     esac
 }
 
+function login_viatui() {
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/login.py
+    sleep 2
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py login.png
+}
+
+function load_turbosrc_viatui() {
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/load_turbosrc.py
+    sleep 2
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py load-turbosrc.png
+}
+
 function execute_all_except_tests() {
   delete_fork $REPO
   fork_repo $REPO
   create_pull_request $USERNAME $REPO
+}
+
+function load_buttons_viatui() {
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/load_vote_buttons.py
+    sleep 2
+    docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py load-vote-buttons.png
 }
 
 if [ $# -lt 2 ]; then
@@ -183,7 +215,13 @@ case "$ACTION" in
     create_pull_request $USERNAME $REPO
     ;;
   "run_tests")
-    run_tests
+
+    if [[ "$VISUAL_TESTS" = true ]]; then
+        echo "loading turbosrc extension"
+        load_turbosrc_viatui
+        view_image "viatui/chromium-nix-screenshots/load-turbosrc.png"
+    fi
+      run_tests
     ;;
   "execute_all")
     delete_fork $REPO
