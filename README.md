@@ -74,9 +74,11 @@ Add a `turbosrc.config` file to the project directory.
 {
     "GithubName": "yourGithubName",
     "GithubApiToken": "ghp_...",
+    "Secret": "deprecated",
     "Mode": "online"
 }
 ```
+Secret is deprecated in online mode, so you can put anything as Secret field value, including "deprecated" or even "".
 
 Initialize.
 
@@ -147,12 +149,13 @@ If you want ci/cd automatically configured for you (run end-to-end tests or want
 
 ## Testing
 
-`tubosrc.config` should be in local mode. You'll need a GithubPassword field, too.
+`tubosrc.config` should be in local mode.
 
-To initialize with visual testing.
+
+To initialize.
 
 ```
-./tsrc-dev init --testers --visual
+./tsrc-dev init --testers
 ```
 
 Build extension. For some reason `sudo` may be necessary, but this should be resolved.
@@ -167,8 +170,34 @@ Start everything
 ./tsrc-dev start
 ```
 
-**If you want to run visual testing do the following `viatui` related commands.**
+And then run tests.
 
+```
+./tsrc-dev test --visual <username> demo run_tests
+```
+
+### Visual
+
+`tubosrc.config` should be in local mode. You'll need a GithubPassword field, too.
+
+You'll also need a `.env` in the project root directory:
+
+```
+UID=1000
+GID=1000
+```
+
+To initialize with visual testing.
+
+```
+./tsrc-dev init --testers --visual
+```
+
+```
+./tsrc-dev start
+```
+
+Start viatui, the visual server
 
 ```
 ./tsrc-dev start-viatui
@@ -176,28 +205,8 @@ Start everything
 
 **In a seperate terminal window do following commands.**
 
-Load the turbosrc button.
-
-```
-./tsrc-dev load-turbosrc-viatui
-```
-
-Login to codehost.
-
-```
-./tsrc-dev login-viatui
-```
-
-And then run tests.
-
 ```
 ./tsrc-dev test --visual <username> demo run_tests
-```
-
-After it finishes the first two tests (creatUser and createRepo):
-
-```
-./tsrc-dev load-buttons-viatui
 ```
 
 [See here if you need help getting the token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
