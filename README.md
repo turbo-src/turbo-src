@@ -228,3 +228,71 @@ Decode.
 ```
 base64 -d -i .tester_fields_for_turbosrc_service.base64 > decoded_file.txt
 ```
+
+## TurboSrc in-depth
+
+#### TurboSrc works currently only on Github repos, but it works off the git level so it will be expanded to other codehosts.
+
+<p align="left">
+  <img src="./images/turbosrc-node.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### Each Github repo "owner" can distribute VotePower to their community.
+
+<p align="left">
+  <img src="./images/turbosrc-repo.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+**Right now it works off a web extension for Github, but more codehosts to come (even standalone web apps and git-cli apps).**
+
+![ezgif com-video-to-gif (2)](https://github.com/turbo-src/turbo-src/assets/75996017/8a4ee3f3-c5a0-45f7-905f-962c16ade766)
+
+#### Each Node has an API, where actions trigger susbsystem functions.
+
+<p align="left">
+  <img src="./images/turbosrc-node-function.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### Each subsystem has **zero** knowledge of Github or anything external to TurboSrc (except the codehost subsystem).
+
+<p align="left">
+  <img src="./images/turbosrc-node-function-subsystems.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### The codehost subsystem (default Github) can be swapped out for another codehost subsystem, so long as the API is honored.
+
+<p align="left">
+  <img src="./images/turbosrc-node-function-subsystems-codehost-git-swap.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### But this isn't entirely true, we are working towards this. Currently, GH-service is Github specific.
+
+<p align="left">
+  <img src="./images/turbosrc-node-function-subsystems-decouple.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+<p align="left">
+  <img src="./images/turbosrc-node-function-subsystems-full-decouple.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### As a result, TurboSrc will have its own cross-platform representation of a repo.
+
+<p align="left">
+  <img src="./images/turbosrc-repo.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### Simply, put TurboSrc let's community stakeholders determine the direction of the code.
+
+![ezgif com-crop (1)](https://github.com/turbo-src/turbo-src/assets/75996017/9b25fb92-f8e5-493b-b4d2-f6bc37cf49f7)
+
+#### TurboSrc can work directly off an endpoint you setup with it.
+
+<p align="left">
+  <img src="./images/turbosrc-node-to-client.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
+
+#### Or it can be connected with a TurboSrc router, to network several nodes managing repos.
+
+<p align="left">
+  <img src="./images/turbosrc-node-to-router-to-client.png" alt="TurboSrc Node Structure" width="61%"/>
+</p>
