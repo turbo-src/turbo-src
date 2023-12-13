@@ -201,3 +201,21 @@ After it finishes the first two tests (creatUser and createRepo):
 ```
 
 [See here if you need help getting the token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+
+
+## Other
+
+Github actions secrets need to be base64 encoded.
+
+Example:
+
+Encode.
+
+```
+base64 -i .tester_fields_for_turbosrc_service.json > .tester_fields_for_turbosrc_service.base64
+```
+Decode.
+
+```
+base64 -d -i .tester_fields_for_turbosrc_service.base64 > decoded_file.txt
+```
