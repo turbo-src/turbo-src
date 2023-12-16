@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Global variables
+github_user=""
+github_key=""
+
+# Function to get GithubName from turbosrc.config
+get_github_user() {
+    github_user=$(jq -r '.GithubName' ./turbosrc.config)
+}
+
+# Function to get GithubApiToken from turbosrc.config
+get_github_key() {
+    github_key=$(jq -r '.GithubApiToken' ./turbosrc.config)
+}
+
+# Example function to use github_user and github_key
+use_github_credentials() {
+    echo "Using Github credentials:"
+    echo "User: $github_user"
+    echo "API Key: $github_key"
+    # You can add more logic here that uses these credentials
+}
+
+# Execute functions
+get_github_user
+get_github_key
+use_github_credentials
