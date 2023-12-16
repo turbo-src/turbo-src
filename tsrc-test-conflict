@@ -15,7 +15,15 @@ get_github_key() {
 }
 
 # Function to push to GitHub using credentials
+# Takes a branch name as an argument
 git_push_with_credentials() {
+    local branch_name=$1
+
+    if [ -z "$branch_name" ]; then
+        echo "Branch name is required."
+        return 1
+    fi
+
     # Navigate to the tsrc-demo-conflict directory
     cd ./tsrc-demo-conflict
 
@@ -23,7 +31,7 @@ git_push_with_credentials() {
     git remote set-url origin https://github.com/$github_user/tsrc-demo-conflict.git
 
     # Temporarily configure Git to use the GitHub API key for this session
-    GIT_ASKPASS="echo $github_key" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push origin master
+    GIT_ASKPASS="echo $github_key" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push origin "$branch_name"
 
     # Return to the original directory
     cd -
@@ -32,4 +40,4 @@ git_push_with_credentials() {
 # Execute functions
 get_github_user
 get_github_key
-git_push_with_credentials
+git_push_with_credentials "your-branch-name"
