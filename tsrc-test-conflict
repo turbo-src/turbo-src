@@ -14,15 +14,22 @@ get_github_key() {
     github_key=$(jq -r '.GithubApiToken' ./turbosrc.config)
 }
 
-# Example function to use github_user and github_key
-use_github_credentials() {
-    echo "Using Github credentials:"
-    echo "User: $github_user"
-    echo "API Key: $github_key"
-    # You can add more logic here that uses these credentials
+# Function to push to GitHub using credentials
+git_push_with_credentials() {
+    # Navigate to the tsrc-demo-conflict directory
+    cd ./tsrc-demo-conflict
+
+    # Set the remote URL
+    git remote set-url origin https://github.com/$github_user/tsrc-demo-conflict.git
+
+    # Temporarily configure Git to use the GitHub API key for this session
+    GIT_ASKPASS="echo $github_key" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push origin master
+
+    # Return to the original directory
+    cd -
 }
 
 # Execute functions
 get_github_user
 get_github_key
-use_github_credentials
+git_push_with_credentials
