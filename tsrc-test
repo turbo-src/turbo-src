@@ -14,6 +14,11 @@ function fork_repo() {
   docker-compose run fork-repo node fork-repo.js "turbo-src/$REPO"
 }
 
+function reset_pull_request_six() {
+  # Ensure pull request 6 is in conflict
+  ./tsrc-test-conflict git-push pullRequest6 pullRequest6
+}
+
 function create_pull_request() {
   echo ""
   echo "Creating pull requests..."
@@ -56,6 +61,7 @@ function run_tests() {
         "duplicateVote"
         "manyVoters"
         "semiAutoManyVoters"
+        "conflictResolution"
     )
 
     for test in "${tests[@]}"; do
@@ -96,7 +102,7 @@ function run_tests() {
         fi
 
         if [[ "$VISUAL_TESTS" = true ]]; then
-            if [[ "$full_test_path" != "testing/integration/privaterepo/createRepo.js" && "$full_test_path" != "testing/integration/privaterepo/createUser.js" ]]; then
+            if [[ "$full_test_path" != "testing/integration/privaterepo/createRepo.js" && "$full_test_path" != "testing/integration/privaterepo/createUser.js" && "$full_test_path" != "testing/integration/privaterepo/semiAutoManyVoters.js" ]]; then
                 echo "Taking a screenshot of $test test..."
                 docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
                 echo ""
@@ -105,6 +111,28 @@ function run_tests() {
                 view_image "viatui/chromium-nix-screenshots/${test}.png"
             fi
         fi
+
+        if [[ "$VISUAL_TESTS" = true && ( "$full_test_path" = "testing/integration/privaterepo/semiAutoManyVoters.js" ) ]]; then
+            docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/vote_merge_pull_request_5.py "${test}".png
+            sleep 3
+            echo "Taking a screenshot of $test test..."
+            docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
+            echo ""
+            echo "Screen shot completed."
+            sleep 5
+            view_image "viatui/chromium-nix-screenshots/${test}.png"
+        fi
+
+          #  # Ensure pull request 6 is not in conflict
+          #  ./tsrc-test-conflict git-push pullRequest6 pullRequest6ConflictResolved
+          #  sleep 3
+          #  echo "Taking a screenshot of $test test..."
+          #  docker-compose exec -it viatui /root/.local/bin/poetry run python scripts/container_screenshot.py "${test}".png
+          #  echo ""
+          #  echo "Screen shot completed."
+          #  sleep 5
+          #  view_image "viatui/chromium-nix-screenshots/${test}.png"
+          #  echo "Finished $test test. Press 'y' and enter to continue go thru login process"
     done
 }
 
@@ -215,11 +243,12 @@ case "$ACTION" in
     create_pull_request $USERNAME $REPO
     ;;
   "run_tests")
-
     if [[ "$VISUAL_TESTS" = true ]]; then
         echo "loading turbosrc extension"
         load_turbosrc_viatui
         view_image "viatui/chromium-nix-screenshots/load-turbosrc.png"
+        echo "Reset pull request 6 to ensure is no conflict."
+        reset_pull_request_six
     fi
       run_tests
     ;;
