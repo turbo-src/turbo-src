@@ -50,6 +50,7 @@ function run_tests() {
     tests=(
         "createUser"
         "createRepo"
+        "conflict"
         "transferTokens"
         "twoVoters"
         "singleMajorityVoter"
