@@ -7,13 +7,13 @@ github_key=""
 # Function to get GithubName from turbosrc.config
 get_github_user() {
     github_user=$(jq -r '.GithubName' ./turbosrc.config)
-    echo "$github_user"
+    echo "Using $github_user"
 }
 
 # Function to get GithubApiToken from turbosrc.config
 get_github_key() {
     github_key=$(jq -r '.GithubApiToken' ./turbosrc.config)
-    echo "Using github key found in turbosrc.config."
+    echo "Using github api key found in turbosrc.config"
 }
 
 # Function to push to GitHub using credentials
@@ -36,11 +36,8 @@ git_push_with_credentials() {
     echo "echo $github_key" > "$echo_script"
     chmod +x "$echo_script"
 
-    # Set the remote URL
-    git remote set-url origin https://github.com/$github_user/demo.git
-
-    # Use the temporary script for GIT_ASKPASS
-    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force origin "$branch_name"
+    # Use the temporary script for GIT_ASKPASS and push to the temporary remote URL
+    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force "https://github.com/$github_user/demo.git" "$branch_name"
 
     # Clean up: Remove the temporary script
     rm "$echo_script"
