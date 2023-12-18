@@ -30,7 +30,7 @@ git_push_with_credentials() {
     cd ./tsrc-demo-conflict || return
 
     # Set the remote URL
-    git remote set-url origin https://github.com/$github_user/tsrc-demo-conflict.git
+    git remote set-url origin https://github.com/$github_user/demo.git
 
     # Temporarily configure Git to use the GitHub API key for this session
     GIT_ASKPASS="echo $github_key" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force origin "$branch_name"
