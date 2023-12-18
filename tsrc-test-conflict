@@ -21,10 +21,11 @@ get_github_key() {
 git_push_with_credentials() {
     get_github_user
     get_github_key
-    local branch_name=$1
+    local local_branch_name=$1
+    local remote_branch_name=$2
 
-    if [ -z "$branch_name" ]; then
-        echo "Branch name is required."
+    if [ -z "$local_branch_name" ] || [ -z "$remote_branch_name" ]; then
+        echo "Local and remote branch names are required."
         return 1
     fi
 
@@ -36,8 +37,8 @@ git_push_with_credentials() {
     echo "echo $github_key" > "$echo_script"
     chmod +x "$echo_script"
 
-    # Use the temporary script for GIT_ASKPASS and push to the temporary remote URL
-    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force "https://github.com/$github_user/demo.git" "$branch_name"
+    # Use the temporary script for GIT_ASKPASS and push the specific branch to the temporary remote URL
+    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force "https://github.com/$github_user/demo.git" "$local_branch_name:$remote_branch_name"
 
     # Clean up: Remove the temporary script
     rm "$echo_script"
