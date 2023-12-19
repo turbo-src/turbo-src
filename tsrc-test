@@ -73,7 +73,11 @@ function run_tests() {
     for test in "${tests[@]}"; do
         full_test_path="testing/integration/privaterepo/${test}.js"
 
-        if [[ "$test" != "conflict" && "$test" != "conflictResolved" ]]; then
+        # Skip conflict tests as they are done visually.
+        if [[ "$VISUAL_TESTS" = false || ( "$test" != "conflict" && "$test" != "conflictResolved" ) ]]; then
+          if [[ "$test" = "conflictResolved" ]]; then
+             deconflict_pull_request_six
+          fi
           OUTPUT=$(docker-compose exec -T turbosrc-service npm test "$full_test_path" 2>&1) || {
               echo "Error running $test test";
               echo "Output: $OUTPUT";
@@ -308,9 +312,9 @@ case "$ACTION" in
         load_turbosrc_viatui
         view_image "viatui/chromium-nix-screenshots/load-turbosrc.png"
         echo "Reset pull request 6 to ensure is no conflict."
-        reset_pull_request_six
     fi
-      run_tests
+    reset_pull_request_six
+    run_tests
     ;;
   "execute_all")
     delete_fork $REPO
