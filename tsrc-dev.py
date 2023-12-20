@@ -882,13 +882,12 @@ if __name__ == "__main__":
 
         print('Build chrome-extension')
         subprocess.run(['docker-compose', 'build', 'chrome-extension'], check=True)
-        if MODE == 'local':
-          subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devLocal'], check=True)
-          if args.visual and not args.github_actions:
+        if MODE == 'local' and visual and not args.github_actions:
+            subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devLocal'], check=True)
             copy_chrome_extension_to_viatui()
             create_viatui_screenshot_directory()
             create_and_update_viatuix_json()
-        else:
+        elif MODE != 'local' and not args.github_actions:
           subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devOnline'], check=True)
 
 
