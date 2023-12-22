@@ -37,3 +37,6 @@
 [submodule "viatui"]
 	path = viatui
 	url = https://github.com/turbo-src/viatui
+[submodule "demo"]
+	path = demo
+	url = https://github.com/turbo-src/demo
