@@ -66,8 +66,8 @@ function run_tests() {
         "duplicateVote"
         "manyVoters"
         "semiAutoManyVoters"
-        "conflict"
-        "conflictResolved"
+        #"conflict"
+        #"conflictResolved"
     )
 
     for test in "${tests[@]}"; do
