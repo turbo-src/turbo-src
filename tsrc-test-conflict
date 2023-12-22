@@ -37,8 +37,8 @@ git_push_with_credentials() {
     echo "echo $github_key" > "$echo_script"
     chmod +x "$echo_script"
 
-    # Use the temporary script for GIT_ASKPASS and push the specific branch to the temporary remote URL
-    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force "https://github.com/$github_user/demo.git" "$local_branch_name:$remote_branch_name"
+    # Use the temporary script for GIT_ASKPASS and push the remote tracking branch to the remote repository
+    GIT_ASKPASS="$echo_script" git -c credential.helper= -c user.name="$github_user" -c user.password="$github_key" push --force "https://github.com/$github_user/demo.git" "origin/$local_branch_name:$remote_branch_name"
 
     # Clean up: Remove the temporary script
     rm "$echo_script"
