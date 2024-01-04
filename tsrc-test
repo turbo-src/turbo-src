@@ -66,15 +66,16 @@ function run_tests() {
         "duplicateVote"
         "manyVoters"
         "semiAutoManyVoters"
-        #"conflict"
-        #"conflictResolved"
+        "semiAutoManyVotersClose"
+        "conflict"
+        "conflictResolved"
     )
 
     for test in "${tests[@]}"; do
         full_test_path="testing/integration/privaterepo/${test}.js"
 
-        # Skip conflict tests as they are done visually.
-        if [[ "$VISUAL_TESTS" = false || ( "$test" != "conflict" && "$test" != "conflictResolved" ) ]]; then
+        # Don't close pr 5 (semiAutoManyVotersClose) and skip conflict tests as they are done visually.
+        if [[ "$VISUAL_TESTS" = false || ( "$test" != "semiAutoManyVotersClose" &&"$test" != "conflict" && "$test" != "conflictResolved" ) ]]; then
           if [[ "$test" = "conflictResolved" ]]; then
              deconflict_pull_request_six
           fi
