@@ -13,7 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        submodules: recursive # fetches all submodules recursively
+        submodules: recursive
+
+    - name: Checkout all branches for 'demo' submodule
+      run: |
+        cd demo
+        git fetch --all
+        cd ..
 
     - name: Set up Python 3
       uses: actions/setup-python@v2
@@ -38,8 +44,6 @@ jobs:
         TURBOSRC_TESTERS_DATA: ${{ secrets.TURBOSRC_TESTERS }}
       run: python add_testers.py
 
-
     - name: Start turbosrc and run tests
       run: |
         ./tsrc-dev restart && sleep 10 && ./tsrc-dev test 7db9a demo run_tests
-
