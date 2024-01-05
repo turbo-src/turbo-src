@@ -808,6 +808,21 @@ def create_and_update_viatuix_json():
     else:
         print("Config file not found:", config_path)
 
+def git_checkout_pull_request(branch_name, repo_dir):
+    """
+    Fetches the specified branch from the remote origin and checks it out in the specified repository directory.
+    """
+    try:
+        # Fetch the specified branch from the remote and create a local branch
+        subprocess.run(['git', 'fetch', '--depth', '1', 'origin', f'{branch_name}:{branch_name}'], check=True, cwd=repo_dir)
+
+        # Checkout the specified branch
+        subprocess.run(['git', 'checkout', branch_name], check=True, cwd=repo_dir)
+
+        print(f"Checked out branch {branch_name} in {repo_dir}")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred: {e}")
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument('--testers', action='store_true',
@@ -822,6 +837,12 @@ args = parser.parse_args
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.operation.lower() == 'init':
+
+        # Otherwise, ref to branches can't be found.
+        git_checkout_pull_request("pullRequest6", "./demo")
+        git_checkout_pull_request("pullRequest6ConflictResolved", "./demo")
+        git_checkout_pull_request("master", "./demo")
+
         config_files_to_remove = [
             "turbosrc-service/.config.json",
             "fork-repo/env.list",
