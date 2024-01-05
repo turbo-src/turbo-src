@@ -294,5 +294,5 @@ base64 -d -i .tester_fields_for_turbosrc_service.base64 > decoded_file.txt
 #### Or it can be connected with a TurboSrc router, to network several nodes managing repos.
 
 <p align="left">
-  <img src="./images/turbosrc-node-to-router-to-client.png" alt="TurboSrc Node Structure" width="61%"/>
+  <img src="./images/turbosrc-nodes-to-router-to-clients.png" alt="TurboSrc Node Structure" width="61%"/>
 </p>
