@@ -173,7 +173,7 @@ Start everything
 And then run tests.
 
 ```
-./tsrc-dev test --visual <username> demo run_tests
+./tsrc-dev test  <username> demo run_tests --visual
 ```
 
 ### Visual
