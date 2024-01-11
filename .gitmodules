@@ -40,3 +40,6 @@
 [submodule "demo"]
 	path = demo
 	url = https://github.com/turbo-src/demo
+[submodule "tsrc-cli"]
+	path = tsrc-cli
+	url = https://github.com/turbo-src/tsrc-cli
