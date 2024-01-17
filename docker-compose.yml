@@ -105,6 +105,38 @@ services:
       - ./chrome-extension/dist:/app/dist
     tty: true
 
+  gitea:
+    image: gitea/gitea:1.21.3
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=postgres:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+    restart: always
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13.7-bullseye
+    restart: always
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
   tsrc-dev:
     build:
       context: .
@@ -143,3 +175,5 @@ volumes:
   gh-db-data:
   namespace-db-data:
   turboSrcInstancesVolume:
+  postgres-data:
+  gitea-data:
