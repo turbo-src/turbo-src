@@ -43,3 +43,6 @@
 [submodule "tsrc-cli"]
 	path = tsrc-cli
 	url = https://github.com/turbo-src/tsrc-cli
+[submodule "git-service"]
+	path = git-service
+	url = https://github.com/turbo-src/git-service
