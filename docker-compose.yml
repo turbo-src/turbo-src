@@ -105,6 +105,30 @@ services:
       - ./chrome-extension/dist:/app/dist
     tty: true
 
+  git-service:
+    build: ./git-service/
+    image: git-service:latest
+    restart: always
+    depends_on:
+      - git-service-db
+    ports:
+      - 4008:4008
+    environment:
+      DOCKER_DB_URL: postgresql://user:password@git-service-db:5432/git-service-db
+    tty: true
+
+  git-service-db:
+    image: postgres:13.7-bullseye
+    restart: always
+    ports:
+      - 54351:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: git-service-db
+    volumes:
+      - git-service-db-data:/db-data/
+
   gitea:
     image: gitea/gitea:1.21.3
     container_name: gitea
@@ -177,3 +201,4 @@ volumes:
   turboSrcInstancesVolume:
   postgres-data:
   gitea-data:
+  git-service-db-data:

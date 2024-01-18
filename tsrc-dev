@@ -25,6 +25,7 @@ start_services() {
     turbosrc-service \
     turbosrc-engine \
     namespace-service \
+    git-service \
     gh-service
 }
 
