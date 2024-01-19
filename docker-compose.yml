@@ -137,9 +137,9 @@ services:
       - USER_GID=1000
       - GITEA__database__DB_TYPE=postgres
       - GITEA__database__HOST=postgres:5432
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea
+      - GITEA__database__NAME=turbosrc
+      - GITEA__database__USER=turbosrc
+      - GITEA__database__PASSWD=turbosrcgitea
     restart: always
     volumes:
       - ./gitea:/data

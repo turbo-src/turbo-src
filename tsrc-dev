@@ -26,7 +26,8 @@ start_services() {
     turbosrc-engine \
     namespace-service \
     git-service \
-    gh-service
+    gh-service \
+    gitea
 }
 
 load_turbosrc_viatui() {
