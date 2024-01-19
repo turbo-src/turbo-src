@@ -155,9 +155,9 @@ services:
     image: postgres:13.7-bullseye
     restart: always
     environment:
-      - POSTGRES_USER=gitea
-      - POSTGRES_PASSWORD=gitea
-      - POSTGRES_DB=gitea
+      - POSTGRES_USER=turbosrc
+      - POSTGRES_PASSWORD=turbosrcgitea
+      - POSTGRES_DB=turbosrc
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
