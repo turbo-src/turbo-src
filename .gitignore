@@ -4,3 +4,5 @@ venv/
 mitmproxy*
 .env
 tsrc-demo-conflict/
+.gitea.env
+gitea/
