@@ -11,12 +11,35 @@ import sys
 import time
 import random
 import shutil
+import errno
 from requests.exceptions import ConnectionError
 
 def usage():
     print("Usage: script.py [init USERNAME REPO ACTION]")
     print("  init: initialize necessary files and directories")
     exit(1)
+
+def remove_folder_if_exists(dir_path):
+    """
+    Remove a folder if it exists, handling permission errors.
+
+    :param dir_path: The path to the directory to be removed.
+    """
+    def onerror(func, path, exc_info):
+        """
+        Error handler for shutil.rmtree.
+        """
+        if not isinstance(exc_info[1], PermissionError):
+            sys.exit(f"\n\nPlease run `sudo rm -r gitea`, which is has gitea data.\nOr run ./tsrc-dev with 'sudo' so it has permissions to delete the gitea folder")
+
+    if os.path.exists(dir_path) and os.path.isdir(dir_path):
+        try:
+            shutil.rmtree(dir_path, onerror=onerror)
+            print(f"Removed folder: {dir_path}")
+        except PermissionError:
+            print(f"Permission denied while removing folder: {dir_path}")
+    else:
+        print(f"Folder does not exist: {dir_path}")
 
 def create_files(*file_paths):
     """
@@ -893,6 +916,40 @@ def git_checkout_pull_request(branch_name, repo_dir):
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
 
+def create_gitea_admin_user():
+    # Load configuration data
+    with open('./turbosrc.config', 'r') as f:
+        turbosrcConfigData = json.load(f)
+    username = turbosrcConfigData.get('GithubName')
+    password = turbosrcConfigData.get('GithubPassword')
+    email = 'turbosrc@turbosrc-marialis.dev'
+
+    # Keep trying the command until it succeeds
+    while True:
+        try:
+            subprocess.run(
+                ['docker-compose',
+                 'exec',
+                 '-T',  # Disable pseudo-tty allocation
+                 '-u', 'git',
+                 'gitea',  # Service name as defined in docker-compose.yml
+                 'gitea',
+                 'admin',
+                 'user',
+                 'create',
+                 '--username', username,
+                 '--password', password,
+                 '--email', email,
+                 '--admin',
+                 '-c', '/data/gitea/conf/app.ini'],
+                check=True
+            )
+            print("Gitea admin user created successfully.")
+            break  # Exit loop if command is successful
+        except subprocess.CalledProcessError as e:
+            print(f"Command failed. Gitea may not be ready. Retrying in 1 second...")
+            time.sleep(1)  # Wait for 1 second before retrying
+
 parser = argparse.ArgumentParser()
 parser.add_argument("operation", help="Operation to perform: 'init' initializes necessary files and directories")
 parser.add_argument('--testers', action='store_true',
@@ -928,6 +985,7 @@ if __name__ == "__main__":
             "viatui/viatuix.json"
         ]
         remove_files(config_files_to_remove)
+        remove_folder_if_exists('./gitea/')
         create_chrome_extension_dist_directory()
         create_chrome_extension_config_files()
         # upfront or docker-compose commands fail.
@@ -972,6 +1030,8 @@ if __name__ == "__main__":
         if args.testers and not args.github_actions:
             local_add_testers()
 
+        ''
+
         print('Build viatui')
         subprocess.run(['docker-compose', 'build', 'viatui'], check=True)
 
@@ -987,5 +1047,14 @@ if __name__ == "__main__":
 
         print('Configure git-service (copying turbosrc.config into git-service)')
         copy_file_to_directory('./turbosrc.config', './git-service/')
+
+        print(f"Building gitea, just in case, but likely unecessary.")
+        manage_docker_service('gitea', 'build')
+        print('Setting gitea admin user and password.')
+        manage_docker_service('gitea', 'up')
+        # give the database a moment to boot and to unlock due to write transations.
+        time.sleep(5)
+        create_gitea_admin_user()
+
     else:
         usage()

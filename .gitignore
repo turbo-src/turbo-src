@@ -1,4 +1,5 @@
-turbosrc.config
+*.turbosrc.config
+turbosrc.config*
 .tester_fields_for_turbosrc_service.json
 venv/
 mitmproxy*
