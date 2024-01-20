@@ -18,6 +18,20 @@ def usage():
     print("  init: initialize necessary files and directories")
     exit(1)
 
+def copy_file_to_directory(src_file, dest_dir):
+    """
+    Copies a file from src_file to the directory dest_dir.
+
+    :param src_file: The path to the source file.
+    :param dest_dir: The path to the destination directory.
+    """
+    # Check if the destination directory exists, create if not
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # Copy the file
+    shutil.copy(src_file, dest_dir)
+
 def local_add_testers():
     # Path to the config file
     CONFIG_FILE_PATH = './turbosrc-service/.config.json'
@@ -911,6 +925,7 @@ if __name__ == "__main__":
         elif MODE != 'local' and not args.github_actions:
           subprocess.run(['docker-compose', 'run', 'chrome-extension', 'yarn', 'devOnline'], check=True)
 
-
+        print('Configure git-service (copying turbosrc.config into git-service)')
+        copy_file_to_directory('./turbosrc.config', './git-service/')
     else:
         usage()
