@@ -18,6 +18,17 @@ def usage():
     print("  init: initialize necessary files and directories")
     exit(1)
 
+def create_files(*file_paths):
+    """
+    Creates empty files at each specified file path.
+
+    :param file_paths: A variable number of file paths where files will be created.
+    """
+    for file_path in file_paths:
+        with open(file_path, 'w') as file:
+            # This will create an empty file at each specified path.
+            pass
+
 def copy_file_to_directory(src_file, dest_dir):
     """
     Copies a file from src_file to the directory dest_dir.
@@ -31,6 +42,43 @@ def copy_file_to_directory(src_file, dest_dir):
 
     # Copy the file
     shutil.copy(src_file, dest_dir)
+
+def write_env_variables(file_name, variables):
+    """
+    Writes given environment variables to a .env file.
+
+    :param file_name: The name of the .env file.
+    :param variables: A dictionary of environment variables to write.
+    """
+    with open(file_name, 'w') as file:
+        for key, value in variables.items():
+            file.write(f"{key}={value}\n")
+
+def populate_gitea_env():
+    with open('./turbosrc.config', 'r') as f:
+        turbosrcConfigData = json.load(f)
+    username = turbosrcConfigData.get('GithubName')
+    password = turbosrcConfigData.get('GithubPassword')
+    secret = turbosrcConfigData.get('Secret')
+
+    env_variables = {
+        "USER_UID": "1000",
+        "USER_GID": "1000",
+        "GITEA_DB_TYPE": "postgres",
+        "GITEA_DB_HOST": "postgres:5432",
+        "GITEA_DB_NAME": username,
+        "GITEA_DB_USER": username,
+        "GITEA_DB_PASSWD": password,
+        "INSTALL_LOCK": "true",
+        "SECRET_KEY": secret,
+        "DISABLE_REGISTRATION": "true",
+        "REQUIRE_SIGNIN_VIEW": "true",
+        "POSTGRES_USER": username,
+        "POSTGRES_PASSWORD": password,
+        "POSTGRES_DB": username
+    }
+
+    write_env_variables('.gitea.env', env_variables)
 
 def local_add_testers():
     # Path to the config file
@@ -238,9 +286,17 @@ def update_contributor_id(contributor_id, contributor_signature):
         print(f"Failed to update contributor id. Error: {str(e)}")
         traceback.print_exc()
 
-def manage_docker_service(action):
+def manage_docker_service(service, command):
+    if command == 'up':
+      subprocess.run(['docker-compose', command, '-d', service], check=True)
+    elif command == 'build':
+      subprocess.run(['docker-compose', command, service], check=True)
+    elif command == 'stop':
+        subprocess.run(['docker-compose', command, service], check=True)
+
+def configure_namespace_data_docker(action):
     if action == 'start':
-        subprocess.run(['docker-compose', 'up', '-d', 'namespace-service'], check=True)
+        manage_docker_service('namespace-service', 'up')
         max_retries = 30  # maximum attempts to check if the service is up
         retries = 0
         last_error = None
@@ -306,7 +362,7 @@ def manage_docker_service(action):
                 print(f"Failed to fetch contributor id. Error: {str(last_error)}. Exiting...")
                 sys.exit(1)
     elif action == 'stop':
-        subprocess.run(['docker-compose', 'stop', 'namespace-service'], check=True)
+        manage_docker_service('namespace-service', 'stop')
 
 def update_turbosrc_id_egress_router_url_in_env_file(env_file_path):
     # load turbosrc.store.contributor from .config.json
@@ -867,6 +923,8 @@ if __name__ == "__main__":
             "chrome-extension/cypress.env.json",
             "chrome-extension/config.dev*",  # Handles wildcard characters
             "chrome-extension/src/config.js",
+            ".gitea.env",
+            "git-service/turbosrc.config"
             "viatui/viatuix.json"
         ]
         remove_files(config_files_to_remove)
@@ -875,12 +933,14 @@ if __name__ == "__main__":
         # upfront or docker-compose commands fail.
         check_and_create_service_env('./turbosrc-ingress-router/service.env')
         check_and_create_service_env('./turbosrc-egress-router/service.env')
+        create_files('.gitea.env')
+        populate_gitea_env()
 
         MODE = initialize_files()
         update_api_token()
         print('Getting or generating user info from namespace subsystem...')
-        manage_docker_service('start')
-        manage_docker_service('stop')
+        configure_namespace_data_docker('start')
+        configure_namespace_data_docker('stop')
         validate_and_update_endpoint_url()
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-ingress-router/service.env')
         update_turbosrc_id_egress_router_url_in_env_file('./turbosrc-egress-router/service.env')
