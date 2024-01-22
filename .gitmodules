@@ -46,3 +46,6 @@
 [submodule "git-service"]
 	path = git-service
 	url = https://github.com/turbo-src/git-service
+[submodule "gitea-demo"]
+	path = gitea-demo
+	url = https://github.com/turbo-src/gitea-demo
