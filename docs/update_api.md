@@ -4,6 +4,8 @@
 
 1. service/server.js - graphQL schema
 
+   service/lib/actions.js
+
 2. service/src/utils/requests.js
 
 3. service/src/utils/<subService>/Requests.js
