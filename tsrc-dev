@@ -27,7 +27,8 @@ start_services() {
     namespace-service \
     git-service \
     gh-service \
-    gitea
+    gitea \
+    algorand
 }
 
 load_turbosrc_viatui() {
