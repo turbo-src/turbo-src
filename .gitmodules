@@ -49,3 +49,6 @@
 [submodule "gitea-demo"]
 	path = gitea-demo
 	url = https://github.com/turbo-src/gitea-demo
+[submodule "algorand"]
+	path = algorand
+	url = https://github.com/7db9a/algorand
