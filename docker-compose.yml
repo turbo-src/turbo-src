@@ -132,18 +132,17 @@ services:
   algorand:
     build:
       context: ./algorand
-      dockerfile: Dockerfile
+      dockerfile: ./algorand/Dockerfile
     restart: always
     ports:
       - "4190:8080" # Expose algod REST API
       - "4191:7833" # Expose kmd REST API
     volumes:
       - algorand-data:/algod/data
-      - ./algorand/my_network_template.json:/algod/my_network_template.json
-      - ./algorand/initialize-network.sh:/algod/initialize-network.sh
-      # Remove the env_file line if not using .env for specific configurations
-      # env_file:
-      #   - .env
+
+    # Optionally, include environment configurations if needed
+    # env_file:
+    #   - .env
 
   gitea:
     image: gitea/gitea:1.21.3
