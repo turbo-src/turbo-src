@@ -139,6 +139,7 @@ services:
       - "4191:7833" # Expose kmd REST API
     volumes:
       - algorand-data:/algod/data
+      - algorand-accounts:/algod/algorand-accounts
 
     # Optionally, include environment configurations if needed
     # env_file:
@@ -210,3 +211,4 @@ volumes:
   gitea-data:
   git-service-db-data:
   algorand-data:
+  algorand-accounts:
